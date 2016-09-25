@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheephead.manager;
+package sheepshead.manager;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
