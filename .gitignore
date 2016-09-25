@@ -1,3 +1,7 @@
+# .idea directory except copyright
+/.idea/*
+!/.idea/copyright
+
 # Built application files
 *.apk
 *.ap_
