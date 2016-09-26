@@ -1,0 +1,43 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage[left=1.00cm, right=1.00cm, top=1.00cm, bottom=1.00cm]{geometry}
+\begin{document}
+	\title{Entwurf Schafkopf-Manager}
+	\section{Beschreibung}
+	Der Schafkopf-Manager ist eine App für Android, die zum Zählen/ Punkte verwalten verwendet wird. Der Benutzer kann für mehrere Schafkopf-Spiele die Ergebnisse (wer hat gewonnen, welches Spiel, Einsatz, etc) eintragen. Ein Spielergebnis wird mit dem bisherigen Spielstand verrechnet. Der Benutzer kann sich den jetzigen Spielstand bzw. Spiel-Verlauf anzeigen lassen, (in späteren Versionen) Statistiken, Diagramme anzeigen lassen und den Spielverlauf in mehrere Formate (z.B. Excel, PDF) exportieren und per Mail versenden.
+	
+	\section{Fortschrittsplanung}
+	Der Entwicklungsfortschritt wird in Meilensteine aufgeteilt. Bis Meilenstein x soll die erste funktionierende Version entstehen.\\
+	\\
+	\begin{tabular}{|p{3cm}||p{7cm}|p{7cm}|}
+		\hline
+		Meilenstein & Ziel & Maßnahmen, TODOs etc\\
+		\hline
+		\centering I\newline Einzelnes Spiel eintragen& 
+		Der Benutzer kann ein Ergebnis eintragen 
+		& Logik: Spielergebnis sowie Zwischenzustände als Klassen, Klassen für Spieler/Farben/Spielart/Einsatz...\\
+		&& GUI: Auswahl-Activity\\
+		\hline
+		\centering II\newline Mehrere Spiele eintragen& Der Benutzer kann ein Spiel erstellen, Mitspieler und Einsatz eintragen. Der Benutzer kann sich den derzeitigen Spielstand anzeigen lassen. Der Benutzer kann ein neues Spielergebnis hinzufügen, welches den Spielstand verändert. &
+		Logik: Spielergebnisse müssen in einen Spielstand eingefügt werden, Klasse für laufendes Spiel\\&&GUI: Spiel-Erstellen-Activity, Spielstand-Anzeigen-Activity\\
+		\hline
+		\centering III\newline Spielstand merken & Wird die App geschlossen (nicht nur minimiert) wird das laufende Spiel inklusive des Spielstands gespeichert und bei Neustart evtl. wieder geladen.&
+		Logik: Serialisierung von Spiel und Spielstand\\
+		&&GUI: Auswahl-Dialog Neues Spiel oder vorhandenes Spiel verwenden\\
+		\hline
+		\centering IV\newline Einfacher Export Excel & Der Benutzer kann den Spielverlauf des laufenden Spiels als Exceltabelle exportieren und per Mail verschicken&Logik: Export-Funktion z.B. nach .csv\\
+		&&GUI: evtl. Export-Menü, Übergang zum Mail-Client\\
+		\hline
+		\centering V\newline Einfaches Diagramm&
+		Der Benutzer kann ein Verlaufsdiagramm (x-Achse Spiele, y-Achse Geld der Mitspieler) auf Basis der aktuellen Daten des Spiels anzeigen lassen&
+		Logik: Spielverlauf für Diagrammzeichnen vorbereiten\newline
+		Evtl. Library?\\
+		&&GUI: Diagramm-Activity zum Zeichnen des Diagramms\\
+		\hline
+	\end{tabular}
+\end{document}

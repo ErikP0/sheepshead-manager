@@ -1,4 +1,10 @@
-# .idea directory except copyright
+#build files from miktex/pdflatex in docs
+docs/*.aux
+docs/*.synctex.gz
+docs/draft.txt
+docs/draft.pdf
+
+# .idea directory except copyright subdirectory
 /.idea/*
 !/.idea/copyright
 
