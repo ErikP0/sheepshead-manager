@@ -14,12 +14,16 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.main.appcore;
+package sheepshead.manager.appcore;
 
-
+/**
+ * This activity is a {@link AbstractBaseActivity} that calls the startup-functionality of
+ * {@link SheepsheadManagerApplication} upon creation
+ */
 public abstract class StartupActivity extends AbstractBaseActivity {
 
     public StartupActivity() {
+        //create singleton
         SheepsheadManagerApplication.create();
         SheepsheadManagerApplication.getInstance().startup();
     }

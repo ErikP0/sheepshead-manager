@@ -19,9 +19,13 @@ package sheepshead.manager.main;
 import android.os.Bundle;
 
 import sheepshead.manager.R;
-import sheepshead.manager.main.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.main.appcore.StartupActivity;
+import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.appcore.StartupActivity;
 
+/**
+ * Java-class for the LoadingScreen Activity.
+ * The loading screen is the entry-point of the application.
+ */
 public class LoadingScreen extends StartupActivity {
 
     public LoadingScreen() {

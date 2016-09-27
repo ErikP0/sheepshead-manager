@@ -14,22 +14,34 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.main.appcore;
+package sheepshead.manager.appcore;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-
+/**
+ * Abstract superclass for all activities used.
+ * The class calls some of the functionality in {@link SheepsheadManagerApplication} under certain conditions.
+ * As a extender of this class, make sure to call super.x() when overriding x of {@link AppCompatActivity}
+ */
 public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
+        onCreate is called once per lifetime of this activity.
+        It can be used to create the UserInterface
+         */
         super.onCreate(savedInstanceState);
         createUserInterface(savedInstanceState);
     }
 
     @Override
     public void onResume() {
+        /*
+        onResume is called every time this activity gains focus (so calls are upon creation and whenever the user maximizes the application again)
+        It can be used to register ui-listener or services belonging to this activity
+         */
         super.onResume();
         SheepsheadManagerApplication.getInstance().registerServices();
         registerActivitySpecificServices();
@@ -37,6 +49,10 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     @Override
     public void onPause() {
+        /*
+        onPause is called every time this activity loses focus (so when the user presses the home button)
+        It can be used to remove ui-listener or services that should not work in other activities
+         */
         super.onPause();
         SheepsheadManagerApplication.getInstance().unregisterServices();
         removeActivitySpecificServices();
@@ -44,13 +60,28 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     @Override
     public void onStop() {
+        /*
+        onStop is called when the application gets terminated
+         */
         super.onStop();
         SheepsheadManagerApplication.getInstance().saveApplicationState();
     }
 
+    /**
+     * Add/Register UserInterface-Listener or specific services here
+     */
     protected abstract void registerActivitySpecificServices();
 
+    /**
+     * Remove/unbind UserInterface-Listener or specific services here
+     */
     protected abstract void removeActivitySpecificServices();
 
+    /**
+     * Create the userinterface for this activity here.
+     * Use <code>setContentView(R.activity_name)</code> when using a layout.xml
+     *
+     * @param savedInstanceState {@link AppCompatActivity#onCreate(Bundle)}
+     */
     protected abstract void createUserInterface(Bundle savedInstanceState);
 }
