@@ -14,16 +14,13 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager;
+package sheepshead.manager.main.appcore;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public abstract class StartupActivity extends AbstractBaseActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public StartupActivity() {
+        SheepsheadManagerApplication.create();
+        SheepsheadManagerApplication.getInstance().startup();
     }
 }

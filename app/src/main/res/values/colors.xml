@@ -16,7 +16,17 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!-- Main-Color used e.g. in the title bar-->
+    <color name="colorPrimary">#FFFFFF</color>
+    <!-- Darker version of colorPrimary -->
+    <color name="colorPrimaryDark">#AAAAAA</color>
+    <!-- Color for outlining components-->
+    <color name="colorAccent">#6b840e</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <!-- Main-Background color (green)-->
+    <color name="color_background">#0e8441</color>
+    <!-- Main-text color (white) -->
+    <color name="color_main_texts">#FFFFFF</color>
 </resources>
