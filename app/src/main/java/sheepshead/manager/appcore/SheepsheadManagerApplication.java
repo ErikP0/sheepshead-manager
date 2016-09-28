@@ -84,7 +84,6 @@ public final class SheepsheadManagerApplication {
      */
     public void loadingScreen() {
         //nothing to load at the start of this app
-
     }
 
     /**

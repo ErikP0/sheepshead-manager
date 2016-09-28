@@ -16,9 +16,12 @@
 
 package sheepshead.manager.main;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.FillGameResult;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.appcore.StartupActivity;
 
@@ -28,19 +31,34 @@ import sheepshead.manager.appcore.StartupActivity;
  */
 public class LoadingScreen extends StartupActivity {
 
-    public LoadingScreen() {
+    private View.OnClickListener l;
 
+    public LoadingScreen() {
+        l = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //TODO temporary
+                //switch activity after a click
+                Intent t = new Intent(LoadingScreen.this, FillGameResult.class);
+                startActivity(t);
+            }
+        };
     }
 
 
     @Override
     protected void registerActivitySpecificServices() {
         //no loading screen specific services/listeners
+        View v = findViewById(R.id.activity_loading_screen);
+        v.setClickable(true);
+        v.setOnClickListener(l);
     }
 
     @Override
     protected void removeActivitySpecificServices() {
         //no loading screen specific services/listeners
+        findViewById(R.id.activity_loading_screen).setOnClickListener(null);
     }
 
     @Override
