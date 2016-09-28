@@ -18,6 +18,7 @@ package sheepshead.manager.uicontrolutils;
 
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -33,6 +34,7 @@ public class CheckBoxGroup extends AbstractWidgetGroup<CheckBox> implements View
     /**
      * The validator responsible for detecting invalid states and fixing them
      */
+    @NonNull
     private ICheckboxGroupStateValidator validator;
 
     /**
@@ -48,12 +50,12 @@ public class CheckBoxGroup extends AbstractWidgetGroup<CheckBox> implements View
     }
 
     @Override
-    protected void addListenerFor(CheckBox box) {
+    protected void addListenerFor(@Nullable CheckBox box) {
         box.setOnClickListener(this);
     }
 
     @Override
-    protected void removeListenerFor(CheckBox box) {
+    protected void removeListenerFor(@Nullable CheckBox box) {
         box.setOnClickListener(null);
     }
 

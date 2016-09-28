@@ -17,6 +17,8 @@
 package sheepshead.manager.activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -217,7 +219,7 @@ public class FillGameResult extends AbstractBaseActivity {
      * @param b
      * @param msg
      */
-    private void printIf(CheckBox condition, StringBuilder b, String msg) {
+    private void printIf(@NonNull CheckBox condition, @NonNull StringBuilder b, @Nullable String msg) {
         if (condition.isChecked()) {
             b.append(msg);
             b.append('\n');
@@ -230,7 +232,7 @@ public class FillGameResult extends AbstractBaseActivity {
      * @param s The spinner to select from
      * @return
      */
-    private int getAmountOfConsecutiveTrumpsSelected(Spinner s) {
+    private int getAmountOfConsecutiveTrumpsSelected(@NonNull Spinner s) {
         String value = (String) s.getSelectedItem();
         try {
             return Integer.parseInt(value);

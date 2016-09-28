@@ -16,6 +16,8 @@
 
 package sheepshead.manager.appcore;
 
+import android.support.annotation.NonNull;
+
 /**
  * Singleton class for the general application behaviour.
  * It can be used by calling <code>SheepsheadManagerApplication.getInstance()</code>.
@@ -51,6 +53,7 @@ public final class SheepsheadManagerApplication {
      *
      * @return Instance of SheepsheadManagerApplication, of null if the singleton has not been created
      */
+    @NonNull
     public static SheepsheadManagerApplication getInstance() {
         return singleton;
     }

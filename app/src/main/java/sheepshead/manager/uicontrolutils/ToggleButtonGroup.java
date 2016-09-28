@@ -16,6 +16,7 @@
 
 package sheepshead.manager.uicontrolutils;
 
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
@@ -36,10 +37,12 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
     /**
      * The current type/behaviour
      */
+    @NonNull
     private Type grouptype;
     /**
      * Registered Listener that get notified when one of the buttons of the group is clicked
      */
+    @NonNull
     private List<View.OnClickListener> listener;
 
     /**
@@ -49,7 +52,7 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      * @param allButtons All buttons that belong to this group
      * @see ToggleButtonGroup.Type
      */
-    public ToggleButtonGroup(Type type, ToggleButton... allButtons) {
+    public ToggleButtonGroup(@NonNull Type type, ToggleButton... allButtons) {
         super(allButtons);
         if (allButtons.length <= 0) {
             throw new IllegalArgumentException("At least one " + ToggleButton.class.getSimpleName() + " must be given for this group");
@@ -64,7 +67,7 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      *
      * @param l the listener to be added
      */
-    public void addOnClickListener(View.OnClickListener l) {
+    public void addOnClickListener(@NonNull View.OnClickListener l) {
         if (!listener.contains(l)) {
             listener.add(l);
         }
@@ -76,7 +79,7 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      *
      * @param l listener to be removed
      */
-    public void removeOnClickListener(View.OnClickListener l) {
+    public void removeOnClickListener(@NonNull View.OnClickListener l) {
         listener.remove(l);
     }
 
@@ -85,7 +88,7 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      *
      * @param buttonPressed
      */
-    private void fire(ToggleButton buttonPressed) {
+    private void fire(@NonNull ToggleButton buttonPressed) {
         for (View.OnClickListener l : listener) {
             l.onClick(buttonPressed);
         }
@@ -98,7 +101,7 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      * @param isToggled
      * @see android.widget.CompoundButton.OnCheckedChangeListener#onCheckedChanged(CompoundButton, boolean)
      */
-    private void handleAllowOnlyOnePressed(ToggleButton b, boolean isToggled) {
+    private void handleAllowOnlyOnePressed(@NonNull ToggleButton b, boolean isToggled) {
         //Act only if the button was pressed, not released as
         // no pressed button is ok with Type ALLOW_ONLY_ONE_PRESSED
         if (isToggled) {
@@ -137,6 +140,7 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      *
      * @return
      */
+    @NonNull
     public Collection<ToggleButton> getPressedButtons() {
         Collection<ToggleButton> result = new ArrayList<>(groupcomponents.length);
         for (ToggleButton button : groupcomponents) {
@@ -148,13 +152,13 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
     }
 
     @Override
-    protected void addListenerFor(ToggleButton button) {
+    protected void addListenerFor(@NonNull ToggleButton button) {
         button.setClickable(true);
         button.setOnCheckedChangeListener(this);
     }
 
     @Override
-    protected void removeListenerFor(ToggleButton button) {
+    protected void removeListenerFor(@NonNull ToggleButton button) {
         button.setOnCheckedChangeListener(this);
     }
 
