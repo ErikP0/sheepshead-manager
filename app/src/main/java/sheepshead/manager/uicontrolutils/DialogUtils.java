@@ -26,7 +26,7 @@ import android.support.v7.app.AlertDialog;
 /**
  * Util class that contains methods to show different dialogs
  */
-public class DialogUtils {
+public final class DialogUtils {
 
     //class will only contain static methods
     private DialogUtils() {

@@ -17,6 +17,7 @@
 package sheepshead.manager.uicontrolutils;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
@@ -38,12 +39,12 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      * The current type/behaviour
      */
     @NonNull
-    private Type grouptype;
+    private final Type grouptype;
     /**
      * Registered Listener that get notified when one of the buttons of the group is clicked
      */
     @NonNull
-    private List<View.OnClickListener> listener;
+    private final List<View.OnClickListener> listener;
 
     /**
      * Creates a new ToggleButtonGroup using the type behaviour.
@@ -152,13 +153,13 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
     }
 
     @Override
-    protected void addListenerFor(@NonNull ToggleButton button) {
+    protected void addListenerFor(@Nullable ToggleButton button) {
         button.setClickable(true);
         button.setOnCheckedChangeListener(this);
     }
 
     @Override
-    protected void removeListenerFor(@NonNull ToggleButton button) {
+    protected void removeListenerFor(@Nullable ToggleButton button) {
         button.setOnCheckedChangeListener(this);
     }
 
@@ -170,6 +171,6 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
          * Allows only one button (out of the many in the group) to be ON. If another button is toggled
          * ON, all other buttons except the new one will be toggled OFF
          */
-        ALLOW_ONLY_ONE_PRESSED;
+        ALLOW_ONLY_ONE_PRESSED
     }
 }

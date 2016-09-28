@@ -31,10 +31,10 @@ import sheepshead.manager.appcore.StartupActivity;
  */
 public class LoadingScreen extends StartupActivity {
 
-    private View.OnClickListener l;
+    private final View.OnClickListener clickListener;
 
     public LoadingScreen() {
-        l = new View.OnClickListener() {
+        clickListener = new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -52,7 +52,7 @@ public class LoadingScreen extends StartupActivity {
         //no loading screen specific services/listeners
         View v = findViewById(R.id.activity_loading_screen);
         v.setClickable(true);
-        v.setOnClickListener(l);
+        v.setOnClickListener(clickListener);
     }
 
     @Override

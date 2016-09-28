@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheesphead.manager;
+package sheepshead.manager;
 
 import org.junit.Test;
 

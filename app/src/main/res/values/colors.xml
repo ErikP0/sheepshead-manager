@@ -23,8 +23,6 @@
     <!-- Color for outlining components-->
     <color name="colorAccent">#6b840e</color>
 
-    <color name="black_overlay">#66000000</color>
-
     <!-- Main-Background color (green)-->
     <color name="color_background">#0e8441</color>
     <!-- Main-text color (white) -->

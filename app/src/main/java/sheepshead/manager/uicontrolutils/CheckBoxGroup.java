@@ -35,7 +35,7 @@ public class CheckBoxGroup extends AbstractWidgetGroup<CheckBox> implements View
      * The validator responsible for detecting invalid states and fixing them
      */
     @NonNull
-    private ICheckboxGroupStateValidator validator;
+    private final ICheckboxGroupStateValidator validator;
 
     /**
      * @param vali          A validator for detecting invalid states

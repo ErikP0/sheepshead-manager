@@ -33,7 +33,7 @@ public final class SheepsheadManagerApplication {
      * Private constructor to only allow creation in {@see #create()}
      */
     private SheepsheadManagerApplication() {
-        singleton = this;
+        
     }
 
     /**

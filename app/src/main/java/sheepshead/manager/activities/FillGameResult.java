@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.ToggleButton;
@@ -79,9 +80,6 @@ public class FillGameResult extends AbstractBaseActivity {
     private SpinnerAdapter consecutiveListWenz;
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void registerActivitySpecificServices() {
         gameTypeGroup.addListener();
@@ -89,9 +87,6 @@ public class FillGameResult extends AbstractBaseActivity {
         playerModifierGroup.addListener();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void removeActivitySpecificServices() {
         gameTypeGroup.addListener();
@@ -99,17 +94,14 @@ public class FillGameResult extends AbstractBaseActivity {
         playerModifierGroup.removeListener();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        this.setContentView(R.layout.activity_fill_game_result);
+        setContentView(R.layout.activity_fill_game_result);
 
         //Create game type button group
-        ToggleButton sau = this.findView(R.id.FillGameResult_toggleBtn_sauspiel);
-        ToggleButton wenz = this.findView(R.id.FillGameResult_toggleBtn_wenz);
-        ToggleButton solo = this.findView(R.id.FillGameResult_toggleBtn_solo);
+        ToggleButton sau = findView(R.id.FillGameResult_toggleBtn_sauspiel);
+        ToggleButton wenz = findView(R.id.FillGameResult_toggleBtn_wenz);
+        ToggleButton solo = findView(R.id.FillGameResult_toggleBtn_solo);
         gameTypeGroup = new ToggleButtonGroup(Type.ALLOW_ONLY_ONE_PRESSED, sau, wenz, solo);
 
         //Create modifier caused by points group
@@ -219,7 +211,7 @@ public class FillGameResult extends AbstractBaseActivity {
      * @param b
      * @param msg
      */
-    private void printIf(@NonNull CheckBox condition, @NonNull StringBuilder b, @Nullable String msg) {
+    private void printIf(@NonNull Checkable condition, @NonNull StringBuilder b, @Nullable String msg) {
         if (condition.isChecked()) {
             b.append(msg);
             b.append('\n');
@@ -236,7 +228,7 @@ public class FillGameResult extends AbstractBaseActivity {
         String value = (String) s.getSelectedItem();
         try {
             return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ignore) {
             return 0;
         }
     }

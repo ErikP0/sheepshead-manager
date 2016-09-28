@@ -18,7 +18,6 @@
     <string name="app_name">Sheepshead Manager</string>
 
     <!-- Strings for LoadingScreenActivity -->
-    <string name="title_activity_loading_screen">LoadingScreenActivity</string>
     <string name="loading_screen_load_message">Schafkopf-Manager\nLade..</string>
 
     <!-- Strings for FillGameResultActivity -->
