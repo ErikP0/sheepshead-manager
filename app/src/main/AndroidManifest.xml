@@ -23,7 +23,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoTitleBar">
-        <activity android:name=".main.LoadingScreen">
+        <activity
+            android:name=".main.LoadingScreen"
+            android:screenOrientation="portrait"><!-- Disable tilting -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
