@@ -19,17 +19,23 @@ package sheepshead.manager.main;
 import android.os.Bundle;
 
 import sheepshead.manager.R;
+import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.appcore.StartupActivity;
 
 /**
  * Java-class for the LoadingScreen Activity.
  * The loading screen is the entry-point of the application.
  */
-public class LoadingScreen extends StartupActivity {
+public class LoadingScreen extends AbstractBaseActivity {
+
+    /**
+     * Ensures that the {@link SheepsheadManagerApplication#loadingScreen()} is not called more than once.
+     * This is necessary as {@link #createUserInterface(Bundle)} may get called multiple times (e.g.
+     * when the screen is tilted the current activity is re-created)
+     */
+    private static boolean loadingStarted = false;
 
     public LoadingScreen() {
-
     }
 
 
@@ -47,6 +53,10 @@ public class LoadingScreen extends StartupActivity {
     protected void createUserInterface(Bundle savedInstanceState) {
         setContentView(R.layout.activity_loading_screen);
 
-        SheepsheadManagerApplication.getInstance().loadingScreen();
+        if (!loadingStarted) {
+            loadingStarted = true;
+            SheepsheadManagerApplication.getInstance().loadingScreen();
+
+        }
     }
 }

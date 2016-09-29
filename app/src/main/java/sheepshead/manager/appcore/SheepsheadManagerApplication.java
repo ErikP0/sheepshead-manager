@@ -16,11 +16,14 @@
 
 package sheepshead.manager.appcore;
 
+import android.app.Application;
+import android.support.annotation.NonNull;
+
 /**
  * Singleton class for the general application behaviour.
  * It can be used by calling <code>SheepsheadManagerApplication.getInstance()</code>.
  */
-public final class SheepsheadManagerApplication {
+public final class SheepsheadManagerApplication extends Application {
 
     /**
      * singleton instance
@@ -28,31 +31,29 @@ public final class SheepsheadManagerApplication {
     private static SheepsheadManagerApplication singleton;
 
     /**
-     * Private constructor to only allow creation in {@see #create()}
-     */
-    private SheepsheadManagerApplication() {
-        singleton = this;
-    }
-
-    /**
-     * Creates the singleton. This can only be called once.
-     *
-     * @throws IllegalStateException When the singleton has been created before this call
-     */
-    public static void create() {
-        if (singleton != null) {
-            throw new IllegalStateException(SheepsheadManagerApplication.class.getSimpleName() + " is a singleton and can therefore only be created once");
-        }
-        singleton = new SheepsheadManagerApplication();
-    }
-
-    /**
      * Returns the singleton instance.
      *
-     * @return Instance of SheepsheadManagerApplication, of null if the singleton has not been created
+     * @return Instance of SheepsheadManagerApplication
      */
-    public static SheepsheadManagerApplication getInstance() {
+    public static
+    @NonNull
+    SheepsheadManagerApplication getInstance() {
         return singleton;
+    }
+
+    @Override
+    public void onCreate() {
+        //this is called at the beginning of the lifetime of this application
+        super.onCreate();
+        singleton = this;
+        startup();
+    }
+
+    @Override
+    public void onTerminate() {
+        //this is called at the end of the lifetime of this application
+        super.onTerminate();
+        saveApplicationState();
     }
 
     /**
@@ -76,6 +77,7 @@ public final class SheepsheadManagerApplication {
      */
     public void saveApplicationState() {
         //nothing to save yet
+        System.out.println("Save");
     }
 
     /**
@@ -84,7 +86,7 @@ public final class SheepsheadManagerApplication {
      */
     public void loadingScreen() {
         //nothing to load at the start of this app
-
+        System.out.println("Loading");
     }
 
     /**
@@ -93,5 +95,6 @@ public final class SheepsheadManagerApplication {
      */
     void startup() {
         //single-run code on startup here
+        System.out.println("Startup");
     }
 }
