@@ -28,12 +28,12 @@ public interface ICheckboxGroupStateValidator {
     /**
      * Validates the state of a CheckBoxGroup using the given checked-values of each CheckBox.
      *
-     * @param checkboxesChecked the checked-value of every CheckBox in the CheckBoxGroup.
+     * @param checkBoxValues the checked-value of every CheckBox in the CheckBoxGroup.
      *                          The order/indexing of these values is the insertion order of the
      *                          CheckBoxes into the CheckBoxGroup
      * @return true if the state is valid, otherwise false
      */
-    public boolean isInValidState(boolean[] checkboxesChecked);
+    public boolean isInValidState(boolean[] checkBoxValues);
 
     /**
      * Modifies the given checkBoxes in a way that after this call the CheckBoxGroup is considered

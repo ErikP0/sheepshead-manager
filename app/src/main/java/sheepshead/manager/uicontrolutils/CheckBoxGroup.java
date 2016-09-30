@@ -38,12 +38,12 @@ public class CheckBoxGroup extends AbstractWidgetGroup<CheckBox> implements View
     private final ICheckboxGroupStateValidator validator;
 
     /**
-     * @param vali          A validator for detecting invalid states
+     * @param stateValidator          A validator for detecting invalid states
      * @param allcheckboxes all Checkboxes that belong to this CheckBoxGroup
      */
-    public CheckBoxGroup(@NonNull ICheckboxGroupStateValidator vali, @NonNull CheckBox... allcheckboxes) {
+    public CheckBoxGroup(@NonNull ICheckboxGroupStateValidator stateValidator, @NonNull CheckBox... allcheckboxes) {
         super(allcheckboxes);
-        validator = vali;
+        validator = stateValidator;
         if (allcheckboxes.length <= 0) {
             throw new IllegalArgumentException("At least one " + CheckBox.class.getSimpleName() + " must be given for this group");
         }

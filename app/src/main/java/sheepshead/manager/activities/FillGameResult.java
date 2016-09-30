@@ -57,41 +57,43 @@ public class FillGameResult extends AbstractBaseActivity {
      * would be schneider=false, schwarz=true: Not possible as scheider is caused when the points are
      * below 30/31, schwarz is caused when points are 0
      */
-    private CheckBoxGroup pointModifierGroup;
+    private CheckBoxGroup schneiderSchwarzGroup;
     /**
      * The group of Checkboxes for the modifiers caused by players ("Kontra" and "Re")
      * A group is required because both checkboxes must always be in a valid state. A invalid state
      * would be kontra=false, re=true: Not possible as "Re" cannot be given without a "Kontra" first
      */
-    private CheckBoxGroup playerModifierGroup;
+    private CheckBoxGroup kontraReGroup;
     /**
-     * Dropdown list for the consecutive high trumps selection
+     * Dropdown list for the "Laufende" selection
      * This list only contains one entry claiming no game type was selected
      */
-    private SpinnerAdapter consecutiveListMissingGameType;
+    private SpinnerAdapter entriesLaufendeMissingGameType;
     /**
-     * Dropdown list for the consecutive high trumps selection
+     * Dropdown list for the "Laufende" selection
      * This list contains entries permitted in a "Sauspiel" or "Farbsolo", so [0, 3-8]
      */
-    private SpinnerAdapter consecutiveListNormal;
+    private SpinnerAdapter entriesLaufendeNormal;
     /**
-     * Dropdown list for the consecutive high trumps selection
-     * This list contains entries permitted in a "Wenz", so [2-8]
+     * Dropdown list for the "Laufende" selection
+     * This list contains entries permitted in a "Wenz", so [2-4]
      */
-    private SpinnerAdapter consecutiveListWenz;
+    private SpinnerAdapter entriesLaufendeWenz;
+
+    private Spinner dropdownLaufende;
 
     @Override
     protected void registerActivitySpecificServices() {
         gameTypeGroup.addListener();
-        pointModifierGroup.addListener();
-        playerModifierGroup.addListener();
+        schneiderSchwarzGroup.addListener();
+        kontraReGroup.addListener();
     }
 
     @Override
     protected void removeActivitySpecificServices() {
         gameTypeGroup.addListener();
-        pointModifierGroup.removeListener();
-        playerModifierGroup.removeListener();
+        schneiderSchwarzGroup.removeListener();
+        kontraReGroup.removeListener();
     }
 
     @Override
@@ -100,30 +102,27 @@ public class FillGameResult extends AbstractBaseActivity {
 
 
         //Create game type button group
-        ToggleButton sau = findView(R.id.FillGameResult_toggleBtn_sauspiel);
-        ToggleButton wenz = findView(R.id.FillGameResult_toggleBtn_wenz);
-        ToggleButton solo = findView(R.id.FillGameResult_toggleBtn_solo);
-        gameTypeGroup = new ToggleButtonGroup(Type.ALLOW_ONLY_ONE_PRESSED, sau, wenz, solo);
+        ToggleButton buttonSauspiel = findView(R.id.FillGameResult_toggleBtn_sauspiel);
+        ToggleButton buttonWenz = findView(R.id.FillGameResult_toggleBtn_wenz);
+        ToggleButton buttonSolo = findView(R.id.FillGameResult_toggleBtn_solo);
+        gameTypeGroup = new ToggleButtonGroup(Type.ALLOW_ONLY_ONE_PRESSED, buttonSauspiel, buttonWenz, buttonSolo);
 
-        //Create modifier caused by points group
-        final CheckBox schneider = findView(R.id.FillGameResult_checkbox_is_schneider);
-        final CheckBox schwarz = findView(R.id.FillGameResult_checkbox_is_schwarz);
-        pointModifierGroup = new CheckBoxGroup(new FillGameResultCheckboxValidator(), schneider, schwarz);
+        //Create schneider/schwarz group
+        final CheckBox checkboxSchneider = findView(R.id.FillGameResult_checkbox_is_schneider);
+        final CheckBox checkboxSchwarz = findView(R.id.FillGameResult_checkbox_is_schwarz);
+        schneiderSchwarzGroup = new CheckBoxGroup(new FillGameResultCheckboxValidator(), checkboxSchneider, checkboxSchwarz);
 
-        //Create modifier caused by players group
-        final CheckBox kontra = findView(R.id.FillGameResult_checkbox_is_kontra);
-        final CheckBox re = findView(R.id.FillGameResult_checkbox_is_re);
-        playerModifierGroup = new CheckBoxGroup(new FillGameResultCheckboxValidator(), kontra, re);
-
-        final CheckBox tout = findView(R.id.FillGameResult_checkbox_is_tout);
-        final CheckBox sie = findView(R.id.FillGameResult_checkbox_is_sie);
+        //Create kontra/re group
+        final CheckBox checkboxKontra = findView(R.id.FillGameResult_checkbox_is_kontra);
+        final CheckBox checkboxRe = findView(R.id.FillGameResult_checkbox_is_re);
+        kontraReGroup = new CheckBoxGroup(new FillGameResultCheckboxValidator(), checkboxKontra, checkboxRe);
 
         //Create consecutive high trumps spinner
-        final Spinner consecutiveTrumpsSpinner = findView(R.id.FillGameResult_consecutive_dropdown);
-        consecutiveListNormal = createSpinnerAdapter(R.array.array_consecutive_normal);
-        consecutiveListMissingGameType = createSpinnerAdapter(R.array.array_no_gametype_selected);
-        consecutiveListWenz = createSpinnerAdapter(R.array.array_consecutive_wenz);
-        consecutiveTrumpsSpinner.setAdapter(consecutiveListMissingGameType);//TODO load spinner state
+        dropdownLaufende = findView(R.id.FillGameResult_laufende_dropdown);
+        entriesLaufendeNormal = createSpinnerAdapter(R.array.array_laufende_normal);
+        entriesLaufendeMissingGameType = createSpinnerAdapter(R.array.array_no_gametype_selected);
+        entriesLaufendeWenz = createSpinnerAdapter(R.array.array_laufende_wenz);
+        dropdownLaufende.setAdapter(entriesLaufendeMissingGameType);//TODO load spinner state
 
         /*
         This adds a Listener to the game type selection, that fires when a new game type is selected
@@ -141,26 +140,22 @@ public class FillGameResult extends AbstractBaseActivity {
                     //no game type selected
                     //the ToggleButtonGroup only allows one button to be ON, if this active button
                     //is now turned OFF, no other button is ON -> no game type selected
-                    switchAdapter(consecutiveListMissingGameType);
+                    switchAdapter(entriesLaufendeMissingGameType);
                 } else if (text.equals(getString(R.string.FillGameResult_wenz))) {
-                    switchAdapter(consecutiveListWenz);
+                    switchAdapter(entriesLaufendeWenz);
                 } else {
                     //This branch applies for "Sauspiel" and "Farbsolo"
-                    switchAdapter(consecutiveListNormal);
-                }
-            }
-
-            /**
-             * Switches the spinner adapter if needed
-             * @param newOne
-             */
-            private void switchAdapter(SpinnerAdapter newOne) {
-                if (consecutiveTrumpsSpinner.getAdapter() != newOne) {
-                    consecutiveTrumpsSpinner.setAdapter(newOne);
+                    switchAdapter(entriesLaufendeNormal);
                 }
             }
         });
 
+        final CheckBox checkboxTout = findView(R.id.FillGameResult_checkbox_is_tout);
+        final CheckBox checkboxSie = findView(R.id.FillGameResult_checkbox_is_sie);
+
+        /**
+         * Add a listener that disables "Tout" and "Sie" checkboxes when no game type/"Sauspiel" was selected
+         */
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,15 +164,15 @@ public class FillGameResult extends AbstractBaseActivity {
                 if (!button.isChecked() || button.getTextOn().equals(getString(R.string.FillGameResult_sauspiel))) {
                     //disable "Tout" and "sie" checkboxes
                     enable = false;
-                    tout.setChecked(false);
-                    sie.setChecked(false);
+                    checkboxTout.setChecked(false);
+                    checkboxSie.setChecked(false);
                 }
-                tout.setEnabled(enable);
-                sie.setEnabled(enable);
+                checkboxTout.setEnabled(enable);
+                checkboxSie.setEnabled(enable);
             }
         });
 
-        final CheckBox playerWon = findView(R.id.FillGameResult_checkbox_playerside_won);
+        final CheckBox checkboxPlayerWon = findView(R.id.FillGameResult_checkbox_playerside_won);
 
         Button confirm = findView(R.id.FillGameResult_button_confirm);
         //Adds a listener, that will display a message containing the filled in attributes or will
@@ -192,19 +187,19 @@ public class FillGameResult extends AbstractBaseActivity {
                     StringBuilder b = new StringBuilder();
                     b.append("Trage ").append(gameTypeButtons.iterator().next().getTextOn());
                     b.append(" ein.\n");
-                    if (playerWon.isChecked()) {
+                    if (checkboxPlayerWon.isChecked()) {
                         b.append("Spieler hat sein Spiel gewonnen.\n");
                     } else {
                         b.append("Spieler hat sein Spiel verloren.\n");
                     }
-                    printIf(schneider, b, "Schneider");
-                    printIf(schwarz, b, "Schwarz");
-                    printIf(kontra, b, "Kontra");
-                    printIf(re, b, "Re");
-                    printIf(tout, b, "Tout");
-                    printIf(sie, b, "Sie");
+                    printIf(checkboxSchneider, b, "Schneider");
+                    printIf(checkboxSchwarz, b, "Schwarz");
+                    printIf(checkboxKontra, b, "Kontra");
+                    printIf(checkboxRe, b, "Re");
+                    printIf(checkboxTout, b, "Tout");
+                    printIf(checkboxSie, b, "Sie");
                     b.append("Anzahl Laufenden: ");
-                    b.append(getAmountOfConsecutiveTrumpsSelected(consecutiveTrumpsSpinner));
+                    b.append(getAmountOfConsecutiveTrumpsSelected(dropdownLaufende));
                     b.append('\n');
                     DialogUtils.showInfoDialog(FillGameResult.this, b.toString(), getString(R.string.FillGameResult_confirm_dialog), null);
                 } else {
@@ -213,6 +208,17 @@ public class FillGameResult extends AbstractBaseActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Switches the spinner adapter if needed
+     *
+     * @param newOne
+     */
+    private void switchAdapter(SpinnerAdapter newOne) {
+        if (dropdownLaufende.getAdapter() != newOne) {
+            dropdownLaufende.setAdapter(newOne);
+        }
     }
 
     /**

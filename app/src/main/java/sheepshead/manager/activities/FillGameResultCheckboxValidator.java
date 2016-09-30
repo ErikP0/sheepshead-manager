@@ -31,10 +31,10 @@ import sheepshead.manager.uicontrolutils.ICheckboxGroupStateValidator;
 public class FillGameResultCheckboxValidator implements ICheckboxGroupStateValidator {
 
     @Override
-    public boolean isInValidState(boolean[] checkboxesChecked) {
+    public boolean isInValidState(boolean[] checkBoxValues) {
         //if first is not checked, second is checked return false
         //otherwise true
-        return !(!checkboxesChecked[0] && checkboxesChecked[1]);
+        return !(!checkBoxValues[0] && checkBoxValues[1]);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      * Registered Listener that get notified when one of the buttons of the group is clicked
      */
     @NonNull
-    private final List<View.OnClickListener> listener;
+    private final List<View.OnClickListener> onClickListeners;
 
     /**
      * Creates a new ToggleButtonGroup using the type behaviour.
@@ -59,18 +59,18 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
             throw new IllegalArgumentException("At least one " + ToggleButton.class.getSimpleName() + " must be given for this group");
         }
         grouptype = type;
-        listener = new LinkedList<>();
+        onClickListeners = new LinkedList<>();
     }
 
     /**
      * Registers a {@link android.view.View.OnClickListener} that gets notified when
      * a button of the group is clicked
      *
-     * @param l the listener to be added
+     * @param listener the onClickListeners to be added
      */
-    public void addOnClickListener(@NonNull View.OnClickListener l) {
-        if (!listener.contains(l)) {
-            listener.add(l);
+    public void addOnClickListener(@NonNull View.OnClickListener listener) {
+        if (!onClickListeners.contains(listener)) {
+            onClickListeners.add(listener);
         }
     }
 
@@ -78,10 +78,10 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      * Removes a {@link android.view.View.OnClickListener}.
      * l will no longer get notified when a button of the group is clicked
      *
-     * @param l listener to be removed
+     * @param listener onClickListeners to be removed
      */
-    public void removeOnClickListener(@NonNull View.OnClickListener l) {
-        listener.remove(l);
+    public void removeOnClickListener(@NonNull View.OnClickListener listener) {
+        onClickListeners.remove(listener);
     }
 
     /**
@@ -90,8 +90,8 @@ public class ToggleButtonGroup extends AbstractWidgetGroup<ToggleButton> impleme
      * @param buttonPressed
      */
     private void fire(@NonNull ToggleButton buttonPressed) {
-        for (View.OnClickListener l : listener) {
-            l.onClick(buttonPressed);
+        for (View.OnClickListener listener : onClickListeners) {
+            listener.onClick(buttonPressed);
         }
     }
 

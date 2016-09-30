@@ -24,7 +24,7 @@ import android.view.View;
  * Abstraction for a group of elements.
  * This class provides common functionality like find element's index to avoid code redundancy
  *
- * @param <E> Type of the stores elements
+ * @param <E> Type of the stored elements
  */
 public abstract class AbstractWidgetGroup<E extends View> {
 
