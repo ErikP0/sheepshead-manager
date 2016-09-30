@@ -29,6 +29,8 @@
     <string name="FillGameResult.schwarz">Schwarz</string>
     <string name="FillGameResult.kontra">Kontra</string>
     <string name="FillGameResult.re">Re</string>
+    <string name="FillGameResult.tout">Tout</string>
+    <string name="FillGameResult.sie">Sie</string>
     <string name="FillGameResult.consecutive_high_trumps_msg">Laufende</string>
     <string name="FillGameResult.missing_game_type_msg">Spielart fehlt !</string>
     <string name="FillGameResult.confirm_dialog">Ok</string>

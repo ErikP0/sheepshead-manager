@@ -43,6 +43,8 @@ import sheepshead.manager.uicontrolutils.ToggleButtonGroup.Type;
  */
 public class FillGameResult extends AbstractBaseActivity {
 
+    private static final String bundlekey_selected_game_type = "game_type_selected";
+    private static final String bundlekey_selected_game_type_index = "game_type_index";
     /**
      * The button group for selecting the game type.
      * A group is required because there cannot be more than one game type selected
@@ -62,7 +64,6 @@ public class FillGameResult extends AbstractBaseActivity {
      * would be kontra=false, re=true: Not possible as "Re" cannot be given without a "Kontra" first
      */
     private CheckBoxGroup playerModifierGroup;
-
     /**
      * Dropdown list for the consecutive high trumps selection
      * This list only contains one entry claiming no game type was selected
@@ -78,7 +79,6 @@ public class FillGameResult extends AbstractBaseActivity {
      * This list contains entries permitted in a "Wenz", so [2-8]
      */
     private SpinnerAdapter consecutiveListWenz;
-
 
     @Override
     protected void registerActivitySpecificServices() {
@@ -98,6 +98,7 @@ public class FillGameResult extends AbstractBaseActivity {
     protected void createUserInterface(Bundle savedInstanceState) {
         setContentView(R.layout.activity_fill_game_result);
 
+
         //Create game type button group
         ToggleButton sau = findView(R.id.FillGameResult_toggleBtn_sauspiel);
         ToggleButton wenz = findView(R.id.FillGameResult_toggleBtn_wenz);
@@ -114,13 +115,15 @@ public class FillGameResult extends AbstractBaseActivity {
         final CheckBox re = findView(R.id.FillGameResult_checkbox_is_re);
         playerModifierGroup = new CheckBoxGroup(new FillGameResultCheckboxValidator(), kontra, re);
 
+        final CheckBox tout = findView(R.id.FillGameResult_checkbox_is_tout);
+        final CheckBox sie = findView(R.id.FillGameResult_checkbox_is_sie);
+
         //Create consecutive high trumps spinner
         final Spinner consecutiveTrumpsSpinner = findView(R.id.FillGameResult_consecutive_dropdown);
         consecutiveListNormal = createSpinnerAdapter(R.array.array_consecutive_normal);
         consecutiveListMissingGameType = createSpinnerAdapter(R.array.array_no_gametype_selected);
         consecutiveListWenz = createSpinnerAdapter(R.array.array_consecutive_wenz);
-        //on creation, no gametype is selected -> missingType must be displayed
-        consecutiveTrumpsSpinner.setAdapter(consecutiveListMissingGameType);
+        consecutiveTrumpsSpinner.setAdapter(consecutiveListMissingGameType);//TODO load spinner state
 
         /*
         This adds a Listener to the game type selection, that fires when a new game type is selected
@@ -158,6 +161,22 @@ public class FillGameResult extends AbstractBaseActivity {
             }
         });
 
+        gameTypeGroup.addOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToggleButton button = (ToggleButton) v;
+                boolean enable = true;
+                if (!button.isChecked() || button.getTextOn().equals(getString(R.string.FillGameResult_sauspiel))) {
+                    //disable "Tout" and "sie" checkboxes
+                    enable = false;
+                    tout.setChecked(false);
+                    sie.setChecked(false);
+                }
+                tout.setEnabled(enable);
+                sie.setEnabled(enable);
+            }
+        });
+
         final CheckBox playerWon = findView(R.id.FillGameResult_checkbox_playerside_won);
 
         Button confirm = findView(R.id.FillGameResult_button_confirm);
@@ -182,6 +201,8 @@ public class FillGameResult extends AbstractBaseActivity {
                     printIf(schwarz, b, "Schwarz");
                     printIf(kontra, b, "Kontra");
                     printIf(re, b, "Re");
+                    printIf(tout, b, "Tout");
+                    printIf(sie, b, "Sie");
                     b.append("Anzahl Laufenden: ");
                     b.append(getAmountOfConsecutiveTrumpsSelected(consecutiveTrumpsSpinner));
                     b.append('\n');
@@ -233,4 +254,10 @@ public class FillGameResult extends AbstractBaseActivity {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle b) {
+        super.onSaveInstanceState(b);
+        //TODO save spinner state
+
+    }
 }

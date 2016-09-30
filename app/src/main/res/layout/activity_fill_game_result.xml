@@ -110,6 +110,18 @@
                     android:layout_height="wrap_content"
                     android:text="@string/FillGameResult.re"/>
 
+                <CheckBox
+                    android:id="@+id/FillGameResult.checkbox_is_tout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FillGameResult.tout"/>
+
+                <CheckBox
+                    android:id="@+id/FillGameResult.checkbox_is_sie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FillGameResult.sie"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
