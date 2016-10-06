@@ -14,13 +14,13 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.main.SingleGameRequirements;
+package sheepshead.manager.singleGameRequirements;
 
 /**
  * Created by Nicolas on 01.10.2016.
  */
 
-public class ConstantsForSheepshead {
+public class SheapsheadConstants {
 
     public final static int GRUNDTARIF = 10;
 
@@ -29,7 +29,7 @@ public class ConstantsForSheepshead {
     public final static int LAUFENDENTARIF = GRUNDTARIF;
 
 
-    public ConstantsForSheepshead(){
+    public SheapsheadConstants(){
 
     }
 }

@@ -14,13 +14,13 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.main.SingleGameRequirements;
+package sheepshead.manager.singleGameRequirements;
 
 /**
- * Created by Nicolas on 01.10.2016.
+ * Created by Nicolas on 06.10.2016.
  */
 
-public class Stake {
+public class StakeModifier {
 
     private boolean isKontra;
 
@@ -42,10 +42,8 @@ public class Stake {
 
     private int numberOfLaufende;
 
-    private int stakeValue;
 
-
-    public Stake(){
+    public StakeModifier(){
         this.isKontra = false;
         this.isRe = false;
         this.isTout = false;
@@ -54,8 +52,6 @@ public class Stake {
         this.isSchwarz = false;
         this.numberOfLaufende = 0;
     }
-
-
 
 
     public boolean isRe() {
@@ -112,41 +108,6 @@ public class Stake {
 
     public void setNumberOfLaufende(int numberOfLaufende) {
         this.numberOfLaufende = numberOfLaufende;
-    }
-
-
-    public void setStakeValue(GameType gameType){
-        stakeValue = gameType.getNormalPriceForOnePlayer();
-
-        if(getNumberOfLaufende() >= 3 && (gameType.equals(GameType.SOLO) || gameType.equals(GameType.SAUSPIEL))
-        || getNumberOfLaufende() >= 2 && gameType.equals(GameType.WENZ)){
-            stakeValue = stakeValue + getNumberOfLaufende() * ConstantsForSheepshead.LAUFENDENTARIF;
-        }
-
-        //Laut Wiki wird bei Tout und Sie kein Schneider oder Schwarz gerechnet
-        if (isTout()){
-            stakeValue = stakeValue * 2;
-        } else if(isSie()){
-            stakeValue = stakeValue * 4;
-        } else { //Weder Tout oder Sie werden gespielt,
-            if(isSchneider()){
-                stakeValue = stakeValue + ConstantsForSheepshead.GRUNDTARIF;
-            }
-            if (isSchwarz()){
-                stakeValue = stakeValue + ConstantsForSheepshead.GRUNDTARIF;
-            }
-        }
-
-        if (isKontra() && !isRe()){
-            stakeValue = stakeValue * 2;
-        }else if (isRe()){
-            stakeValue = stakeValue * 4;
-        }
-
-    }
-
-    public int getStakeValue(){
-        return stakeValue;
     }
 
 }

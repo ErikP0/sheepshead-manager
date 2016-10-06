@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.main.SingleGameRequirements;
+package sheepshead.manager.singleGameRequirements;
 
 /**
  * Created by Nicolas on 01.10.2016.
@@ -22,11 +22,11 @@ package sheepshead.manager.main.SingleGameRequirements;
 
 public class Player {
 
-    private String playername;
+    private String name;
 
-    private int playernumber;
+    private int number;
 
-    private boolean isPlayer;
+    private boolean isCaller;
 
     private boolean hasWon;
 
@@ -36,36 +36,36 @@ public class Player {
     private int priceToGet;
 
 
-    public Player(String playername, int playernumber){
-        this.playername = playername;
-        this.playernumber = playernumber;
-        this.isPlayer = false;
+    public Player(String name, int number){
+        this.name = name;
+        this.number = number;
+        this.isCaller = false;
         this.hasWon = false;
     }
 
 
-    public String getPlayername() {
-        return playername;
+    public String getName() {
+        return name;
     }
 
-    public void setPlayername(String playername) {
-        this.playername = playername;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getPlayernumber() {
-        return playernumber;
+    public int getNumber() {
+        return number;
     }
 
-    public void setPlayernumber(int playernumber) {
-        this.playernumber = playernumber;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
-    public boolean isPlayer() {
-        return isPlayer;
+    public boolean isCaller() {
+        return isCaller;
     }
 
-    public void setPlayer(boolean player) {
-        isPlayer = player;
+    public void setCaller(boolean caller) {
+        isCaller = caller;
     }
 
     public int getPriceToGet() {
@@ -76,7 +76,7 @@ public class Player {
         this.priceToGet = priceToGet;
     }
 
-    public boolean isHasWon() {
+    public boolean hasWon() {
         return hasWon;
     }
 

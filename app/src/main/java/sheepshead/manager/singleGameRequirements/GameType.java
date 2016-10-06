@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.main.SingleGameRequirements;
+package sheepshead.manager.singleGameRequirements;
 
 /**
  * Created by Nicolas on 01.10.2016.
@@ -22,18 +22,14 @@ package sheepshead.manager.main.SingleGameRequirements;
 
 public enum GameType {
 
-    SAUSPIEL(ConstantsForSheepshead.GRUNDTARIF, 1),
-    WENZ(ConstantsForSheepshead.SOLOTARIF, 3),
-    SOLO(ConstantsForSheepshead.SOLOTARIF, 3),
+    SAUSPIEL(SheapsheadConstants.GRUNDTARIF, 1),
+    WENZ(SheapsheadConstants.SOLOTARIF, 3),
+    SOLO(SheapsheadConstants.SOLOTARIF, 3),
     LEER(0, 1); //Wird aktuell nicht gebraucht, könnte aber evtl. mal nützlich sein
 
     private int normalPriceForOnePlayer;
 
     private int teamMultiplier;
-
-    GameType(){
-
-    }
 
     GameType(int normalPriceForOnePlayer, int teamMultiplier){
         this.normalPriceForOnePlayer = normalPriceForOnePlayer;
