@@ -84,4 +84,19 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
      * @param savedInstanceState {@link AppCompatActivity#onCreate(Bundle)}
      */
     protected abstract void createUserInterface(Bundle savedInstanceState);
+
+    /**
+     * Utility method for {@link #findViewById(int)}.
+     * The return type is not a view, but will be casted into the type of the catching variable.
+     * So a explicit cast is no longer needed:
+     * <code>Button b = findView(someId)</code> instead of
+     * <code>Button b = (Button)findViewById(someId)</code>
+     *
+     * @param id
+     * @param <T> result type
+     * @return
+     */
+    protected <T extends android.view.View> T findView(@android.support.annotation.IdRes int id) {
+        return (T) findViewById(id);
+    }
 }

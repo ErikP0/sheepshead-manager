@@ -21,6 +21,7 @@ import android.os.Bundle;
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.appcore.StartupActivity;
 
 /**
  * Java-class for the LoadingScreen Activity.
@@ -36,6 +37,7 @@ public class LoadingScreen extends AbstractBaseActivity {
     private static boolean loadingStarted = false;
 
     public LoadingScreen() {
+
     }
 
 

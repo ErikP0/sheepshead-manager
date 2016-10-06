@@ -18,6 +18,39 @@
     <string name="app_name">Sheepshead Manager</string>
 
     <!-- Strings for LoadingScreenActivity -->
-    <string name="title_activity_loading_screen">LoadingScreenActivity</string>
     <string name="loading_screen_load_message">Schafkopf-Manager\nLade..</string>
+
+    <!-- Strings for FillGameResultActivity -->
+    <string name="FillGameResult.playerside_won">Spieler hat gewonnen</string>
+    <string name="FillGameResult.sauspiel">Sauspiel</string>
+    <string name="FillGameResult.wenz">Wenz</string>
+    <string name="FillGameResult.farbsolo">Farbsolo</string>
+    <string name="FillGameResult.schneider">Schneider</string>
+    <string name="FillGameResult.schwarz">Schwarz</string>
+    <string name="FillGameResult.kontra">Kontra</string>
+    <string name="FillGameResult.re">Re</string>
+    <string name="FillGameResult.tout">Tout</string>
+    <string name="FillGameResult.sie">Sie</string>
+    <string name="FillGameResult.text_laufende">Laufende</string>
+    <string name="FillGameResult.missing_game_type_msg">Spielart fehlt !</string>
+    <string name="FillGameResult.confirm_dialog">Ok</string>
+    <string name="FillGameResult.confirm_result_text">Ok!</string>
+    <string-array name="array_laufende_normal">
+        <item>keine</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="array_laufende_wenz">
+        <item>keine</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="array_no_gametype_selected">
+        <item>Kein Spiel ausgewählt</item>
+    </string-array>
 </resources>
