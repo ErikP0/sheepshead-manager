@@ -16,6 +16,7 @@
 
 package sheepshead.manager.singleGameRequirements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,20 +27,24 @@ public class SingleGameResult {
     /**
      * Wer spielt mit in aktuellem Spiel
      */
-    private List<Player> participatingPlayers;
+    private ArrayList<Player> playerList;
 
     private GameType gameType;
 
     private StakeModifier stakeModifier;
+
+    private ArrayList<Integer> singleGameMoney;
 
 
     /**
      * Bei neuem Spiel: Wer spielt mit, welcher GameType, wer mit wem, wie ging das Spiel aus, welcher Spieler kriegt/verliert wieviel
      */
 
-    public SingleGameResult(List<Player> participatingPlayers, GameType gameType, StakeModifier stakeModifier) {
+    public SingleGameResult(ArrayList<Player> playerList, GameType gameType, StakeModifier stakeModifier) {
 
-        this.participatingPlayers = participatingPlayers;
+        singleGameMoney = new ArrayList<Integer>(playerList.size() * 2); //Hier ist das Geld der Spieler, das sie in der Runde zahlen müssen und insgesamt besitzen/zahlen müssen aufgeführt. 1. Wert gesamt Geld 2. Geld in dem Spiel
+
+        this.playerList = playerList;
 
         this.gameType = gameType;
 
@@ -52,18 +57,29 @@ public class SingleGameResult {
 
         final int stakeValue = calculateStakeValue();
 
-        for (Player player : participatingPlayers){
-            if (player.hasWon()){
-                winLoseMultiplier = 1;
-            }else{
-                winLoseMultiplier = -1;
+        for (Player player : playerList){
+            if (player.isParticipant()) {
+                if (player.hasWon()){
+                    winLoseMultiplier = 1;
+                } else {
+                    winLoseMultiplier = -1;
+                }
+
+                if (player.isCaller()) {
+                    player.setPriceToGetInSingleGame(gameType.getTeamMultiplier() * winLoseMultiplier * stakeValue);
+                } else {
+                    player.setPriceToGetInSingleGame(winLoseMultiplier * stakeValue);
+                }
+
+                player.setPriceToGetInSession(player.getPriceToGetInSession() + player.getPriceToGetInSingleGame());
+
+            } else {
+                player.setPriceToGetInSingleGame(0);
             }
 
-            if (player.isCaller()){
-                player.setPriceToGet(gameType.getTeamMultiplier() * winLoseMultiplier * stakeValue);
-            }else{
-                player.setPriceToGet(winLoseMultiplier * stakeValue);
-            }
+            singleGameMoney.add(player.getPriceToGetInSession());
+            singleGameMoney.add(player.getPriceToGetInSingleGame());
+
         }
     }
 
@@ -98,9 +114,8 @@ public class SingleGameResult {
 
     }
 
-    //TODO ?
-    private void showSingleGameResult(){
-
+    public ArrayList<Integer> getSingleGameMoney(){
+        return singleGameMoney;
     }
 
 }

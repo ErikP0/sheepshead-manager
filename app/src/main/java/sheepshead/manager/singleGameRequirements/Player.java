@@ -24,16 +24,20 @@ public class Player {
 
     private String name;
 
-    private int number;
+    private int number; //it should always start with 0 for the first player, 1 for the second ...
 
     private boolean isCaller;
 
     private boolean hasWon;
 
+    private boolean isParticipant;
+
     /**
      * if player lost game, this int is negative
      */
-    private int priceToGet;
+    private int priceToGetInSingleGame = 0;
+
+    private int priceToGetInSession = 0;
 
 
     public Player(String name, int number){
@@ -41,6 +45,7 @@ public class Player {
         this.number = number;
         this.isCaller = false;
         this.hasWon = false;
+        this.isParticipant = true;
     }
 
 
@@ -68,12 +73,12 @@ public class Player {
         isCaller = caller;
     }
 
-    public int getPriceToGet() {
-        return priceToGet;
+    public int getPriceToGetInSingleGame() {
+        return priceToGetInSingleGame;
     }
 
-    public void setPriceToGet(int priceToGet) {
-        this.priceToGet = priceToGet;
+    public void setPriceToGetInSingleGame(int priceToGetInSingleGame) {
+        this.priceToGetInSingleGame = priceToGetInSingleGame;
     }
 
     public boolean hasWon() {
@@ -82,6 +87,22 @@ public class Player {
 
     public void setHasWon(boolean hasWon) {
         this.hasWon = hasWon;
+    }
+
+    public boolean isParticipant() {
+        return isParticipant;
+    }
+
+    public void setParticipant(boolean participant) {
+        isParticipant = participant;
+    }
+
+    public int getPriceToGetInSession() {
+        return priceToGetInSession;
+    }
+
+    public void setPriceToGetInSession(int priceToGetInSession) {
+        this.priceToGetInSession = priceToGetInSession;
     }
 
 }

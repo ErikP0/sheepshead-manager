@@ -16,8 +16,10 @@
 
 package sheepshead.manager.singleGameRequirements;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,16 +30,19 @@ import static org.junit.Assert.assertEquals;
  */
 public class SingleGameResultTest {
 
-    private Player player1 = new Player("A", 1);
-    private Player player2 = new Player("B", 2);
-    private Player player3 = new Player("C", 3);
-    private Player player4 = new Player("D", 4);
+    private Player player1 = new Player("A", 0);
+    private Player player2 = new Player("B", 1);
+    private Player player3 = new Player("C", 2);
+    private Player player4 = new Player("D", 3);
+
+    private ArrayList<Player> playerList;
 
     private SingleGameResult singleGameResult;
 
     private GameType gameType;
 
     private StakeModifier stakeModifier;
+
 
     @Test
     public void testNormalSauspielPlayer1and2Won() throws Exception {
@@ -48,7 +53,7 @@ public class SingleGameResultTest {
         player3.setCaller(true);
         player4.setCaller(true);
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -56,10 +61,10 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(10, player1.getPriceToGet());
-        assertEquals(10, player2.getPriceToGet());
-        assertEquals(-10, player3.getPriceToGet());
-        assertEquals(-10, player4.getPriceToGet());
+        assertEquals(10, player1.getPriceToGetInSingleGame());
+        assertEquals(10, player2.getPriceToGetInSingleGame());
+        assertEquals(-10, player3.getPriceToGetInSingleGame());
+        assertEquals(-10, player4.getPriceToGetInSingleGame());
     }
 
     @Test
@@ -71,7 +76,7 @@ public class SingleGameResultTest {
         player3.setCaller(true);
         player4.setCaller(true);
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -84,10 +89,10 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(60, player1.getPriceToGet());
-        assertEquals(60, player2.getPriceToGet());
-        assertEquals(-60, player3.getPriceToGet());
-        assertEquals(-60, player4.getPriceToGet());
+        assertEquals(60, player1.getPriceToGetInSingleGame());
+        assertEquals(60, player2.getPriceToGetInSingleGame());
+        assertEquals(-60, player3.getPriceToGetInSingleGame());
+        assertEquals(-60, player4.getPriceToGetInSingleGame());
 
     }
 
@@ -100,7 +105,7 @@ public class SingleGameResultTest {
         player1.setCaller(true);
         player3.setCaller(true);
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -112,10 +117,10 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(70, player1.getPriceToGet());
-        assertEquals(-70, player2.getPriceToGet());
-        assertEquals(70, player3.getPriceToGet());
-        assertEquals(-70, player4.getPriceToGet());
+        assertEquals(70, player1.getPriceToGetInSingleGame());
+        assertEquals(-70, player2.getPriceToGetInSingleGame());
+        assertEquals(70, player3.getPriceToGetInSingleGame());
+        assertEquals(-70, player4.getPriceToGetInSingleGame());
     }
 
     @Test
@@ -127,7 +132,7 @@ public class SingleGameResultTest {
         player1.setCaller(true);
         player3.setCaller(true);
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -141,10 +146,10 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(320, player1.getPriceToGet());
-        assertEquals(-320, player2.getPriceToGet());
-        assertEquals(320, player3.getPriceToGet());
-        assertEquals(-320, player4.getPriceToGet());
+        assertEquals(320, player1.getPriceToGetInSingleGame());
+        assertEquals(-320, player2.getPriceToGetInSingleGame());
+        assertEquals(320, player3.getPriceToGetInSingleGame());
+        assertEquals(-320, player4.getPriceToGetInSingleGame());
     }
 
     @Test
@@ -154,7 +159,7 @@ public class SingleGameResultTest {
         player1.setHasWon(true);
         player1.setCaller(true);
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -167,10 +172,10 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(420, player1.getPriceToGet());
-        assertEquals(-140, player2.getPriceToGet());
-        assertEquals(-140, player3.getPriceToGet());
-        assertEquals(-140, player4.getPriceToGet());
+        assertEquals(420, player1.getPriceToGetInSingleGame());
+        assertEquals(-140, player2.getPriceToGetInSingleGame());
+        assertEquals(-140, player3.getPriceToGetInSingleGame());
+        assertEquals(-140, player4.getPriceToGetInSingleGame());
     }
 
     @Test
@@ -183,7 +188,7 @@ public class SingleGameResultTest {
         player3.setHasWon(true);
         player4.setHasWon(true);
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -194,10 +199,10 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(-180, player1.getPriceToGet());
-        assertEquals(60, player2.getPriceToGet());
-        assertEquals(60, player3.getPriceToGet());
-        assertEquals(60, player4.getPriceToGet());
+        assertEquals(-180, player1.getPriceToGetInSingleGame());
+        assertEquals(60, player2.getPriceToGetInSingleGame());
+        assertEquals(60, player3.getPriceToGetInSingleGame());
+        assertEquals(60, player4.getPriceToGetInSingleGame());
     }
 
     @Test
@@ -208,7 +213,7 @@ public class SingleGameResultTest {
         player1.setCaller(true);
         player1.setHasWon(true);
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -221,17 +226,17 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(1560, player1.getPriceToGet());
-        assertEquals(-520, player2.getPriceToGet());
-        assertEquals(-520, player3.getPriceToGet());
-        assertEquals(-520, player4.getPriceToGet());
+        assertEquals(1560, player1.getPriceToGetInSingleGame());
+        assertEquals(-520, player2.getPriceToGetInSingleGame());
+        assertEquals(-520, player3.getPriceToGetInSingleGame());
+        assertEquals(-520, player4.getPriceToGetInSingleGame());
     }
 
     @Test
     public void testLeeresSpiel() throws Exception {
         gameType = GameType.LEER;
 
-        List<Player> playerList = Arrays.asList(player1, player2, player3, player4);
+        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -239,10 +244,10 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(0, player1.getPriceToGet());
-        assertEquals(0, player2.getPriceToGet());
-        assertEquals(0, player3.getPriceToGet());
-        assertEquals(0, player4.getPriceToGet());
+        assertEquals(0, player1.getPriceToGetInSingleGame());
+        assertEquals(0, player2.getPriceToGetInSingleGame());
+        assertEquals(0, player3.getPriceToGetInSingleGame());
+        assertEquals(0, player4.getPriceToGetInSingleGame());
     }
 
 /*
@@ -327,7 +332,18 @@ public class SingleGameResultTest {
         stake.setStakeValue(gameType);
         return stake.getStakeValue();
     }
+
+
 */
+    public void givenSetPlayerList() throws Exception {
+        playerList = new ArrayList<Player>(4);
+        playerList.add(player1);
+        playerList.add(player2);
+        playerList.add(player3);
+        playerList.add(player4);
+    }
+
+
     private void whenSetSingleGameResultIsExecuted(){
         singleGameResult.setSingleGameResult();
     }
