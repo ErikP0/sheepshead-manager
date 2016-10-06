@@ -16,12 +16,14 @@
 
 package sheepshead.manager.main;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.appcore.StartupActivity;
 
 /**
  * Java-class for the LoadingScreen Activity.
@@ -60,5 +62,15 @@ public class LoadingScreen extends AbstractBaseActivity {
             SheepsheadManagerApplication.getInstance().loadingScreen();
 
         }
+
+        //Temporarly go to the home screen by one click
+        View activityPanel = findView(R.id.activity_loading_screen);
+        activityPanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoadingScreen.this, FillGameResult.class);
+                startActivity(intent);
+            }
+        });
     }
 }
