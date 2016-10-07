@@ -28,12 +28,19 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.ToggleButton;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.singleGameRequirements.GameType;
+import sheepshead.manager.singleGameRequirements.Player;
+import sheepshead.manager.singleGameRequirements.SingleGameResult;
+import sheepshead.manager.singleGameRequirements.StakeModifier;
 import sheepshead.manager.uicontrolutils.CheckBoxGroup;
 import sheepshead.manager.uicontrolutils.DialogUtils;
+import sheepshead.manager.uicontrolutils.EnumToggleButton;
 import sheepshead.manager.uicontrolutils.ICheckboxGroupStateValidator;
 import sheepshead.manager.uicontrolutils.ToggleButtonGroup;
 import sheepshead.manager.uicontrolutils.ToggleButtonGroup.Type;
@@ -111,10 +118,14 @@ public class FillGameResult extends AbstractBaseActivity {
 
 
         //Create game type button group
-        ToggleButton buttonSauspiel = findView(R.id.FillGameResult_toggleBtn_sauspiel);
-        ToggleButton buttonWenz = findView(R.id.FillGameResult_toggleBtn_wenz);
-        ToggleButton buttonSolo = findView(R.id.FillGameResult_toggleBtn_solo);
+        EnumToggleButton<GameType> buttonSauspiel = findView(R.id.FillGameResult_toggleBtn_sauspiel);
+        EnumToggleButton<GameType> buttonWenz = findView(R.id.FillGameResult_toggleBtn_wenz);
+        EnumToggleButton<GameType> buttonSolo = findView(R.id.FillGameResult_toggleBtn_solo);
         gameTypeGroup = new ToggleButtonGroup(Type.ALLOW_ONLY_ONE_PRESSED, buttonSauspiel, buttonWenz, buttonSolo);
+
+        buttonSauspiel.setRepresentation(GameType.SAUSPIEL);
+        buttonWenz.setRepresentation(GameType.WENZ);
+        buttonSolo.setRepresentation(GameType.SOLO);
 
         //Create schneider/schwarz group
         final CheckBox checkboxSchneider = findView(R.id.FillGameResult_checkbox_is_schneider);
@@ -141,21 +152,20 @@ public class FillGameResult extends AbstractBaseActivity {
         /*
         This adds a Listener to the game type selection, that fires when a new game type is selected
         or was deselected (-> game type missing)
-        The listener adjusts the consecutive high trumps dropdown to match with the new selected game
+        The listener adjusts the "laufende" dropdown to match with the new selected game
         type
          */
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //v is a ToggleButton
-                ToggleButton button = (ToggleButton) v;
-                CharSequence text = button.getTextOn();
+                EnumToggleButton<GameType> button = (EnumToggleButton<GameType>) v;
                 if (!button.isChecked()) {
                     //no game type selected
                     //the ToggleButtonGroup only allows one button to be ON, if this active button
                     //is now turned OFF, no other button is ON -> no game type selected
                     switchAdapter(entriesLaufendeMissingGameType);
-                } else if (text.equals(getString(R.string.FillGameResult_wenz))) {
+                } else if (button.getRepresentation().equals(GameType.WENZ)) {
                     switchAdapter(entriesLaufendeWenz);
                 } else {
                     //This branch applies for "Sauspiel" and "Farbsolo"
@@ -170,9 +180,9 @@ public class FillGameResult extends AbstractBaseActivity {
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToggleButton button = (ToggleButton) v;
+                EnumToggleButton<GameType> button = (EnumToggleButton<GameType>) v;
                 boolean enable = true;
-                if (!button.isChecked() || button.getTextOn().equals(getString(R.string.FillGameResult_sauspiel))) {
+                if (!button.isChecked() || button.getRepresentation().equals(GameType.SAUSPIEL)) {
                     //disable "Tout" and "sie" checkboxes
                     enable = false;
                     checkboxTout.setChecked(false);
@@ -183,7 +193,7 @@ public class FillGameResult extends AbstractBaseActivity {
             }
         });
 
-        final CheckBox checkboxPlayerWon = findView(R.id.FillGameResult_checkbox_playerside_won);
+        final CheckBox checkboxPlayerWon = findView(R.id.FillGameResult_checkbox_callerside_won);
 
         Button confirm = findView(R.id.FillGameResult_button_confirm);
         //Adds a listener, that will display a message containing the filled in attributes or will
@@ -193,32 +203,62 @@ public class FillGameResult extends AbstractBaseActivity {
             public void onClick(View v) {
                 Collection<ToggleButton> gameTypeButtons = gameTypeGroup.getPressedButtons();
                 if (!gameTypeButtons.isEmpty()) {
-                    //TODO insert inputs into GameResult-Model
-                    //resolve inputs
-                    StringBuilder b = new StringBuilder();
-                    b.append("Trage ").append(gameTypeButtons.iterator().next().getTextOn());
-                    b.append(" ein.\n");
-                    if (checkboxPlayerWon.isChecked()) {
-                        b.append("Spieler hat sein Spiel gewonnen.\n");
-                    } else {
-                        b.append("Spieler hat sein Spiel verloren.\n");
+                    EnumToggleButton<GameType> pressedButton = (EnumToggleButton<GameType>) (gameTypeButtons.iterator().next());
+                    Player[] players = {new Player("A", 0), new Player("B", 1), new Player("C", 2), new Player("D", 3)};
+                    SingleGameResult result = createSingleGameResult(Arrays.asList(players), pressedButton.getRepresentation());
+                    String message = "";
+                    for (Player p : players) {
+                        message += p + "\n";
                     }
-                    printIf(checkboxSchneider, b, "Schneider");
-                    printIf(checkboxSchwarz, b, "Schwarz");
-                    printIf(checkboxKontra, b, "Kontra");
-                    printIf(checkboxRe, b, "Re");
-                    printIf(checkboxTout, b, "Tout");
-                    printIf(checkboxSie, b, "Sie");
-                    b.append("Anzahl Laufenden: ");
-                    b.append(getAmountOfConsecutiveTrumpsSelected(dropdownLaufende));
-                    b.append('\n');
-                    DialogUtils.showInfoDialog(FillGameResult.this, b.toString(), getString(R.string.FillGameResult_confirm_dialog), null);
+                    DialogUtils.showInfoDialog(FillGameResult.this, message, getString(R.string.FillGameResult_confirm_dialog), null);
                 } else {
                     //No game type was selected -> Display message to user
                     DialogUtils.showInfoDialog(FillGameResult.this, getString(R.string.FillGameResult_missing_game_type_msg), getString(R.string.FillGameResult_confirm_dialog), null);
                 }
             }
         });
+    }
+
+    private SingleGameResult createSingleGameResult(List<Player> player, GameType selectedGameType) {
+        //Temporary, will be removed when selection activity is finished
+        player.get(0).setCaller(true);
+        if (selectedGameType.equals(GameType.SAUSPIEL)) {
+            player.get(1).setCaller(true);
+        }
+
+        CheckBox boxCallerSideWon = findView(R.id.FillGameResult_checkbox_callerside_won);
+        for (Player p : player) {
+            if (p.isCaller()) {
+                p.setHasWon(boxCallerSideWon.isChecked());
+            } else {
+                p.setHasWon(!boxCallerSideWon.isChecked());
+            }
+        }
+
+        StakeModifier modifier = createStakeModifier();
+        SingleGameResult result = new SingleGameResult(player, selectedGameType, modifier);
+        result.setSingleGameResult();
+        return result;
+    }
+
+    private StakeModifier createStakeModifier() {
+        StakeModifier modifier = new StakeModifier();
+
+        CheckBox schneiderBox = findView(R.id.FillGameResult_checkbox_is_schneider);
+        modifier.setSchneider(schneiderBox.isChecked());
+        CheckBox schwarzBox = findView(R.id.FillGameResult_checkbox_is_schwarz);
+        modifier.setSchwarz(schwarzBox.isChecked());
+
+        CheckBox kontraBox = findView(R.id.FillGameResult_checkbox_is_kontra);
+        modifier.setKontra(kontraBox.isChecked());
+        CheckBox reBox = findView(R.id.FillGameResult_checkbox_is_re);
+        modifier.setRe(reBox.isChecked());
+
+        CheckBox toutBox = findView(R.id.FillGameResult_checkbox_is_tout);
+        modifier.setTout(toutBox.isChecked());
+        CheckBox sieBox = findView(R.id.FillGameResult_checkbox_is_sie);
+        modifier.setSie(sieBox.isChecked());
+        return modifier;
     }
 
     /**

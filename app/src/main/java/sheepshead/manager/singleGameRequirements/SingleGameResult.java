@@ -27,20 +27,20 @@ public class SingleGameResult {
     /**
      * Wer spielt mit in aktuellem Spiel
      */
-    private ArrayList<Player> playerList;
+    private List<Player> playerList;
 
     private GameType gameType;
 
     private StakeModifier stakeModifier;
 
-    private ArrayList<Integer> singleGameMoney;
+    private List<Integer> singleGameMoney;
 
 
     /**
      * Bei neuem Spiel: Wer spielt mit, welcher GameType, wer mit wem, wie ging das Spiel aus, welcher Spieler kriegt/verliert wieviel
      */
 
-    public SingleGameResult(ArrayList<Player> playerList, GameType gameType, StakeModifier stakeModifier) {
+    public SingleGameResult(List<Player> playerList, GameType gameType, StakeModifier stakeModifier) {
 
         singleGameMoney = new ArrayList<Integer>(playerList.size() * 2); //Hier ist das Geld der Spieler, das sie in der Runde zahlen müssen und insgesamt besitzen/zahlen müssen aufgeführt. 1. Wert gesamt Geld 2. Geld in dem Spiel
 
@@ -52,14 +52,14 @@ public class SingleGameResult {
 
     }
 
-    public void setSingleGameResult(){
+    public void setSingleGameResult() {
         int winLoseMultiplier = 1;
 
         final int stakeValue = calculateStakeValue();
 
-        for (Player player : playerList){
+        for (Player player : playerList) {
             if (player.isParticipant()) {
-                if (player.hasWon()){
+                if (player.hasWon()) {
                     winLoseMultiplier = 1;
                 } else {
                     winLoseMultiplier = -1;
@@ -83,38 +83,38 @@ public class SingleGameResult {
         }
     }
 
-    private int calculateStakeValue(){
+    private int calculateStakeValue() {
         int aktStakeValue = gameType.getNormalPriceForOnePlayer();
 
-        if(stakeModifier.getNumberOfLaufende() >= 3 && (gameType.equals(GameType.SOLO) || gameType.equals(GameType.SAUSPIEL))
-                || stakeModifier.getNumberOfLaufende() >= 2 && gameType.equals(GameType.WENZ)){
+        if (stakeModifier.getNumberOfLaufende() >= 3 && (gameType.equals(GameType.SOLO) || gameType.equals(GameType.SAUSPIEL))
+                || stakeModifier.getNumberOfLaufende() >= 2 && gameType.equals(GameType.WENZ)) {
             aktStakeValue = aktStakeValue + stakeModifier.getNumberOfLaufende() * SheapsheadConstants.LAUFENDENTARIF;
         }
 
         //Laut Wiki wird bei Tout und Sie kein Schneider oder Schwarz gerechnet
-        if (stakeModifier.isTout()){
+        if (stakeModifier.isTout()) {
             aktStakeValue = aktStakeValue * 2;
-        } else if(stakeModifier.isSie()){
+        } else if (stakeModifier.isSie()) {
             aktStakeValue = aktStakeValue * 4;
         } else { //Weder Tout oder Sie werden gespielt,
-            if(stakeModifier.isSchneider()){
+            if (stakeModifier.isSchneider()) {
                 aktStakeValue = aktStakeValue + SheapsheadConstants.GRUNDTARIF;
             }
-            if (stakeModifier.isSchwarz()){
+            if (stakeModifier.isSchwarz()) {
                 aktStakeValue = aktStakeValue + SheapsheadConstants.GRUNDTARIF;
             }
         }
 
-        if (stakeModifier.isKontra() && !stakeModifier.isRe()){
+        if (stakeModifier.isKontra() && !stakeModifier.isRe()) {
             aktStakeValue = aktStakeValue * 2;
-        }else if (stakeModifier.isRe()){
+        } else if (stakeModifier.isRe()) {
             aktStakeValue = aktStakeValue * 4;
         }
         return aktStakeValue;
 
     }
 
-    public ArrayList<Integer> getSingleGameMoney(){
+    public List<Integer> getSingleGameMoney() {
         return singleGameMoney;
     }
 

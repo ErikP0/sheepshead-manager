@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ToggleButton
+            <sheepshead.manager.uicontrolutils.EnumToggleButton
                 android:id="@+id/FillGameResult.toggleBtn_sauspiel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 android:textOff="@string/FillGameResult.sauspiel"
                 android:textOn="@string/FillGameResult.sauspiel" />
 
-            <ToggleButton
+            <sheepshead.manager.uicontrolutils.EnumToggleButton
                 android:id="@+id/FillGameResult.toggleBtn_wenz"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:textOff="@string/FillGameResult.wenz"
                 android:textOn="@string/FillGameResult.wenz" />
 
-            <ToggleButton
+            <sheepshead.manager.uicontrolutils.EnumToggleButton
                 android:id="@+id/FillGameResult.toggleBtn_solo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:textOn="@string/FillGameResult.farbsolo" />
 
             <CheckBox
-                android:id="@+id/FillGameResult.checkbox_playerside_won"
+                android:id="@+id/FillGameResult.checkbox_callerside_won"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -80,7 +80,7 @@
                 android:id="@+id/FillGameResult.modifier_panel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/FillGameResult.checkbox_playerside_won"
+                android:layout_below="@+id/FillGameResult.checkbox_callerside_won"
                 android:layout_centerHorizontal="true"
                 android:orientation="vertical">
 
