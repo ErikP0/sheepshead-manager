@@ -34,6 +34,7 @@ import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.uicontrolutils.CheckBoxGroup;
 import sheepshead.manager.uicontrolutils.DialogUtils;
+import sheepshead.manager.uicontrolutils.ICheckboxGroupStateValidator;
 import sheepshead.manager.uicontrolutils.ToggleButtonGroup;
 import sheepshead.manager.uicontrolutils.ToggleButtonGroup.Type;
 
@@ -64,6 +65,12 @@ public class FillGameResult extends AbstractBaseActivity {
      * would be kontra=false, re=true: Not possible as "Re" cannot be given without a "Kontra" first
      */
     private CheckBoxGroup kontraReGroup;
+
+    /**
+     * The group of Checkboxes for the modifiers "Tout" and "Sie".
+     * Aa group is required because both checkboxes cannot be checked.
+     */
+    private CheckBoxGroup toutSieGroup;
     /**
      * Dropdown list for the "Laufende" selection
      * This list only contains one entry claiming no game type was selected
@@ -87,6 +94,7 @@ public class FillGameResult extends AbstractBaseActivity {
         gameTypeGroup.addListener();
         schneiderSchwarzGroup.addListener();
         kontraReGroup.addListener();
+        toutSieGroup.addListener();
     }
 
     @Override
@@ -94,6 +102,7 @@ public class FillGameResult extends AbstractBaseActivity {
         gameTypeGroup.addListener();
         schneiderSchwarzGroup.removeListener();
         kontraReGroup.removeListener();
+        toutSieGroup.removeListener();
     }
 
     @Override
@@ -110,12 +119,17 @@ public class FillGameResult extends AbstractBaseActivity {
         //Create schneider/schwarz group
         final CheckBox checkboxSchneider = findView(R.id.FillGameResult_checkbox_is_schneider);
         final CheckBox checkboxSchwarz = findView(R.id.FillGameResult_checkbox_is_schwarz);
-        schneiderSchwarzGroup = new CheckBoxGroup(new FillGameResultCheckboxValidator(), checkboxSchneider, checkboxSchwarz);
+        schneiderSchwarzGroup = new CheckBoxGroup(new CheckboxValidatorDependentCheckboxes(), checkboxSchneider, checkboxSchwarz);
 
         //Create kontra/re group
         final CheckBox checkboxKontra = findView(R.id.FillGameResult_checkbox_is_kontra);
         final CheckBox checkboxRe = findView(R.id.FillGameResult_checkbox_is_re);
-        kontraReGroup = new CheckBoxGroup(new FillGameResultCheckboxValidator(), checkboxKontra, checkboxRe);
+        kontraReGroup = new CheckBoxGroup(new CheckboxValidatorDependentCheckboxes(), checkboxKontra, checkboxRe);
+
+        //Create tout/sie group
+        final CheckBox checkboxTout = findView(R.id.FillGameResult_checkbox_is_tout);
+        final CheckBox checkboxSie = findView(R.id.FillGameResult_checkbox_is_sie);
+        toutSieGroup = new CheckBoxGroup(new CheckboxValidatorContraryCheckboxes(), checkboxTout, checkboxSie);
 
         //Create consecutive high trumps spinner
         dropdownLaufende = findView(R.id.FillGameResult_laufende_dropdown);
@@ -149,9 +163,6 @@ public class FillGameResult extends AbstractBaseActivity {
                 }
             }
         });
-
-        final CheckBox checkboxTout = findView(R.id.FillGameResult_checkbox_is_tout);
-        final CheckBox checkboxSie = findView(R.id.FillGameResult_checkbox_is_sie);
 
         /**
          * Add a listener that disables "Tout" and "Sie" checkboxes when no game type/"Sauspiel" was selected
@@ -266,4 +277,69 @@ public class FillGameResult extends AbstractBaseActivity {
         //TODO save spinner state
 
     }
+
+    /**
+     * Implementation of {@link ICheckboxGroupStateValidator} for a group of two checkboxes
+     * with the following rules:
+     * <p>
+     * <li>Box 2 can only be checked when Box 1 is checked</li>
+     * <li>Both boxes can be unchecked</li>
+     */
+    private static class CheckboxValidatorDependentCheckboxes implements ICheckboxGroupStateValidator {
+
+        @Override
+        public boolean isInValidState(boolean[] checkBoxValues) {
+            //if first is not checked, second is checked return false
+            //otherwise true
+            return !(!checkBoxValues[0] && checkBoxValues[1]);
+        }
+
+        @Override
+        public void putIntoValidState(CheckBox[] checkBoxes, boolean[] checkBoxValues, int lastModified) {
+            //only one invalid state exists: box1 = false, box2 = true
+            //There are two way to resolve this:
+            //1. make box2 = false or 2. make box1 = true
+            //the 3rd way (swap values from box 1 & 2) would not be intuitive for the user
+
+            //Under the assumption that the user wants the last modified box to keep its state
+            if (lastModified == 0) {
+                //user set box1 to false -> use way 1
+                checkBoxes[1].setChecked(false);
+            } else if (lastModified == 1) {
+                //user set box2 to true -> use way 2
+                checkBoxes[0].setChecked(true);
+            }
+        }
+    }
+
+    /**
+     * Implementation of {@link ICheckboxGroupStateValidator} for a group of two checkboxes with the
+     * following rules:
+     * <p>
+     * <li>Both boxes cannot be checked</li>
+     * <li>Both boxes can be unchecked</li>
+     */
+    private static class CheckboxValidatorContraryCheckboxes implements ICheckboxGroupStateValidator {
+        @Override
+        public boolean isInValidState(boolean[] checkBoxValues) {
+            //not valid when both boxes are checked
+            return !(checkBoxValues[0] && checkBoxValues[1]);
+        }
+
+        @Override
+        public void putIntoValidState(CheckBox[] checkBoxes, boolean[] checkBoxValues, int lastModified) {
+            //only one invalid state exists: box1 = box2 = true
+            //Two ways to resolve: 1. box1 => false 2. box2 => false
+
+            //Under the assumption that the user wants to select the last modified box
+            if (lastModified == 0) {
+                //user checked box1 -> use way 2
+                checkBoxes[1].setChecked(false);
+            } else if (lastModified == 1) {
+                //user checked box2 -> use way 1
+                checkBoxes[0].setChecked(false);
+            }
+        }
+    }
+
 }

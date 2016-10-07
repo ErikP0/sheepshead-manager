@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2016  Erik Pohle
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +14,7 @@
   ~    limitations under the License.
   -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_fill_game_result"
     android:layout_width="match_parent"
@@ -47,7 +45,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:textOff="@string/FillGameResult.sauspiel"
-                android:textOn="@string/FillGameResult.sauspiel"/>
+                android:textOn="@string/FillGameResult.sauspiel" />
 
             <ToggleButton
                 android:id="@+id/FillGameResult.toggleBtn_wenz"
@@ -56,7 +54,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:textOff="@string/FillGameResult.wenz"
-                android:textOn="@string/FillGameResult.wenz"/>
+                android:textOn="@string/FillGameResult.wenz" />
 
             <ToggleButton
                 android:id="@+id/FillGameResult.toggleBtn_solo"
@@ -66,7 +64,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:textOff="@string/FillGameResult.farbsolo"
-                android:textOn="@string/FillGameResult.farbsolo"/>
+                android:textOn="@string/FillGameResult.farbsolo" />
 
             <CheckBox
                 android:id="@+id/FillGameResult.checkbox_playerside_won"
@@ -76,7 +74,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="57dp"
                 android:checked="true"
-                android:text="@string/FillGameResult.playerside_won"/>
+                android:text="@string/FillGameResult.playerside_won" />
 
             <LinearLayout
                 android:id="@+id/FillGameResult.modifier_panel"
@@ -90,37 +88,37 @@
                     android:id="@+id/FillGameResult.checkbox_is_schneider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/FillGameResult.schneider"/>
+                    android:text="@string/FillGameResult.schneider" />
 
                 <CheckBox
                     android:id="@+id/FillGameResult.checkbox_is_schwarz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/FillGameResult.schwarz"/>
+                    android:text="@string/FillGameResult.schwarz" />
 
                 <CheckBox
                     android:id="@+id/FillGameResult.checkbox_is_kontra"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/FillGameResult.kontra"/>
+                    android:text="@string/FillGameResult.kontra" />
 
                 <CheckBox
                     android:id="@+id/FillGameResult.checkbox_is_re"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/FillGameResult.re"/>
+                    android:text="@string/FillGameResult.re" />
 
                 <CheckBox
                     android:id="@+id/FillGameResult.checkbox_is_tout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/FillGameResult.tout"/>
+                    android:text="@string/FillGameResult.tout" />
 
                 <CheckBox
                     android:id="@+id/FillGameResult.checkbox_is_sie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/FillGameResult.sie"/>
+                    android:text="@string/FillGameResult.sie" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -129,19 +127,19 @@
 
                     <TextView
                         android:id="@+id/FillGameResult.textview_laufende"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/FillGameResult.text_laufende"
                         android:textAlignment="center"
                         android:textAllCaps="false"
-                        android:textStyle="normal|bold"/>
+                        android:textStyle="normal|bold" />
 
                     <Spinner
                         android:id="@+id/FillGameResult.laufende_dropdown"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -153,7 +151,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_below="@+id/FillGameResult.modifier_panel"
                 android:layout_centerHorizontal="true"
-                android:text="@string/FillGameResult.confirm_result_text"/>
+                android:text="@string/FillGameResult.confirm_result_text" />
 
 
         </RelativeLayout>
