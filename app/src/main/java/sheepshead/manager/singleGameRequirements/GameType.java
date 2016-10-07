@@ -16,11 +16,13 @@
 
 package sheepshead.manager.singleGameRequirements;
 
+import java.io.Serializable;
+
 /**
  * Created by Nicolas on 01.10.2016.
  */
 
-public enum GameType {
+public enum GameType implements Serializable {
 
     SAUSPIEL(SheapsheadConstants.GRUNDTARIF, 1),
     WENZ(SheapsheadConstants.SOLOTARIF, 3),
@@ -31,7 +33,7 @@ public enum GameType {
 
     private int teamMultiplier;
 
-    GameType(int normalPriceForOnePlayer, int teamMultiplier){
+    GameType(int normalPriceForOnePlayer, int teamMultiplier) {
         this.normalPriceForOnePlayer = normalPriceForOnePlayer;
         this.teamMultiplier = teamMultiplier;
     }
