@@ -53,4 +53,8 @@
     <string-array name="array_no_gametype_selected">
         <item>Kein Spiel ausgewählt</item>
     </string-array>
+
+    <!-- Strings for HomeScreenActivity -->
+    <string name="HomeScreen.continue_last_session">Weitermachen</string>
+    <string name="HomeScreen.new_session">Neue Sitzung</string>
 </resources>
