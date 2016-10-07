@@ -48,7 +48,13 @@ import sheepshead.manager.uicontrolutils.ToggleButtonGroup.Type;
  */
 public class FillGameResult extends AbstractBaseActivity {
 
+    /**
+     * Key for storing/retrieving the current selected game type when the activity is reloaded
+     */
     private static final String bundlekey_selected_game_type = "game_type_selected";
+    /**
+     * Key for storing/retrieving the index of the laufende spinner when the activity is reloaded
+     */
     private static final String bundlekey_selected_game_type_index = "game_type_index";
     /**
      * The button group for selecting the game type.
@@ -98,7 +104,6 @@ public class FillGameResult extends AbstractBaseActivity {
     protected void createUserInterface(Bundle savedInstanceState) {
         setContentView(R.layout.activity_fill_game_result);
 
-
         //Create game type button group
         EnumToggleButton<GameType> buttonSauspiel = findView(R.id.FillGameResult_toggleBtn_sauspiel);
         EnumToggleButton<GameType> buttonWenz = findView(R.id.FillGameResult_toggleBtn_wenz);
@@ -124,7 +129,7 @@ public class FillGameResult extends AbstractBaseActivity {
         final CheckBox checkboxSie = findView(R.id.FillGameResult_checkbox_is_sie);
         toutSieGroup = new CheckBoxGroup(new CheckboxValidatorContraryCheckboxes(), checkboxTout, checkboxSie);
 
-        //Create consecutive high trumps spinner
+        //Create laufende spinner
         dropdownLaufende = findView(R.id.FillGameResult_laufende_dropdown);
         //load state from bundle (if available)
         GameType loadedType = GameType.LEER;
@@ -133,7 +138,7 @@ public class FillGameResult extends AbstractBaseActivity {
             loadedType = (GameType) savedInstanceState.getSerializable(bundlekey_selected_game_type);
             loadedIndex = savedInstanceState.getInt(bundlekey_selected_game_type_index);
         }
-        switchAdapter(new LaufendeSpinnerBuilder(loadedType).build());
+        switchAdapter(new LaufendeElement.Builder(loadedType).build());
         dropdownLaufende.setSelection(loadedIndex);
 
         /*
@@ -146,15 +151,8 @@ public class FillGameResult extends AbstractBaseActivity {
             @Override
             public void onClick(View v) {
                 //v is a ToggleButton
-                EnumToggleButton<GameType> button = (EnumToggleButton<GameType>) v;
-                if (!button.isChecked()) {
-                    //no game type selected
-                    //the ToggleButtonGroup only allows one button to be ON, if this active button
-                    //is now turned OFF, no other button is ON -> no game type selected
-                    switchAdapter(new LaufendeSpinnerBuilder(GameType.LEER).build());
-                } else {
-                    switchAdapter(new LaufendeSpinnerBuilder(button.getRepresentation()).build());
-                }
+                GameType selectedGameType = getCurrentlySelectedGameType();
+                switchAdapter(new LaufendeElement.Builder(selectedGameType).build());
             }
         });
 
@@ -164,9 +162,9 @@ public class FillGameResult extends AbstractBaseActivity {
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EnumToggleButton<GameType> button = (EnumToggleButton<GameType>) v;
+                GameType selectedGameType = getCurrentlySelectedGameType();
                 boolean enable = true;
-                if (!button.isChecked() || button.getRepresentation().equals(GameType.SAUSPIEL)) {
+                if (selectedGameType.equals(GameType.LEER) || selectedGameType.equals(GameType.SAUSPIEL)) {
                     //disable "Tout" and "sie" checkboxes
                     enable = false;
                     checkboxTout.setChecked(false);
@@ -176,8 +174,6 @@ public class FillGameResult extends AbstractBaseActivity {
                 checkboxSie.setEnabled(enable);
             }
         });
-
-        final CheckBox checkboxPlayerWon = findView(R.id.FillGameResult_checkbox_callerside_won);
 
         Button confirm = findView(R.id.FillGameResult_button_confirm);
         //Adds a listener, that will display a message containing the filled in attributes or will
@@ -202,8 +198,15 @@ public class FillGameResult extends AbstractBaseActivity {
         });
     }
 
+    /**
+     * Creates and returns a {@link SingleGameResult} based on the selections the user made
+     *
+     * @param player           List of players participating in the game
+     * @param selectedGameType the current selected game type
+     * @return the result of the user made selections
+     */
     private SingleGameResult createSingleGameResult(List<Player> player, GameType selectedGameType) {
-        //Temporary, will be removed when selection activity is finished
+        //Temporary, will be removed when selection activity is finished (TODO)
         player.get(0).setCaller(true);
         if (selectedGameType.equals(GameType.SAUSPIEL)) {
             player.get(1).setCaller(true);
@@ -224,6 +227,12 @@ public class FillGameResult extends AbstractBaseActivity {
         return result;
     }
 
+    /**
+     * Creates and returns a {@link StakeModifier} instance that contains all the selection the user
+     * made regarding point modifiers (schneider/schwarz, kontra/re, tout/sie and Laufende)
+     *
+     * @return
+     */
     private StakeModifier createStakeModifier() {
         StakeModifier modifier = new StakeModifier();
 
@@ -242,7 +251,7 @@ public class FillGameResult extends AbstractBaseActivity {
         CheckBox sieBox = findView(R.id.FillGameResult_checkbox_is_sie);
         modifier.setSie(sieBox.isChecked());
 
-        LaufendeSpinnerBuilder.LaufendeElement selectedElement = (LaufendeSpinnerBuilder.LaufendeElement) dropdownLaufende.getSelectedItem();
+        LaufendeElement selectedElement = (LaufendeElement) dropdownLaufende.getSelectedItem();
         modifier.setNumberOfLaufende(selectedElement.getAnzLaufende());
         return modifier;
     }
@@ -252,11 +261,16 @@ public class FillGameResult extends AbstractBaseActivity {
      *
      * @param elements the new content for the "Laufende"-Dropdown
      */
-    private void switchAdapter(LaufendeSpinnerBuilder.LaufendeElement[] elements) {
-        SpinnerAdapter adapter = new ArrayAdapter<LaufendeSpinnerBuilder.LaufendeElement>(this, android.R.layout.simple_dropdown_item_1line, elements);
+    private void switchAdapter(LaufendeElement[] elements) {
+        SpinnerAdapter adapter = new ArrayAdapter<LaufendeElement>(this, android.R.layout.simple_dropdown_item_1line, elements);
         dropdownLaufende.setAdapter(adapter);
     }
 
+    /**
+     * Returns the current selected {@link GameType}
+     *
+     * @return
+     */
     private GameType getCurrentlySelectedGameType() {
         Collection<ToggleButton> pressedButtons = gameTypeGroup.getPressedButtons();
         if (pressedButtons.isEmpty()) {

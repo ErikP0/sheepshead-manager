@@ -22,20 +22,34 @@ import java.io.Serializable;
  * Created by Nicolas on 01.10.2016.
  */
 
+//Serializable is used in FillGameResult
 public enum GameType implements Serializable {
 
-    SAUSPIEL(SheapsheadConstants.GRUNDTARIF, 1),
-    WENZ(SheapsheadConstants.SOLOTARIF, 3),
-    SOLO(SheapsheadConstants.SOLOTARIF, 3),
-    LEER(0, 1); //Wird aktuell nicht gebraucht, könnte aber evtl. mal nützlich sein
+    SAUSPIEL(SheapsheadConstants.GRUNDTARIF, 1, 3, 8),
+    WENZ(SheapsheadConstants.SOLOTARIF, 3, 2, 4),
+    SOLO(SheapsheadConstants.SOLOTARIF, 3, 3, 8),
+    LEER(0, 1, -1, -1);
 
     private int normalPriceForOnePlayer;
 
     private int teamMultiplier;
 
-    GameType(int normalPriceForOnePlayer, int teamMultiplier) {
+    /**
+     * The first number where "Laufende" count (e.g. SAUSPIEL/SOLO 3, WENZ 2)
+     */
+    private int minLaufende;
+
+    /**
+     * The highest number where "Laufende" still count (e.g. SAUSPIEL/SOLO 8, WENZ 4)
+     * This is restricted by the amount of high trumps in the game type
+     */
+    private int maxLaufendeIncl;
+
+    GameType(int normalPriceForOnePlayer, int teamMultiplier, int laufendeBegin, int laufendeEndIncl) {
         this.normalPriceForOnePlayer = normalPriceForOnePlayer;
         this.teamMultiplier = teamMultiplier;
+        minLaufende = laufendeBegin;
+        maxLaufendeIncl = laufendeEndIncl;
     }
 
 
@@ -45,6 +59,20 @@ public enum GameType implements Serializable {
 
     public int getTeamMultiplier() {
         return teamMultiplier;
+    }
+
+    /**
+     * @return the first number where high trumps count as "Laufende"
+     */
+    public int getLaufendeBegin() {
+        return minLaufende;
+    }
+
+    /**
+     * @return the last number where high trumps still count as "Laufende"
+     */
+    public int getLaufendeEnd() {
+        return maxLaufendeIncl;
     }
 
 }
