@@ -83,7 +83,8 @@ public class SingleGameResult {
         }
     }
 
-    private int calculateStakeValue(){
+    private int calculateStakeValue() {
+
         int aktStakeValue = gameType.getNormalPriceForOnePlayer();
 
         if(stakeModifier.getNumberOfLaufende() >= 3 && (gameType.equals(GameType.SOLO) || gameType.equals(GameType.SAUSPIEL))

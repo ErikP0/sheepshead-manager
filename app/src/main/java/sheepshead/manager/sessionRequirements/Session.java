@@ -17,13 +17,13 @@
 package sheepshead.manager.sessionRequirements;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.prefs.InvalidPreferencesFormatException;
 
 import sheepshead.manager.singleGameRequirements.GameType;
 import sheepshead.manager.singleGameRequirements.Player;
 import sheepshead.manager.singleGameRequirements.SingleGameResult;
 import sheepshead.manager.singleGameRequirements.StakeModifier;
+import sheepshead.manager.singleGameRequirements.ValidGame;
 
 /**
  * Created by Nicolas on 06.10.2016.
@@ -35,13 +35,13 @@ public class Session {
 
     private ArrayList<SingleGameResult> gameResults;
 
-    private ArrayList<ArrayList<Integer>> moneyMatrix; //Evtl. sogar redundant. Ergebnisse könnten auch über die gameResults und dann jeweils getSingleGameMoney() erhalten werden.
+    private ArrayList<ArrayList<Integer>> scoreBoard; //Evtl. sogar redundant. Ergebnisse könnten auch über die gameResults und dann jeweils getSingleGameMoney() erhalten werden.
 
     private int firstPlayerToParticipate = 0; //wenn mehr als 4 Spieler mitspielen, ist das der erste von 4, der dabei ist.
 
 
     public Session(ArrayList<Player> playerList){
-        moneyMatrix = new ArrayList<ArrayList<Integer>>(0);
+        scoreBoard = new ArrayList<ArrayList<Integer>>(0);
 
         gameResults = new ArrayList<SingleGameResult>(0);
 
@@ -51,25 +51,42 @@ public class Session {
 
     public void calculateMoneyMatrix(){
         for (SingleGameResult singleGameResult : gameResults) {
-            addToMoneyMatrix(singleGameResult);
+            addToScoreBoard(singleGameResult);
         }
     }
 
-    private void addToMoneyMatrix(SingleGameResult singleGameResult){
-        moneyMatrix.add(singleGameResult.getSingleGameMoney());
+    private void addToScoreBoard(SingleGameResult singleGameResult){
+        scoreBoard.add(singleGameResult.getSingleGameMoney());
     }
 
-    public void addNewSingleGameResult(GameType gameType, StakeModifier stakeModifier){
+    public ArrayList<Integer> getLineOfScoreBoard(int lineNumber){
+        return scoreBoard.get(lineNumber);
+    }
+
+    /**
+     * Erzeugt ein neues SingleGameResult, dessen Ergebnisse dann in die Scoreboard eingetragen werden.
+     * @param gameType Es wird ein Spieltyp also (Sauspiel, Wenz, Solo) benötigt
+     * @param stakeModifier Es müssen die Parameter für ein Spiel gesetzt werden (Schneider, Schwarz, Tout, Re ...)
+     */
+    public void addNewSingleGameResult(GameType gameType, StakeModifier stakeModifier) throws InvalidPreferencesFormatException {
 
         setParticipantPlayers();
 
         SingleGameResult singleGameResult = new SingleGameResult(playerList, gameType, stakeModifier);
 
+        if (!ValidGame.isValidGame(playerList, gameType, stakeModifier)) {
+            throw new InvalidPreferencesFormatException("Game cannot be added! Invalid Parameters are used.");
+        }
+
         singleGameResult.setSingleGameResult();
+
+        if (!ValidGame.isValidMoneySum(playerList)) {
+            throw new InvalidPreferencesFormatException("The Sum of one line must be 0!");
+        }
 
         gameResults.add(singleGameResult);
 
-        addToMoneyMatrix(singleGameResult);
+        addToScoreBoard(singleGameResult);
 
         firstPlayerToParticipate = (gameResults.size() % playerList.size());
     }
@@ -106,12 +123,22 @@ public class Session {
         this.gameResults = gameResults;
     }
 
-    public ArrayList<ArrayList<Integer>> getMoneyMatrix() {
-        return moneyMatrix;
+    public ArrayList<ArrayList<Integer>> getScoreBoard() {
+        return scoreBoard;
     }
 
-    public void setMoneyMatrix(ArrayList<ArrayList<Integer>> moneyMatrix) {
-        this.moneyMatrix = moneyMatrix;
+    public void setScoreBoard(ArrayList<ArrayList<Integer>> scoreBoard) {
+        this.scoreBoard = scoreBoard;
     }
+
+    public int getFirstPlayerToParticipate() {
+        return firstPlayerToParticipate;
+    }
+
+    //wird nur für den Test benötigt bisher
+    public void setFirstPlayerToParticipate(int firstPlayerToParticipate) {
+        this.firstPlayerToParticipate = firstPlayerToParticipate;
+    }
+
 
 }
