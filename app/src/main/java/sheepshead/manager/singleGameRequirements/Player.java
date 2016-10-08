@@ -40,7 +40,7 @@ public class Player {
     private int priceToGetInSession = 0;
 
 
-    public Player(String name, int number){
+    public Player(String name, int number) {
         this.name = name;
         this.number = number;
         this.isCaller = false;

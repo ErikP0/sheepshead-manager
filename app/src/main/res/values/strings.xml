@@ -53,4 +53,8 @@
     <string-array name="array_no_gametype_selected">
         <item>Kein Spiel ausgewählt</item>
     </string-array>
+
+    <!-- Strings for CreateSessionActivity -->
+    <string name="CreateSession.header_stake">Einsatz auswählen</string>
+    <string name="CreateSession.header_players">Mitspieler auswählen</string>
 </resources>
