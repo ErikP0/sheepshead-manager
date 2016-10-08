@@ -17,23 +17,27 @@
 package sheepshead.manager.activities;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.ToggleButton;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.singleGameRequirements.GameType;
+import sheepshead.manager.singleGameRequirements.Player;
+import sheepshead.manager.singleGameRequirements.SingleGameResult;
+import sheepshead.manager.singleGameRequirements.StakeModifier;
 import sheepshead.manager.uicontrolutils.CheckBoxGroup;
 import sheepshead.manager.uicontrolutils.DialogUtils;
+import sheepshead.manager.uicontrolutils.EnumToggleButton;
 import sheepshead.manager.uicontrolutils.ICheckboxGroupStateValidator;
 import sheepshead.manager.uicontrolutils.ToggleButtonGroup;
 import sheepshead.manager.uicontrolutils.ToggleButtonGroup.Type;
@@ -44,7 +48,13 @@ import sheepshead.manager.uicontrolutils.ToggleButtonGroup.Type;
  */
 public class FillGameResult extends AbstractBaseActivity {
 
+    /**
+     * Key for storing/retrieving the current selected game type when the activity is reloaded
+     */
     private static final String bundlekey_selected_game_type = "game_type_selected";
+    /**
+     * Key for storing/retrieving the index of the laufende spinner when the activity is reloaded
+     */
     private static final String bundlekey_selected_game_type_index = "game_type_index";
     /**
      * The button group for selecting the game type.
@@ -71,21 +81,6 @@ public class FillGameResult extends AbstractBaseActivity {
      * Aa group is required because both checkboxes cannot be checked.
      */
     private CheckBoxGroup toutSieGroup;
-    /**
-     * Dropdown list for the "Laufende" selection
-     * This list only contains one entry claiming no game type was selected
-     */
-    private SpinnerAdapter entriesLaufendeMissingGameType;
-    /**
-     * Dropdown list for the "Laufende" selection
-     * This list contains entries permitted in a "Sauspiel" or "Farbsolo", so [0, 3-8]
-     */
-    private SpinnerAdapter entriesLaufendeNormal;
-    /**
-     * Dropdown list for the "Laufende" selection
-     * This list contains entries permitted in a "Wenz", so [2-4]
-     */
-    private SpinnerAdapter entriesLaufendeWenz;
 
     private Spinner dropdownLaufende;
 
@@ -109,12 +104,15 @@ public class FillGameResult extends AbstractBaseActivity {
     protected void createUserInterface(Bundle savedInstanceState) {
         setContentView(R.layout.activity_fill_game_result);
 
-
         //Create game type button group
-        ToggleButton buttonSauspiel = findView(R.id.FillGameResult_toggleBtn_sauspiel);
-        ToggleButton buttonWenz = findView(R.id.FillGameResult_toggleBtn_wenz);
-        ToggleButton buttonSolo = findView(R.id.FillGameResult_toggleBtn_solo);
+        EnumToggleButton<GameType> buttonSauspiel = findView(R.id.FillGameResult_toggleBtn_sauspiel);
+        EnumToggleButton<GameType> buttonWenz = findView(R.id.FillGameResult_toggleBtn_wenz);
+        EnumToggleButton<GameType> buttonSolo = findView(R.id.FillGameResult_toggleBtn_solo);
         gameTypeGroup = new ToggleButtonGroup(Type.ALLOW_ONLY_ONE_PRESSED, buttonSauspiel, buttonWenz, buttonSolo);
+
+        buttonSauspiel.setRepresentation(GameType.SAUSPIEL);
+        buttonWenz.setRepresentation(GameType.WENZ);
+        buttonSolo.setRepresentation(GameType.SOLO);
 
         //Create schneider/schwarz group
         final CheckBox checkboxSchneider = findView(R.id.FillGameResult_checkbox_is_schneider);
@@ -131,36 +129,30 @@ public class FillGameResult extends AbstractBaseActivity {
         final CheckBox checkboxSie = findView(R.id.FillGameResult_checkbox_is_sie);
         toutSieGroup = new CheckBoxGroup(new CheckboxValidatorContraryCheckboxes(), checkboxTout, checkboxSie);
 
-        //Create consecutive high trumps spinner
+        //Create laufende spinner
         dropdownLaufende = findView(R.id.FillGameResult_laufende_dropdown);
-        entriesLaufendeNormal = createSpinnerAdapter(R.array.array_laufende_normal);
-        entriesLaufendeMissingGameType = createSpinnerAdapter(R.array.array_no_gametype_selected);
-        entriesLaufendeWenz = createSpinnerAdapter(R.array.array_laufende_wenz);
-        dropdownLaufende.setAdapter(entriesLaufendeMissingGameType);//TODO load spinner state
+        //load state from bundle (if available)
+        GameType loadedType = GameType.LEER;
+        int loadedIndex = 0;
+        if (savedInstanceState != null && savedInstanceState.containsKey(bundlekey_selected_game_type)) {
+            loadedType = (GameType) savedInstanceState.getSerializable(bundlekey_selected_game_type);
+            loadedIndex = savedInstanceState.getInt(bundlekey_selected_game_type_index);
+        }
+        switchAdapter(new LaufendeElement.Builder(loadedType).build());
+        dropdownLaufende.setSelection(loadedIndex);
 
         /*
         This adds a Listener to the game type selection, that fires when a new game type is selected
         or was deselected (-> game type missing)
-        The listener adjusts the consecutive high trumps dropdown to match with the new selected game
+        The listener adjusts the "laufende" dropdown to match with the new selected game
         type
          */
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //v is a ToggleButton
-                ToggleButton button = (ToggleButton) v;
-                CharSequence text = button.getTextOn();
-                if (!button.isChecked()) {
-                    //no game type selected
-                    //the ToggleButtonGroup only allows one button to be ON, if this active button
-                    //is now turned OFF, no other button is ON -> no game type selected
-                    switchAdapter(entriesLaufendeMissingGameType);
-                } else if (text.equals(getString(R.string.FillGameResult_wenz))) {
-                    switchAdapter(entriesLaufendeWenz);
-                } else {
-                    //This branch applies for "Sauspiel" and "Farbsolo"
-                    switchAdapter(entriesLaufendeNormal);
-                }
+                GameType selectedGameType = getCurrentlySelectedGameType();
+                switchAdapter(new LaufendeElement.Builder(selectedGameType).build());
             }
         });
 
@@ -170,9 +162,9 @@ public class FillGameResult extends AbstractBaseActivity {
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToggleButton button = (ToggleButton) v;
+                GameType selectedGameType = getCurrentlySelectedGameType();
                 boolean enable = true;
-                if (!button.isChecked() || button.getTextOn().equals(getString(R.string.FillGameResult_sauspiel))) {
+                if (selectedGameType.equals(GameType.LEER) || selectedGameType.equals(GameType.SAUSPIEL)) {
                     //disable "Tout" and "sie" checkboxes
                     enable = false;
                     checkboxTout.setChecked(false);
@@ -183,36 +175,21 @@ public class FillGameResult extends AbstractBaseActivity {
             }
         });
 
-        final CheckBox checkboxPlayerWon = findView(R.id.FillGameResult_checkbox_playerside_won);
-
         Button confirm = findView(R.id.FillGameResult_button_confirm);
         //Adds a listener, that will display a message containing the filled in attributes or will
         //display a error message when no game type was selected
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collection<ToggleButton> gameTypeButtons = gameTypeGroup.getPressedButtons();
-                if (!gameTypeButtons.isEmpty()) {
-                    //TODO insert inputs into GameResult-Model
-                    //resolve inputs
-                    StringBuilder b = new StringBuilder();
-                    b.append("Trage ").append(gameTypeButtons.iterator().next().getTextOn());
-                    b.append(" ein.\n");
-                    if (checkboxPlayerWon.isChecked()) {
-                        b.append("Spieler hat sein Spiel gewonnen.\n");
-                    } else {
-                        b.append("Spieler hat sein Spiel verloren.\n");
+                GameType selectedGameType = getCurrentlySelectedGameType();
+                if (!selectedGameType.equals(GameType.LEER)) {
+                    Player[] players = {new Player("A", 0), new Player("B", 1), new Player("C", 2), new Player("D", 3)};
+                    SingleGameResult result = createSingleGameResult(Arrays.asList(players), selectedGameType);
+                    String message = "";
+                    for (Player p : players) {
+                        message += p + "\n";
                     }
-                    printIf(checkboxSchneider, b, "Schneider");
-                    printIf(checkboxSchwarz, b, "Schwarz");
-                    printIf(checkboxKontra, b, "Kontra");
-                    printIf(checkboxRe, b, "Re");
-                    printIf(checkboxTout, b, "Tout");
-                    printIf(checkboxSie, b, "Sie");
-                    b.append("Anzahl Laufenden: ");
-                    b.append(getAmountOfConsecutiveTrumpsSelected(dropdownLaufende));
-                    b.append('\n');
-                    DialogUtils.showInfoDialog(FillGameResult.this, b.toString(), getString(R.string.FillGameResult_confirm_dialog), null);
+                    DialogUtils.showInfoDialog(FillGameResult.this, message, getString(R.string.FillGameResult_confirm_dialog), null);
                 } else {
                     //No game type was selected -> Display message to user
                     DialogUtils.showInfoDialog(FillGameResult.this, getString(R.string.FillGameResult_missing_game_type_msg), getString(R.string.FillGameResult_confirm_dialog), null);
@@ -222,59 +199,97 @@ public class FillGameResult extends AbstractBaseActivity {
     }
 
     /**
-     * Switches the spinner adapter if needed
+     * Creates and returns a {@link SingleGameResult} based on the selections the user made
      *
-     * @param newOne
+     * @param player           List of players participating in the game
+     * @param selectedGameType the current selected game type
+     * @return the result of the user made selections
      */
-    private void switchAdapter(SpinnerAdapter newOne) {
-        if (dropdownLaufende.getAdapter() != newOne) {
-            dropdownLaufende.setAdapter(newOne);
+    private SingleGameResult createSingleGameResult(List<Player> player, GameType selectedGameType) {
+        //Temporary, will be removed when selection activity is finished (TODO)
+        player.get(0).setCaller(true);
+        if (selectedGameType.equals(GameType.SAUSPIEL)) {
+            player.get(1).setCaller(true);
         }
-    }
 
-    /**
-     * Creates and returns a SpinnerAdapter from a resource id.
-     *
-     * @param id Resource id (should be a textArrayId)
-     * @return ArrayAdapter, created using resources from the given id
-     */
-    private SpinnerAdapter createSpinnerAdapter(int id) {
-        return ArrayAdapter.createFromResource(this, id, android.R.layout.simple_spinner_dropdown_item);
-    }
-
-    /**
-     * Prints the message msg into the given b, only if the given Checkbox is checked
-     *
-     * @param condition
-     * @param b
-     * @param msg
-     */
-    private void printIf(@NonNull Checkable condition, @NonNull StringBuilder b, @Nullable String msg) {
-        if (condition.isChecked()) {
-            b.append(msg);
-            b.append('\n');
+        CheckBox boxCallerSideWon = findView(R.id.FillGameResult_checkbox_callerside_won);
+        for (Player p : player) {
+            if (p.isCaller()) {
+                p.setHasWon(boxCallerSideWon.isChecked());
+            } else {
+                p.setHasWon(!boxCallerSideWon.isChecked());
+            }
         }
+
+        StakeModifier modifier = createStakeModifier();
+        SingleGameResult result = new SingleGameResult(player, selectedGameType, modifier);
+        result.setSingleGameResult();
+        return result;
     }
 
     /**
-     * Returns the amount of consecutive high trumps selected
+     * Creates and returns a {@link StakeModifier} instance that contains all the selection the user
+     * made regarding point modifiers (schneider/schwarz, kontra/re, tout/sie and Laufende)
      *
-     * @param s The spinner to select from
      * @return
      */
-    private int getAmountOfConsecutiveTrumpsSelected(@NonNull Spinner s) {
-        String value = (String) s.getSelectedItem();
-        try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException ignore) {
-            return 0;
+    private StakeModifier createStakeModifier() {
+        StakeModifier modifier = new StakeModifier();
+
+        CheckBox schneiderBox = findView(R.id.FillGameResult_checkbox_is_schneider);
+        modifier.setSchneider(schneiderBox.isChecked());
+        CheckBox schwarzBox = findView(R.id.FillGameResult_checkbox_is_schwarz);
+        modifier.setSchwarz(schwarzBox.isChecked());
+
+        CheckBox kontraBox = findView(R.id.FillGameResult_checkbox_is_kontra);
+        modifier.setKontra(kontraBox.isChecked());
+        CheckBox reBox = findView(R.id.FillGameResult_checkbox_is_re);
+        modifier.setRe(reBox.isChecked());
+
+        CheckBox toutBox = findView(R.id.FillGameResult_checkbox_is_tout);
+        modifier.setTout(toutBox.isChecked());
+        CheckBox sieBox = findView(R.id.FillGameResult_checkbox_is_sie);
+        modifier.setSie(sieBox.isChecked());
+
+        LaufendeElement selectedElement = (LaufendeElement) dropdownLaufende.getSelectedItem();
+        modifier.setNumberOfLaufende(selectedElement.getAnzLaufende());
+        return modifier;
+    }
+
+    /**
+     * Switches the "Laufende"-Dropdown content to the content provided in the given array
+     *
+     * @param elements the new content for the "Laufende"-Dropdown
+     */
+    private void switchAdapter(LaufendeElement[] elements) {
+        SpinnerAdapter adapter = new ArrayAdapter<LaufendeElement>(this, android.R.layout.simple_dropdown_item_1line, elements);
+        dropdownLaufende.setAdapter(adapter);
+    }
+
+    /**
+     * Returns the current selected {@link GameType}
+     *
+     * @return
+     */
+    private GameType getCurrentlySelectedGameType() {
+        Collection<ToggleButton> pressedButtons = gameTypeGroup.getPressedButtons();
+        if (pressedButtons.isEmpty()) {
+            return GameType.LEER;
+        } else {
+            //Get the pressed button
+            EnumToggleButton<GameType> pressedButton = (EnumToggleButton<GameType>) pressedButtons.iterator().next();
+            return pressedButton.getRepresentation();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle b) {
         super.onSaveInstanceState(b);
-        //TODO save spinner state
+        //save current selected game type
+        GameType currentGameType = getCurrentlySelectedGameType();
+        b.putSerializable(bundlekey_selected_game_type, currentGameType);
+        int selectedIndex = dropdownLaufende.getSelectedItemPosition();
+        b.putSerializable(bundlekey_selected_game_type_index, selectedIndex);
 
     }
 

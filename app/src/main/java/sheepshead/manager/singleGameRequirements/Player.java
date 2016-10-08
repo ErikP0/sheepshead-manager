@@ -40,7 +40,7 @@ public class Player {
     private int priceToGetInSession = 0;
 
 
-    public Player(String name, int number){
+    public Player(String name, int number) {
         this.name = name;
         this.number = number;
         this.isCaller = false;
@@ -103,6 +103,18 @@ public class Player {
 
     public void setPriceToGetInSession(int priceToGetInSession) {
         this.priceToGetInSession = priceToGetInSession;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Player \"");
+        stringBuilder.append(name);
+        stringBuilder.append("\"(");
+        stringBuilder.append(number);
+        stringBuilder.append(") Price: ");
+        stringBuilder.append(priceToGetInSingleGame);
+        return stringBuilder.toString();
     }
 
 }
