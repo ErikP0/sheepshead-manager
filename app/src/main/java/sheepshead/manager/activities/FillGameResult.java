@@ -158,20 +158,27 @@ public class FillGameResult extends AbstractBaseActivity {
 
         /**
          * Add a listener that disables "Tout" and "Sie" checkboxes when no game type/"Sauspiel" was selected
+         * and disables "Sie" when "Wenz" is selected
          */
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GameType selectedGameType = getCurrentlySelectedGameType();
-                boolean enable = true;
+                boolean enableTout = true;
+                boolean enableSie = true;
                 if (selectedGameType.equals(GameType.LEER) || selectedGameType.equals(GameType.SAUSPIEL)) {
                     //disable "Tout" and "sie" checkboxes
-                    enable = false;
+                    enableTout = false;
+                    enableSie = false;
                     checkboxTout.setChecked(false);
                     checkboxSie.setChecked(false);
                 }
-                checkboxTout.setEnabled(enable);
-                checkboxSie.setEnabled(enable);
+                if (selectedGameType.equals(GameType.WENZ)) {
+                    enableSie = false;
+                    checkboxSie.setChecked(false);
+                }
+                checkboxTout.setEnabled(enableTout);
+                checkboxSie.setEnabled(enableSie);
             }
         });
 
