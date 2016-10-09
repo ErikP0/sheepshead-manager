@@ -19,12 +19,15 @@ package sheepshead.manager.activities;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import sheepshead.manager.R;
+import sheepshead.manager.singleGameRequirements.GameType;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -33,6 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -167,5 +171,51 @@ public class FillGameResultTest {
         //expect laufende spinner displaying one item (no game type selected)
         //TODO
 
+    }
+
+    private void testGameTypeToutSie(GameType gameTypeToSelect, boolean enabledValueTout, boolean enabledValueSie) {
+        int btnId = -1;
+        switch (gameTypeToSelect) {
+            case LEER://default game type, do nothing
+                break;
+            case SAUSPIEL:
+                btnId = R.id.FillGameResult_toggleBtn_sauspiel;
+                break;
+            case WENZ:
+                btnId = R.id.FillGameResult_toggleBtn_wenz;
+                break;
+            case SOLO:
+                btnId = R.id.FillGameResult_toggleBtn_solo;
+                break;
+            default:
+                fail("Unknown gametype " + gameTypeToSelect);
+        }
+        if (btnId > 0) {
+            onView(withId(btnId)).perform(click());
+        }
+        Matcher<View> toutMatcher = enabledValueTout ? isEnabled() : not(isEnabled());
+        Matcher<View> sieMatcher = enabledValueSie ? isEnabled() : not(isEnabled());
+        onView(withId(R.id.FillGameResult_checkbox_is_tout)).check(matches(toutMatcher));
+        onView(withId(R.id.FillGameResult_checkbox_is_sie)).check(matches(sieMatcher));
+    }
+
+    @Test
+    public void testSauspielToutSieDisabled() {
+        testGameTypeToutSie(GameType.SAUSPIEL, false, false);
+    }
+
+    @Test
+    public void testWenzToutEnabledSieDisabled() {
+        testGameTypeToutSie(GameType.WENZ, true, false);
+    }
+
+    @Test
+    public void testSoloToutSieEnabled() {
+        testGameTypeToutSie(GameType.SOLO, true, true);
+    }
+
+    @Test
+    public void testNoGameTypeToutSieDisabled() {
+        testGameTypeToutSie(GameType.LEER, false, false);
     }
 }
