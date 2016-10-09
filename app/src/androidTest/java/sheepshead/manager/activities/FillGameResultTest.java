@@ -30,8 +30,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class FillGameResultTest {
@@ -119,6 +121,9 @@ public class FillGameResultTest {
     public void testToutSieCheckboxes() {
         final int idTout = R.id.FillGameResult_checkbox_is_tout;
         final int idSie = R.id.FillGameResult_checkbox_is_sie;
+        //select Sauspiel
+        onView(withId(R.id.FillGameResult_toggleBtn_solo)).perform(click());
+
         //test both are unchecked
         onView(withId(idTout)).check(matches(isNotChecked()));
         onView(withId(idSie)).check(matches(isNotChecked()));
@@ -147,7 +152,7 @@ public class FillGameResultTest {
         onView(withId(R.id.FillGameResult_toggleBtn_solo)).check(matches(isNotChecked()));
 
         //expect caller won checked
-        onView(withId(R.id.FillGameResult_checkbox_playerside_won)).check(matches(isChecked()));
+        onView(withId(R.id.FillGameResult_checkbox_callerside_won)).check(matches(isChecked()));
 
         //expect all point modifiers unchecked
         int[] pointModifier = {R.id.FillGameResult_checkbox_is_schneider, R.id.FillGameResult_checkbox_is_schwarz, R.id.FillGameResult_checkbox_is_kontra, R.id.FillGameResult_checkbox_is_re, R.id.FillGameResult_checkbox_is_tout, R.id.FillGameResult_checkbox_is_sie};
@@ -156,8 +161,8 @@ public class FillGameResultTest {
         }
 
         //expect tout, sie disabled TODO currently failing, enable when feature/integrate-stake-model is merged
-        //onView(withId(R.id.FillGameResult_checkbox_is_tout)).check(matches(not(isEnabled())));
-        //onView(withId(R.id.FillGameResult_checkbox_is_sie)).check(matches(not(isEnabled())));
+        onView(withId(R.id.FillGameResult_checkbox_is_tout)).check(matches(not(isEnabled())));
+        onView(withId(R.id.FillGameResult_checkbox_is_sie)).check(matches(not(isEnabled())));
 
         //expect laufende spinner displaying one item (no game type selected)
         //TODO

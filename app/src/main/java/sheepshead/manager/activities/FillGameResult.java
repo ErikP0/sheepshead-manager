@@ -141,6 +141,8 @@ public class FillGameResult extends AbstractBaseActivity {
         switchAdapter(new LaufendeElement.Builder(loadedType).build());
         dropdownLaufende.setSelection(loadedIndex);
 
+        updateCheckboxesForGameType();
+
         /*
         This adds a Listener to the game type selection, that fires when a new game type is selected
         or was deselected (-> game type missing)
@@ -163,22 +165,7 @@ public class FillGameResult extends AbstractBaseActivity {
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GameType selectedGameType = getCurrentlySelectedGameType();
-                boolean enableTout = true;
-                boolean enableSie = true;
-                if (selectedGameType.equals(GameType.LEER) || selectedGameType.equals(GameType.SAUSPIEL)) {
-                    //disable "Tout" and "sie" checkboxes
-                    enableTout = false;
-                    enableSie = false;
-                    checkboxTout.setChecked(false);
-                    checkboxSie.setChecked(false);
-                }
-                if (selectedGameType.equals(GameType.WENZ)) {
-                    enableSie = false;
-                    checkboxSie.setChecked(false);
-                }
-                checkboxTout.setEnabled(enableTout);
-                checkboxSie.setEnabled(enableSie);
+                updateCheckboxesForGameType();
             }
         });
 
@@ -203,6 +190,29 @@ public class FillGameResult extends AbstractBaseActivity {
                 }
             }
         });
+    }
+
+    private void updateCheckboxesForGameType() {
+        CheckBox checkboxTout = findView(R.id.FillGameResult_checkbox_is_tout);
+        CheckBox checkboxSie = findView(R.id.FillGameResult_checkbox_is_sie);
+
+        GameType selectedGameType = getCurrentlySelectedGameType();
+        boolean enableTout = true;
+        boolean enableSie = true;
+        if (selectedGameType.equals(GameType.LEER) || selectedGameType.equals(GameType.SAUSPIEL)) {
+            //disable "Tout" and "sie" checkboxes
+            enableTout = false;
+            enableSie = false;
+            checkboxTout.setChecked(false);
+            checkboxSie.setChecked(false);
+        }
+        if (selectedGameType.equals(GameType.WENZ)) {
+            //disable "Tout" checkbox
+            enableSie = false;
+            checkboxSie.setChecked(false);
+        }
+        checkboxTout.setEnabled(enableTout);
+        checkboxSie.setEnabled(enableSie);
     }
 
     /**
