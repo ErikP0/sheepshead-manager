@@ -43,16 +43,40 @@ import sheepshead.manager.singleGameRequirements.Player;
 import sheepshead.manager.uicontrolutils.AbstractListItem;
 import sheepshead.manager.uicontrolutils.DialogUtils;
 
+/**
+ * Activity for selecting price values for "Sauspiel" and "Solo" and for selecting all players that
+ * should be part of the new created session
+ */
 public class CreateSession extends AbstractBaseActivity {
 
+    /**
+     * List index where to find the stake selection
+     */
     private int STAKE_INDEX;
+    /**
+     * List index where to find the player selection
+     */
     private int PLAYER_INDEX;
 
+    /**
+     * A listener for the "Add-Player" button, on click, it shows a dialog where the name of the player
+     * can be written into
+     */
     private AddNewPlayerListener addNewPlayerListener;
+    /**
+     * A listener for both stake selections ("Sauspiel & "Solo")
+     */
     private StakeInputWatcher stakeInputWatcher;
 
+    /**
+     * A list of currently added players
+     */
     private List<Player> players;
+    /**
+     * The list adapter
+     */
     private CreateSessionListAdapter adapter;
+
     private Button btnCreateSession;
 
     public CreateSession() {
@@ -75,6 +99,7 @@ public class CreateSession extends AbstractBaseActivity {
     protected void createUserInterface(Bundle savedInstanceState) {
         setContentView(R.layout.activity_create_session);
 
+        //build the expandable list & fill it with content
         CreateSessionListAdapter.Builder builder = new CreateSessionListAdapter.Builder(this);
         STAKE_INDEX = builder.addItem(getString(R.string.CreateSession_header_stake), new StakeSelectionListItem());
         PLAYER_INDEX = builder.addItem(getString(R.string.CreateSession_header_players), new PlayerSelectionListItem());
@@ -84,12 +109,14 @@ public class CreateSession extends AbstractBaseActivity {
         ExpandableListView listView = findView(R.id.CreateSession_listView);
         listView.setAdapter(adapter);
 
+        //Add the stake selection listener to the stake selection EditTexts
         View inputStakeView = adapter.getItemView(STAKE_INDEX);
         EditText inputSauspiel = (EditText) inputStakeView.findViewById(R.id.CreateSession_input_sauspiel);
         EditText inputSolo = (EditText) inputStakeView.findViewById(R.id.CreateSession_input_solo);
         inputSauspiel.addTextChangedListener(stakeInputWatcher);
         inputSolo.addTextChangedListener(stakeInputWatcher);
 
+        //Add the add player listener to the matching button
         View addPlayerView = adapter.getItemView(PLAYER_INDEX);
         ImageButton addButton = (ImageButton) addPlayerView.findViewById(R.id.CreateSession_AddPlayer);
         addButton.setOnClickListener(addNewPlayerListener);
@@ -98,11 +125,19 @@ public class CreateSession extends AbstractBaseActivity {
         btnCreateSession.setOnClickListener(new CreateSessionAction());
 
         if (savedInstanceState != null) {
+            //load (if possible) selected states
             adapter.loadInstanceState(savedInstanceState);
         }
         revalidateIcons();
     }
 
+    /**
+     * Attempts to add a new player with <code>name</code>.
+     * Is a player with the same name already added, the user gets notifier via Dialog and the new
+     * player is not added.
+     *
+     * @param name The name of the player
+     */
     private void addNewPlayer(String name) {
         //add player if not already there
         for (Player player : players) {
@@ -116,6 +151,11 @@ public class CreateSession extends AbstractBaseActivity {
         updatePlayerlist();
     }
 
+    /**
+     * Removes a player with <code>name</code>
+     *
+     * @param name The name of the player to remove from the list
+     */
     private void removePlayer(String name) {
         ListIterator<Player> it = players.listIterator();
         while (it.hasNext()) {
@@ -127,16 +167,21 @@ public class CreateSession extends AbstractBaseActivity {
         updatePlayerlist();
     }
 
+    /**
+     * Changes the player selection view to match to the internal player list
+     */
     private void updatePlayerlist() {
         LinearLayout list = (LinearLayout) adapter.getItemView(PLAYER_INDEX).findViewById(R.id.CreateSession_playerlist);
-        list.removeAllViews();
+        list.removeAllViews();//remove old player-entries
         for (Player player : players) {
+            //create a new player-entry
             LayoutInflater infalInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = infalInflater.inflate(R.layout.create_session_playerlist_row, null);
             TextView textPlayername = (TextView) child.findViewById(R.id.CreateSession_playername);
             final String name = player.getName();
             textPlayername.setText(name);
 
+            //add listener to remove button of this player-entry
             ImageButton removePlayerButton = (ImageButton) child.findViewById(R.id.CreateSession_RemovePlayer);
             removePlayerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,13 +190,17 @@ public class CreateSession extends AbstractBaseActivity {
                 }
             });
 
+            //add this player-entry
             list.addView(child);
         }
         revalidateIcons();
     }
 
+    /**
+     * Updates all state icons of each selection. If all selections are valid, the create new session
+     * button is enabled
+     */
     private void revalidateIcons() {
-
         boolean inputValidForCreation = true;
 
         //validate input of sauspiel & solo
@@ -190,6 +239,9 @@ public class CreateSession extends AbstractBaseActivity {
         adapter.saveInstanceState(outState);
     }
 
+    /**
+     * Updates the icons when the user edits any of the stake selection TextEdits
+     */
     private class StakeInputWatcher implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -205,6 +257,9 @@ public class CreateSession extends AbstractBaseActivity {
         }
     }
 
+    /**
+     * Creates a new session with the stake values and players entered by the user
+     */
     private class CreateSessionAction implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -229,6 +284,9 @@ public class CreateSession extends AbstractBaseActivity {
         }
     }
 
+    /**
+     * Shows a dialog where the user can enter a players name
+     */
     private class AddNewPlayerListener implements View.OnClickListener {
 
         @Override
@@ -255,6 +313,10 @@ public class CreateSession extends AbstractBaseActivity {
         }
     }
 
+    /**
+     * A custom data container for the stake selection item in the {@link ExpandableListView}.
+     * This container saves and loads the values in the stake selection
+     */
     private class StakeSelectionListItem extends AbstractListItem {
 
         private static final String bundlekey_stake_sauspiel = "create_session_stake_sauspiel";
@@ -287,6 +349,10 @@ public class CreateSession extends AbstractBaseActivity {
         }
     }
 
+    /**
+     * A custom data container for the player selection in the {@link ExpandableListView}
+     * This container saves and loads the current added players
+     */
     private class PlayerSelectionListItem extends AbstractListItem {
         private static final String bundlekey_players = "create_session_players";
 
