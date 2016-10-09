@@ -16,6 +16,8 @@
 
 <resources>
     <string name="app_name">Sheepshead Manager</string>
+    <!-- Global strings -->
+    <string name="Dialog_text_back">Zurück</string>
 
     <!-- Strings for LoadingScreenActivity -->
     <string name="loading_screen_load_message">Schafkopf-Manager\nLade..</string>
@@ -57,4 +59,6 @@
     <!-- Strings for CreateSessionActivity -->
     <string name="CreateSession.header_stake">Einsatz auswählen</string>
     <string name="CreateSession.header_players">Mitspieler auswählen</string>
+    <string name="CreateSession.warning_player_already_exists">Spieler bereits hinzugefügt</string>
+    <string name="CreateSession.dialog_text_enter_player_name">Name eingeben</string>
 </resources>

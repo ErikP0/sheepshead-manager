@@ -107,7 +107,7 @@ public class CreateSession extends AbstractBaseActivity {
         //add player if not already there
         for (Player player : players) {
             if (player.getName().equalsIgnoreCase(name)) {
-                DialogUtils.showInfoDialog(this, "Spieler bereits hinzugefügt", "Ok", null);
+                DialogUtils.showInfoDialog(this, getString(R.string.CreateSession_warning_player_already_exists), getString(R.string.FillGameResult_confirm_dialog), null);
                 return;//exit
             }
         }
@@ -214,7 +214,7 @@ public class CreateSession extends AbstractBaseActivity {
             int priceSauspiel = Integer.parseInt(inputSauspiel.getText().toString());
             int priceSolo = Integer.parseInt(inputSolo.getText().toString());
 
-            //TODO create a session object here
+            //TODO create a session object here (instead of a message)
             StringBuilder builder = new StringBuilder();
             builder.append("Erzeuge Sitzung mit Preisen:\n");
             builder.append(priceSauspiel).append(" für Sauspiel\n");
@@ -237,15 +237,15 @@ public class CreateSession extends AbstractBaseActivity {
             final EditText textfield = new EditText(CreateSession.this);
             textfield.setInputType(InputType.TYPE_CLASS_TEXT);
             dialogBuilder.setView(textfield);
-            dialogBuilder.setMessage("Name eingeben");
+            dialogBuilder.setMessage(getString(R.string.CreateSession_dialog_text_enter_player_name));
             dialogBuilder.setCancelable(true);
-            dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            dialogBuilder.setPositiveButton(getString(R.string.FillGameResult_confirm_dialog), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     addNewPlayer(textfield.getText().toString());
                 }
             });
-            dialogBuilder.setNegativeButton("Zurück", new DialogInterface.OnClickListener() {
+            dialogBuilder.setNegativeButton(getString(R.string.Dialog_text_back), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
