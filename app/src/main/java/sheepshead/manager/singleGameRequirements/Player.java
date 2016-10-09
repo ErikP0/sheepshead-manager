@@ -105,4 +105,16 @@ public class Player {
         this.priceToGetInSession = priceToGetInSession;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Player \"");
+        stringBuilder.append(name);
+        stringBuilder.append("\"(");
+        stringBuilder.append(number);
+        stringBuilder.append(") Price: ");
+        stringBuilder.append(priceToGetInSingleGame);
+        return stringBuilder.toString();
+    }
+
 }
