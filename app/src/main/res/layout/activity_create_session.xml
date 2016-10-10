@@ -40,5 +40,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Sitzung erstellen" />
+        android:text="@string/CreateSession.btn_text_create_new_session" />
 </RelativeLayout>

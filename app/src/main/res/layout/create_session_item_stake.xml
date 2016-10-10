@@ -32,7 +32,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:text="Preis für Sauspiel" />
+                android:text="@string/CreateSession.text_stake_sauspiel" />
 
             <EditText
                 android:id="@+id/CreateSession.input_sauspiel"
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="number"
-                android:text="10" />
+                android:text="@string/CreateSession.default_value_sauspiel" />
         </TableRow>
 
         <TableRow
@@ -50,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Preis für Solo" />
+                android:text="@string/CreateSession.text_stake_solo" />
 
             <EditText
                 android:id="@+id/CreateSession.input_solo"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="number"
-                android:text="50" />
+                android:text="@string/CreateSession.default_value_solo" />
         </TableRow>
     </TableLayout>
 

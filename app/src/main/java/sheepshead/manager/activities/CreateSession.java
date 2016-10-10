@@ -139,6 +139,11 @@ public class CreateSession extends AbstractBaseActivity {
      * @param name The name of the player
      */
     private void addNewPlayer(String name) {
+        if (name.equalsIgnoreCase("")) {
+            DialogUtils.showInfoDialog(this, getString(R.string.CreateSession_warning_invalid_player_name), getString(R.string.FillGameResult_confirm_dialog), null);
+            return;//exit
+        }
+
         //add player if not already there
         for (Player player : players) {
             if (player.getName().equalsIgnoreCase(name)) {
