@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2016  Erik Pohle
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +14,7 @@
   ~    limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="sheepshead.manager">
+    package="sheepshead.manager">
 
     <application
         android:name=".appcore.SheepsheadManagerApplication"
@@ -24,15 +23,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoTitleBar">
-        <activity
-            android:name=".main.LoadingScreen">
+        <activity android:name=".main.LoadingScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FillGameResult">
+        <activity android:name=".activities.FillGameResult" />
+        <activity android:name=".activities.DisplayScoresPortrait" />
+        <activity
+            android:name=".activities.DisplayScoresLandscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_display_scores_landscape"
+            android:parentActivityName=".activities.DisplayScoresPortrait"
+            android:theme="@style/FullscreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sheepshead.manager.activities.DisplayScoresPortrait" />
         </activity>
     </application>
 

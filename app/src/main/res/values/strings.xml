@@ -53,4 +53,8 @@
     <string-array name="array_no_gametype_selected">
         <item>Kein Spiel ausgewählt</item>
     </string-array>
+
+    <string name="title_activity_display_scores_landscape">DisplayScoresLandscape</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
