@@ -16,6 +16,8 @@
 
 <resources>
     <string name="app_name">Sheepshead Manager</string>
+    <!-- Global strings -->
+    <string name="Dialog_text_back">Zurück</string>
 
     <!-- Strings for LoadingScreenActivity -->
     <string name="loading_screen_load_message">Schafkopf-Manager\nLade..</string>
@@ -57,4 +59,15 @@
     <!-- Strings for HomeScreenActivity -->
     <string name="HomeScreen.continue_last_session">Weitermachen</string>
     <string name="HomeScreen.new_session">Neue Sitzung</string>
+    <!-- Strings for CreateSessionActivity -->
+    <string name="CreateSession.header_stake">Einsatz auswählen</string>
+    <string name="CreateSession.header_players">Mitspieler auswählen</string>
+    <string name="CreateSession.warning_player_already_exists">Spieler bereits hinzugefügt</string>
+    <string name="CreateSession.dialog_text_enter_player_name">Name eingeben</string>
+    <string name="CreateSession.btn_text_create_new_session">Sitzung erstellen</string>
+    <string name="CreateSession.text_stake_sauspiel">Preis für Sauspiel</string>
+    <string name="CreateSession.text_stake_solo">Preis für Solo</string>
+    <string name="CreateSession.default_value_sauspiel">10</string>
+    <string name="CreateSession.default_value_solo">50</string>
+    <string name="CreateSession.warning_invalid_player_name">Ungültiger Name</string>
 </resources>
