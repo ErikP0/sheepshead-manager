@@ -16,13 +16,13 @@
 
 package sheepshead.manager.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
-import sheepshead.manager.uicontrolutils.DialogUtils;
 
 /**
  * A home screen where the user can chose to continue the last session or to create a new session
@@ -51,8 +51,8 @@ public class HomeScreen extends AbstractBaseActivity {
         newSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO switch to create session activity
-                DialogUtils.showInfoDialog(HomeScreen.this, "In Kürze kann hier eine neue Sitzung erstellt werden", "Schade :(", null);
+                Intent intent = new Intent(HomeScreen.this, CreateSession.class);
+                startActivity(intent);
             }
         });
     }
