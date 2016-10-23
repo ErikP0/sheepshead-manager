@@ -18,6 +18,9 @@ package sheepshead.manager.appcore;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import sheepshead.manager.sessionRequirements.Session;
 
 /**
  * Singleton class for the general application behaviour.
@@ -29,6 +32,9 @@ public final class SheepsheadManagerApplication extends Application {
      * singleton instance
      */
     private static SheepsheadManagerApplication singleton;
+    private
+    @Nullable
+    Session currentSession;
 
     /**
      * Returns the singleton instance.
@@ -96,5 +102,15 @@ public final class SheepsheadManagerApplication extends Application {
     void startup() {
         //single-run code on startup here
         System.out.println("Startup");
+    }
+
+    public
+    @Nullable
+    Session getCurrentSession() {
+        return currentSession;
+    }
+
+    public void setCurrentSession(@NonNull Session session) {
+        currentSession = session;
     }
 }

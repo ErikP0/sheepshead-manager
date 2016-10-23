@@ -25,12 +25,10 @@ import java.io.Serializable;
 //Serializable is used in FillGameResult
 public enum GameType implements Serializable {
 
-    SAUSPIEL(SheapsheadConstants.GRUNDTARIF, 1, 3, 8),
-    WENZ(SheapsheadConstants.SOLOTARIF, 3, 2, 4),
-    SOLO(SheapsheadConstants.SOLOTARIF, 3, 3, 8),
-    LEER(0, 1, -1, -1);
-
-    private int normalPriceForOnePlayer;
+    SAUSPIEL(1, 3, 8),
+    WENZ(3, 2, 4),
+    SOLO(3, 3, 8),
+    LEER(1, -1, -1);
 
     private int teamMultiplier;
 
@@ -45,16 +43,10 @@ public enum GameType implements Serializable {
      */
     private int maxLaufendeIncl;
 
-    GameType(int normalPriceForOnePlayer, int teamMultiplier, int laufendeBegin, int laufendeEndIncl) {
-        this.normalPriceForOnePlayer = normalPriceForOnePlayer;
+    GameType(int teamMultiplier, int laufendeBegin, int laufendeEndIncl) {
         this.teamMultiplier = teamMultiplier;
         minLaufende = laufendeBegin;
         maxLaufendeIncl = laufendeEndIncl;
-    }
-
-
-    public int getNormalPriceForOnePlayer() {
-        return normalPriceForOnePlayer;
     }
 
     public int getTeamMultiplier() {

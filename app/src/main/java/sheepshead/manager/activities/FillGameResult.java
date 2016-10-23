@@ -25,14 +25,19 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.ToggleButton;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.sessionRequirements.Session;
 import sheepshead.manager.singleGameRequirements.GameType;
 import sheepshead.manager.singleGameRequirements.Player;
+import sheepshead.manager.singleGameRequirements.PlayerRole;
 import sheepshead.manager.singleGameRequirements.SingleGameResult;
 import sheepshead.manager.singleGameRequirements.StakeModifier;
 import sheepshead.manager.uicontrolutils.CheckBoxGroup;
@@ -83,6 +88,22 @@ public class FillGameResult extends AbstractBaseActivity {
     private CheckBoxGroup toutSieGroup;
 
     private Spinner dropdownLaufende;
+
+
+    private Collection<Player> allPlayers;
+    private Set<Player> callers;
+    private Set<Player> nonCallers;
+
+    public FillGameResult() {
+        Session session = SheepsheadManagerApplication.getInstance().getCurrentSession();
+        if (session == null) {
+            throw new IllegalStateException("FillGameResultActivity did not find a session");
+        }
+        allPlayers = session.getPlayers();
+        callers = new HashSet<>();
+        nonCallers = new HashSet<>();
+    }
+
 
     @Override
     protected void registerActivitySpecificServices() {
@@ -178,7 +199,7 @@ public class FillGameResult extends AbstractBaseActivity {
                 GameType selectedGameType = getCurrentlySelectedGameType();
                 if (!selectedGameType.equals(GameType.LEER)) {
                     Player[] players = {new Player("A", 0), new Player("B", 1), new Player("C", 2), new Player("D", 3)};
-                    SingleGameResult result = createSingleGameResult(Arrays.asList(players), selectedGameType);
+                    SingleGameResult result = createSingleGameResult(selectedGameType);
                     String message = "";
                     for (Player p : players) {
                         message += p + "\n";
@@ -218,29 +239,23 @@ public class FillGameResult extends AbstractBaseActivity {
     /**
      * Creates and returns a {@link SingleGameResult} based on the selections the user made
      *
-     * @param player           List of players participating in the game
      * @param selectedGameType the current selected game type
      * @return the result of the user made selections
      */
-    private SingleGameResult createSingleGameResult(List<Player> player, GameType selectedGameType) {
+    private SingleGameResult createSingleGameResult(GameType selectedGameType) {
         //Temporary, will be removed when selection activity is finished (TODO)
-        player.get(0).setCaller(true);
-        if (selectedGameType.equals(GameType.SAUSPIEL)) {
-            player.get(1).setCaller(true);
-        }
-
         CheckBox boxCallerSideWon = findView(R.id.FillGameResult_checkbox_callerside_won);
-        for (Player p : player) {
-            if (p.isCaller()) {
-                p.setHasWon(boxCallerSideWon.isChecked());
-            } else {
-                p.setHasWon(!boxCallerSideWon.isChecked());
-            }
+        boolean callerHasWon = boxCallerSideWon.isChecked();
+        List<PlayerRole> roles = new ArrayList<>(callers.size() + nonCallers.size());
+        for (Player caller : callers) {
+            roles.add(new PlayerRole(caller, true, callerHasWon));
+        }
+        for (Player nonCaller : nonCallers) {
+            roles.add(new PlayerRole(nonCaller, false, !callerHasWon));
         }
 
         StakeModifier modifier = createStakeModifier();
-        SingleGameResult result = new SingleGameResult(player, selectedGameType, modifier);
-        result.setSingleGameResult();
+        SingleGameResult result = new SingleGameResult(roles, selectedGameType, modifier);
         return result;
     }
 

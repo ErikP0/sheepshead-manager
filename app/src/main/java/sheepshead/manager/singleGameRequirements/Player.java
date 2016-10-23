@@ -26,83 +26,29 @@ public class Player {
 
     private int number; //it should always start with 0 for the first player, 1 for the second ...
 
-    private boolean isCaller;
-
-    private boolean hasWon;
-
-    private boolean isParticipant;
-
-    /**
-     * if player lost game, this int is negative
-     */
-    private int priceToGetInSingleGame = 0;
-
-    private int priceToGetInSession = 0;
+    private int sessionMoney = 0;
 
 
     public Player(String name, int number) {
         this.name = name;
         this.number = number;
-        this.isCaller = false;
-        this.hasWon = false;
-        this.isParticipant = true;
     }
-
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+
+    public int getSessionMoney() {
+        return sessionMoney;
     }
 
-    public boolean isCaller() {
-        return isCaller;
-    }
-
-    public void setCaller(boolean caller) {
-        isCaller = caller;
-    }
-
-    public int getPriceToGetInSingleGame() {
-        return priceToGetInSingleGame;
-    }
-
-    public void setPriceToGetInSingleGame(int priceToGetInSingleGame) {
-        this.priceToGetInSingleGame = priceToGetInSingleGame;
-    }
-
-    public boolean hasWon() {
-        return hasWon;
-    }
-
-    public void setHasWon(boolean hasWon) {
-        this.hasWon = hasWon;
-    }
-
-    public boolean isParticipant() {
-        return isParticipant;
-    }
-
-    public void setParticipant(boolean participant) {
-        isParticipant = participant;
-    }
-
-    public int getPriceToGetInSession() {
-        return priceToGetInSession;
-    }
-
-    public void setPriceToGetInSession(int priceToGetInSession) {
-        this.priceToGetInSession = priceToGetInSession;
+    public void setSessionMoney(int sessionMoney) {
+        this.sessionMoney = sessionMoney;
     }
 
     @Override
@@ -112,8 +58,6 @@ public class Player {
         stringBuilder.append(name);
         stringBuilder.append("\"(");
         stringBuilder.append(number);
-        stringBuilder.append(") Price: ");
-        stringBuilder.append(priceToGetInSingleGame);
         return stringBuilder.toString();
     }
 

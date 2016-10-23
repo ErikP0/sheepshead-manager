@@ -39,6 +39,9 @@ import java.util.ListIterator;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.sessionRequirements.Session;
+import sheepshead.manager.sessionRequirements.Stake;
 import sheepshead.manager.singleGameRequirements.Player;
 import sheepshead.manager.uicontrolutils.AbstractListItem;
 import sheepshead.manager.uicontrolutils.DialogUtils;
@@ -152,7 +155,7 @@ public class CreateSession extends AbstractBaseActivity {
             }
         }
 
-        players.add(new Player(name, 0));//TODO richtige ID vergeben
+        players.add(new Player(name, players.size()));//TODO richtige ID vergeben
         updatePlayerlist();
     }
 
@@ -273,6 +276,12 @@ public class CreateSession extends AbstractBaseActivity {
             EditText inputSolo = (EditText) adapter.getItemView(STAKE_INDEX).findViewById(R.id.CreateSession_input_solo);
             int priceSauspiel = Integer.parseInt(inputSauspiel.getText().toString());
             int priceSolo = Integer.parseInt(inputSolo.getText().toString());
+            Stake stake = new Stake(priceSauspiel, priceSolo, priceSauspiel);
+
+            List<Player> playerInSession = new ArrayList<>();
+            playerInSession.addAll(players);
+            Session session = new Session(playerInSession, stake);
+            SheepsheadManagerApplication.getInstance().setCurrentSession(session);
 
             //TODO create a session object here (instead of a message)
             StringBuilder builder = new StringBuilder();

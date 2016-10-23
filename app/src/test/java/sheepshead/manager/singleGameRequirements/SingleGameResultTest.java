@@ -16,14 +16,14 @@
 
 package sheepshead.manager.singleGameRequirements;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import sheepshead.manager.sessionRequirements.Stake;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by Nicolas on 01.10.2016.
@@ -35,7 +35,7 @@ public class SingleGameResultTest {
     private Player player3 = new Player("C", 2);
     private Player player4 = new Player("D", 3);
 
-    private ArrayList<Player> playerList;
+    private Stake defaultStake = new Stake(10, 50, 10);
 
     private SingleGameResult singleGameResult;
 
@@ -48,12 +48,11 @@ public class SingleGameResultTest {
     public void testNormalSauspielPlayer1and2Won() throws Exception {
         gameType = GameType.SAUSPIEL;
 
-        player1.setHasWon(true);
-        player2.setHasWon(true);
-        player3.setCaller(true);
-        player4.setCaller(true);
-
-        givenSetPlayerList();
+        List<PlayerRole> playerList = new ArrayList<>(4);
+        playerList.add(new PlayerRole(player1, false, true));
+        playerList.add(new PlayerRole(player2, false, true));
+        playerList.add(new PlayerRole(player3, true, false));
+        playerList.add(new PlayerRole(player4, true, false));
 
         stakeModifier = new StakeModifier();
 
@@ -61,22 +60,24 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(10, player1.getPriceToGetInSingleGame());
-        assertEquals(10, player2.getPriceToGetInSingleGame());
-        assertEquals(-10, player3.getPriceToGetInSingleGame());
-        assertEquals(-10, player4.getPriceToGetInSingleGame());
+        int[] expected = {10, 10, -10, -10};
+        int index = 0;
+        for (PlayerRole role : singleGameResult.getParticipants()) {
+            assertEquals(expected[index], role.getMoney());
+            index++;
+        }
     }
 
     @Test
     public void testSauspielSchneiderSchwarz2LaufendeKontra() throws Exception {
         gameType = GameType.SAUSPIEL;
 
-        player1.setHasWon(true);
-        player2.setHasWon(true);
-        player3.setCaller(true);
-        player4.setCaller(true);
+        List<PlayerRole> playerList = new ArrayList<>(4);
+        playerList.add(new PlayerRole(player1, false, true));
+        playerList.add(new PlayerRole(player2, false, true));
+        playerList.add(new PlayerRole(player3, true, false));
+        playerList.add(new PlayerRole(player4, true, false));
 
-        givenSetPlayerList();
 
         stakeModifier = new StakeModifier();
 
@@ -89,10 +90,12 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(60, player1.getPriceToGetInSingleGame());
-        assertEquals(60, player2.getPriceToGetInSingleGame());
-        assertEquals(-60, player3.getPriceToGetInSingleGame());
-        assertEquals(-60, player4.getPriceToGetInSingleGame());
+        int[] expected = {60, 60, -60, -60};
+        int index = 0;
+        for (PlayerRole role : singleGameResult.getParticipants()) {
+            assertEquals(expected[index], role.getMoney());
+            index++;
+        }
 
     }
 
@@ -100,12 +103,11 @@ public class SingleGameResultTest {
     public void testSauspielSchneiderSchwarz4Laufende() throws Exception {
         gameType = GameType.SAUSPIEL;
 
-        player1.setHasWon(true);
-        player3.setHasWon(true);
-        player1.setCaller(true);
-        player3.setCaller(true);
-
-        givenSetPlayerList();
+        List<PlayerRole> playerList = new ArrayList<>(4);
+        playerList.add(new PlayerRole(player1, true, true));
+        playerList.add(new PlayerRole(player2, false, false));
+        playerList.add(new PlayerRole(player3, true, true));
+        playerList.add(new PlayerRole(player4, false, false));
 
         stakeModifier = new StakeModifier();
 
@@ -117,22 +119,23 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(70, player1.getPriceToGetInSingleGame());
-        assertEquals(-70, player2.getPriceToGetInSingleGame());
-        assertEquals(70, player3.getPriceToGetInSingleGame());
-        assertEquals(-70, player4.getPriceToGetInSingleGame());
+        int[] expected = {70, -70, 70, -70};
+        int index = 0;
+        for (PlayerRole role : singleGameResult.getParticipants()) {
+            assertEquals(expected[index], role.getMoney());
+            index++;
+        }
     }
 
     @Test
     public void testSauspielSchneiderSchwarz5LaufendeRe() throws Exception {
         gameType = GameType.SAUSPIEL;
 
-        player1.setHasWon(true);
-        player3.setHasWon(true);
-        player1.setCaller(true);
-        player3.setCaller(true);
-
-        givenSetPlayerList();
+        List<PlayerRole> playerList = new ArrayList<>(4);
+        playerList.add(new PlayerRole(player1, true, true));
+        playerList.add(new PlayerRole(player2, false, false));
+        playerList.add(new PlayerRole(player3, true, true));
+        playerList.add(new PlayerRole(player4, false, false));
 
         stakeModifier = new StakeModifier();
 
@@ -146,20 +149,23 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(320, player1.getPriceToGetInSingleGame());
-        assertEquals(-320, player2.getPriceToGetInSingleGame());
-        assertEquals(320, player3.getPriceToGetInSingleGame());
-        assertEquals(-320, player4.getPriceToGetInSingleGame());
+        int[] expected = {320, -320, 320, -320};
+        int index = 0;
+        for (PlayerRole role : singleGameResult.getParticipants()) {
+            assertEquals(expected[index], role.getMoney());
+            index++;
+        }
     }
 
     @Test
     public void testWenzTout2LaufendeSchwarz() throws Exception {
         gameType = GameType.WENZ;
 
-        player1.setHasWon(true);
-        player1.setCaller(true);
-
-        givenSetPlayerList();
+        List<PlayerRole> playerList = new ArrayList<>(4);
+        playerList.add(new PlayerRole(player1, true, true));
+        playerList.add(new PlayerRole(player2, false, false));
+        playerList.add(new PlayerRole(player3, false, false));
+        playerList.add(new PlayerRole(player4, false, false));
 
         stakeModifier = new StakeModifier();
 
@@ -172,10 +178,12 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(420, player1.getPriceToGetInSingleGame());
-        assertEquals(-140, player2.getPriceToGetInSingleGame());
-        assertEquals(-140, player3.getPriceToGetInSingleGame());
-        assertEquals(-140, player4.getPriceToGetInSingleGame());
+        int[] expected = {420, -140, -140, -140};
+        int index = 0;
+        for (PlayerRole role : singleGameResult.getParticipants()) {
+            assertEquals(expected[index], role.getMoney());
+            index++;
+        }
     }
 
     @Test
@@ -183,12 +191,11 @@ public class SingleGameResultTest {
 
         gameType = GameType.SOLO;
 
-        player1.setCaller(true);
-        player2.setHasWon(true);
-        player3.setHasWon(true);
-        player4.setHasWon(true);
-
-        givenSetPlayerList();
+        List<PlayerRole> playerList = new ArrayList<>(4);
+        playerList.add(new PlayerRole(player1, true, false));
+        playerList.add(new PlayerRole(player2, false, true));
+        playerList.add(new PlayerRole(player3, false, true));
+        playerList.add(new PlayerRole(player4, false, true));
 
         stakeModifier = new StakeModifier();
 
@@ -199,10 +206,12 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(-180, player1.getPriceToGetInSingleGame());
-        assertEquals(60, player2.getPriceToGetInSingleGame());
-        assertEquals(60, player3.getPriceToGetInSingleGame());
-        assertEquals(60, player4.getPriceToGetInSingleGame());
+        int[] expected = {-180, 60, 60, 60};
+        int index = 0;
+        for (PlayerRole role : singleGameResult.getParticipants()) {
+            assertEquals(expected[index], role.getMoney());
+            index++;
+        }
     }
 
     @Test
@@ -210,10 +219,11 @@ public class SingleGameResultTest {
 
         gameType = GameType.SOLO;
 
-        player1.setCaller(true);
-        player1.setHasWon(true);
-
-        givenSetPlayerList();
+        List<PlayerRole> playerList = new ArrayList<>(4);
+        playerList.add(new PlayerRole(player1, true, true));
+        playerList.add(new PlayerRole(player2, false, false));
+        playerList.add(new PlayerRole(player3, false, false));
+        playerList.add(new PlayerRole(player4, false, false));
 
         stakeModifier = new StakeModifier();
 
@@ -226,135 +236,112 @@ public class SingleGameResultTest {
 
         whenSetSingleGameResultIsExecuted();
 
-        assertEquals(1560, player1.getPriceToGetInSingleGame());
-        assertEquals(-520, player2.getPriceToGetInSingleGame());
-        assertEquals(-520, player3.getPriceToGetInSingleGame());
-        assertEquals(-520, player4.getPriceToGetInSingleGame());
+        int[] expected = {1560, -520, -520, -520};
+        int index = 0;
+        for (PlayerRole role : singleGameResult.getParticipants()) {
+            assertEquals(expected[index], role.getMoney());
+            index++;
+        }
     }
 
-    @Test
-    public void testLeeresSpiel() throws Exception {
-        gameType = GameType.LEER;
+    /*
+        @Test
+        public void testNormalSauspiel() throws Exception {
 
-        givenSetPlayerList();
+            assertEquals(SheapsheadConstants.GRUNDTARIF, whenSetStakeIsExecuted(GameType.SAUSPIEL));
+            assertEquals(10, whenSetStakeIsExecuted(GameType.SAUSPIEL));
+        }
 
-        stakeModifier = new StakeModifier();
+        @Test
+        public void testSauspielSchneiderSchwarz2LaufendeKontra() throws Exception {
 
-        singleGameResult = new SingleGameResult(playerList, gameType, stakeModifier);
+            stake.setSchneider(true);
+            stake.setSchwarz(true);
+            stake.setKontra(true);
+            stake.setNumberOfLaufende(2);
+            assertEquals(2 * (SheapsheadConstants.GRUNDTARIF * 3), whenSetStakeIsExecuted(GameType.SAUSPIEL));
+            assertEquals(60, whenSetStakeIsExecuted(GameType.SAUSPIEL));
+        }
 
-        whenSetSingleGameResultIsExecuted();
+        @Test
+        public void testSauspielSchneiderSchwarz4Laufende() throws Exception {
 
-        assertEquals(0, player1.getPriceToGetInSingleGame());
-        assertEquals(0, player2.getPriceToGetInSingleGame());
-        assertEquals(0, player3.getPriceToGetInSingleGame());
-        assertEquals(0, player4.getPriceToGetInSingleGame());
+            stake.setSchneider(true);
+            stake.setSchwarz(true);
+            stake.setNumberOfLaufende(4);
+            assertEquals(SheapsheadConstants.GRUNDTARIF * 3 + SheapsheadConstants.LAUFENDENTARIF * 4, whenSetStakeIsExecuted(GameType.SAUSPIEL));
+            assertEquals(70, whenSetStakeIsExecuted(GameType.SAUSPIEL));
+        }
+
+        @Test
+        public void testSauspielSchneiderSchwarz5LaufendeRe() throws Exception {
+
+            stake.setSchneider(true);
+            stake.setSchwarz(true);
+            stake.setKontra(true);
+            stake.setRe(true);
+            stake.setNumberOfLaufende(5);
+            assertEquals(4 * (SheapsheadConstants.GRUNDTARIF * 3 + SheapsheadConstants.LAUFENDENTARIF * 5), whenSetStakeIsExecuted(GameType.SAUSPIEL));
+            assertEquals(320, whenSetStakeIsExecuted(GameType.SAUSPIEL));
+        }
+
+        @Test
+        public void testWenzTout2LaufendeSchwarz() throws Exception {
+
+            stake.setTout(true);
+            stake.setNumberOfLaufende(2);
+            stake.setSchneider(true);
+            stake.setSchwarz(true);
+            assertEquals(2 * (SheapsheadConstants.SOLOTARIF + SheapsheadConstants.LAUFENDENTARIF * 2), whenSetStakeIsExecuted(GameType.WENZ));
+            assertEquals(140, whenSetStakeIsExecuted(GameType.WENZ));
+        }
+
+        @Test
+        public void testSoloSchneider1Laufender() throws Exception {
+
+            stake.setNumberOfLaufende(1);
+            stake.setSchwarz(true);
+            assertEquals(SheapsheadConstants.SOLOTARIF + SheapsheadConstants.GRUNDTARIF, whenSetStakeIsExecuted(GameType.SOLO));
+            assertEquals(60, whenSetStakeIsExecuted(GameType.SOLO));
+        }
+
+        @Test
+        public void testSoloSie() throws Exception {
+
+            stake.setSchneider(true);
+            stake.setSchwarz(true);
+            stake.setSie(true);
+            stake.setNumberOfLaufende(8);
+            assertEquals(4 * (SheapsheadConstants.SOLOTARIF + SheapsheadConstants.LAUFENDENTARIF * 8), whenSetStakeIsExecuted(GameType.SOLO));
+            assertEquals(520, whenSetStakeIsExecuted(GameType.SOLO));
+        }
+
+        @Test
+        public void testLeeresSpiel() throws Exception {
+
+            assertEquals(0, whenSetStakeIsExecuted(GameType.LEER));
+        }
+
+        public int whenSetStakeIsExecuted(GameType gameType){
+            stake.setStakeValue(gameType);
+            return stake.getStakeValue();
+        }
+
+
+    */
+
+
+    private void whenSetSingleGameResultIsExecuted() {
+        singleGameResult.calculate(defaultStake);
     }
 
-/*
-    @Test
-    public void testNormalSauspiel() throws Exception {
+    // private void whenCalculateStakeValueIsExecuted() { singleGameResult.calcu}
 
-        assertEquals(SheapsheadConstants.GRUNDTARIF, whenSetStakeIsExecuted(GameType.SAUSPIEL));
-        assertEquals(10, whenSetStakeIsExecuted(GameType.SAUSPIEL));
-    }
-
-    @Test
-    public void testSauspielSchneiderSchwarz2LaufendeKontra() throws Exception {
-
-        stake.setSchneider(true);
-        stake.setSchwarz(true);
-        stake.setKontra(true);
-        stake.setNumberOfLaufende(2);
-        assertEquals(2 * (SheapsheadConstants.GRUNDTARIF * 3), whenSetStakeIsExecuted(GameType.SAUSPIEL));
-        assertEquals(60, whenSetStakeIsExecuted(GameType.SAUSPIEL));
-    }
-
-    @Test
-    public void testSauspielSchneiderSchwarz4Laufende() throws Exception {
-
-        stake.setSchneider(true);
-        stake.setSchwarz(true);
-        stake.setNumberOfLaufende(4);
-        assertEquals(SheapsheadConstants.GRUNDTARIF * 3 + SheapsheadConstants.LAUFENDENTARIF * 4, whenSetStakeIsExecuted(GameType.SAUSPIEL));
-        assertEquals(70, whenSetStakeIsExecuted(GameType.SAUSPIEL));
-    }
-
-    @Test
-    public void testSauspielSchneiderSchwarz5LaufendeRe() throws Exception {
-
-        stake.setSchneider(true);
-        stake.setSchwarz(true);
-        stake.setKontra(true);
-        stake.setRe(true);
-        stake.setNumberOfLaufende(5);
-        assertEquals(4 * (SheapsheadConstants.GRUNDTARIF * 3 + SheapsheadConstants.LAUFENDENTARIF * 5), whenSetStakeIsExecuted(GameType.SAUSPIEL));
-        assertEquals(320, whenSetStakeIsExecuted(GameType.SAUSPIEL));
-    }
-
-    @Test
-    public void testWenzTout2LaufendeSchwarz() throws Exception {
-
-        stake.setTout(true);
-        stake.setNumberOfLaufende(2);
-        stake.setSchneider(true);
-        stake.setSchwarz(true);
-        assertEquals(2 * (SheapsheadConstants.SOLOTARIF + SheapsheadConstants.LAUFENDENTARIF * 2), whenSetStakeIsExecuted(GameType.WENZ));
-        assertEquals(140, whenSetStakeIsExecuted(GameType.WENZ));
-    }
-
-    @Test
-    public void testSoloSchneider1Laufender() throws Exception {
-
-        stake.setNumberOfLaufende(1);
-        stake.setSchwarz(true);
-        assertEquals(SheapsheadConstants.SOLOTARIF + SheapsheadConstants.GRUNDTARIF, whenSetStakeIsExecuted(GameType.SOLO));
-        assertEquals(60, whenSetStakeIsExecuted(GameType.SOLO));
-    }
-
-    @Test
-    public void testSoloSie() throws Exception {
-
-        stake.setSchneider(true);
-        stake.setSchwarz(true);
-        stake.setSie(true);
-        stake.setNumberOfLaufende(8);
-        assertEquals(4 * (SheapsheadConstants.SOLOTARIF + SheapsheadConstants.LAUFENDENTARIF * 8), whenSetStakeIsExecuted(GameType.SOLO));
-        assertEquals(520, whenSetStakeIsExecuted(GameType.SOLO));
-    }
-
-    @Test
-    public void testLeeresSpiel() throws Exception {
-
-        assertEquals(0, whenSetStakeIsExecuted(GameType.LEER));
-    }
-
-    public int whenSetStakeIsExecuted(GameType gameType){
-        stake.setStakeValue(gameType);
-        return stake.getStakeValue();
-    }
-
-
-*/
-    public void givenSetPlayerList() throws Exception {
-        playerList = new ArrayList<Player>(4);
-        playerList.add(player1);
-        playerList.add(player2);
-        playerList.add(player3);
-        playerList.add(player4);
-    }
-
-
-    private void whenSetSingleGameResultIsExecuted(){
-        singleGameResult.setSingleGameResult();
-    }
-
-   // private void whenCalculateStakeValueIsExecuted() { singleGameResult.calcu}
-
-    private void thenNoExceptionShouldBeThrown(){
+    private void thenNoExceptionShouldBeThrown() {
 
     }
 
-    private void thenExceptionShouldBeThrown(){
+    private void thenExceptionShouldBeThrown() {
 
     }
 
