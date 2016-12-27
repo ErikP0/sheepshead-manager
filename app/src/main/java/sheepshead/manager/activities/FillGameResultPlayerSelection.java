@@ -37,7 +37,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import sheepshead.manager.R;
-import sheepshead.manager.singleGameRequirements.Player;
+import sheepshead.manager.game.Player;
 import sheepshead.manager.uicontrolutils.DataCheckBox;
 
 public class FillGameResultPlayerSelection implements View.OnClickListener, Dialog.OnDismissListener {

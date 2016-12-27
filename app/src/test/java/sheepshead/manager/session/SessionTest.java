@@ -1,8 +1,6 @@
-package sheepshead.manager.sessionRequirements;
+package sheepshead.manager.session;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Nicolas on 07.10.2016.

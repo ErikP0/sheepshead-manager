@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.singleGameRequirements;
+package sheepshead.manager.game;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sheepshead.manager.sessionRequirements.Stake;
+import sheepshead.manager.session.Stake;
 
 import static junit.framework.Assert.assertEquals;
 

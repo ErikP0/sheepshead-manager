@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.singleGameRequirements;
+package sheepshead.manager.game;
 
 import java.io.Serializable;
 

@@ -20,7 +20,7 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import sheepshead.manager.sessionRequirements.Session;
+import sheepshead.manager.session.Session;
 
 /**
  * Singleton class for the general application behaviour.

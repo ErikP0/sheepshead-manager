@@ -41,9 +41,9 @@ import java.util.ListIterator;
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.sessionRequirements.Session;
-import sheepshead.manager.sessionRequirements.Stake;
-import sheepshead.manager.singleGameRequirements.Player;
+import sheepshead.manager.session.Session;
+import sheepshead.manager.session.Stake;
+import sheepshead.manager.game.Player;
 import sheepshead.manager.uicontrolutils.AbstractListItem;
 import sheepshead.manager.uicontrolutils.DialogUtils;
 

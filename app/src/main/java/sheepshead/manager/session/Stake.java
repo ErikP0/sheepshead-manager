@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.sessionRequirements;
+package sheepshead.manager.session;
 
 
-import sheepshead.manager.singleGameRequirements.GameType;
+import sheepshead.manager.game.GameType;
 
 public class Stake {
 

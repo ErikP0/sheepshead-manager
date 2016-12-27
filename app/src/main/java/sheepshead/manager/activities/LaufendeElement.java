@@ -17,7 +17,7 @@
 package sheepshead.manager.activities;
 
 
-import sheepshead.manager.singleGameRequirements.GameType;
+import sheepshead.manager.game.GameType;
 
 /**
  * Represents a selectable element for the "Laufende"-Dropdown in {@link FillGameResult}

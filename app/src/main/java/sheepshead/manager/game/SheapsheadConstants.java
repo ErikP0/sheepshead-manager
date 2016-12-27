@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.singleGameRequirements;
+package sheepshead.manager.game;
 
 /**
  * Created by Nicolas on 01.10.2016.

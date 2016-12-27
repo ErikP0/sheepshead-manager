@@ -14,12 +14,12 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.singleGameRequirements;
+package sheepshead.manager.game;
 
 import java.util.Collection;
 import java.util.List;
 
-import sheepshead.manager.sessionRequirements.Stake;
+import sheepshead.manager.session.Stake;
 
 /**
  * Created by Nicolas on 01.10.2016.

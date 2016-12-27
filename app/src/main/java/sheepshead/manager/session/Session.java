@@ -1,12 +1,12 @@
-package sheepshead.manager.sessionRequirements;
+package sheepshead.manager.session;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import sheepshead.manager.singleGameRequirements.Player;
-import sheepshead.manager.singleGameRequirements.PlayerRole;
-import sheepshead.manager.singleGameRequirements.SingleGameResult;
+import sheepshead.manager.game.Player;
+import sheepshead.manager.game.PlayerRole;
+import sheepshead.manager.game.SingleGameResult;
 
 /**
  * Created by Nicolas on 06.10.2016.
