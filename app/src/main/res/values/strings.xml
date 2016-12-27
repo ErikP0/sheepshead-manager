@@ -30,6 +30,7 @@
     <string name="FillGameResult.editCallers">Wer sagt an?</string>
     <string name="FillGameResult.editNonCallers">Wer spielt mit?</string>
     <string name="FillGameResult.invalidPlayerAmount">Anzahl an ausgewählten Spielern ungültig</string>
+    <string name="FillGameResult.needMorePlayers">Weitere Auswahl benötigt</string>
     <string name="FillGameResult.schneider">Schneider</string>
     <string name="FillGameResult.schwarz">Schwarz</string>
     <string name="FillGameResult.kontra">Kontra</string>

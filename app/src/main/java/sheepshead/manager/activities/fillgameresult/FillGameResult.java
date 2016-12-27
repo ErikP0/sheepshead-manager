@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.activities;
+package sheepshead.manager.activities.fillgameresult;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,15 +25,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.LaufendeElement;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.game.GameType;
@@ -63,6 +62,10 @@ public class FillGameResult extends AbstractBaseActivity {
      * Key for storing/retrieving the index of the laufende spinner when the activity is reloaded
      */
     private static final String bundlekey_selected_game_type_index = "game_type_index";
+
+    private static final String bundlekey_selected_callers = "callers_selected";
+
+    private static final String bundlekey_selected_non_callers = "non_callers_selected";
     /**
      * The button group for selecting the game type.
      * A group is required because there cannot be more than one game type selected
@@ -93,8 +96,8 @@ public class FillGameResult extends AbstractBaseActivity {
 
 
     private Collection<Player> allPlayers;
-    private FillGameResultPlayerSelection callerSelection;
-    private FillGameResultPlayerSelection nonCallerSelection;
+    private IPlayerSelection callerSelection;
+    private IPlayerSelection nonCallerSelection;
 
     public FillGameResult() {
         Session session = SheepsheadManagerApplication.getInstance().getCurrentSession();
@@ -136,17 +139,36 @@ public class FillGameResult extends AbstractBaseActivity {
         buttonSolo.setRepresentation(GameType.SOLO);
 
         //Create caller & nonCaller Areas
-        View callerView = findViewById(R.id.FillGameResult_callerPanel);
+        final View callerView = findViewById(R.id.FillGameResult_callerPanel);
+        final DialogPlayerSelection specCallerSelection = new DialogPlayerSelection(true, bundlekey_selected_callers, callerView,
+                getString(R.string.FillGameResult_invalidPlayerAmount), getString(R.string.FillGameResult_needMorePlayers));
         Button editCallerButton = (Button) callerView.findViewById(R.id.FillGameResultPlayerSelection_button);
         editCallerButton.setText(getString(R.string.FillGameResult_editCallers));
-        callerSelection = new FillGameResultPlayerSelection(this, callerView, true, allPlayers);
+        editCallerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                specCallerSelection.showDialog(FillGameResult.this);
+            }
+        });
 
-        View nonCallerView = findViewById(R.id.FillGameResult_nonCallerPanel);
+        final View nonCallerView = findViewById(R.id.FillGameResult_nonCallerPanel);
+        final DialogPlayerSelection specNonCallerSelection = new DialogPlayerSelection(false, bundlekey_selected_non_callers, nonCallerView,
+                getString(R.string.FillGameResult_invalidPlayerAmount), getString(R.string.FillGameResult_needMorePlayers));
         Button editNonCallerButton = (Button) nonCallerView.findViewById(R.id.FillGameResultPlayerSelection_button);
         editNonCallerButton.setText(getString(R.string.FillGameResult_editNonCallers));
-        nonCallerSelection = new FillGameResultPlayerSelection(this, nonCallerView, false, allPlayers);
-        callerSelection.setOther(nonCallerSelection);
-        nonCallerSelection.setOther(callerSelection);
+        editNonCallerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                specNonCallerSelection.showDialog(FillGameResult.this);
+            }
+        });
+
+        specCallerSelection.setOther(specNonCallerSelection);
+        specNonCallerSelection.setOther(specCallerSelection);
+        callerSelection = specCallerSelection;
+        nonCallerSelection = specNonCallerSelection;
+        callerSelection.setAvailablePlayers(allPlayers);
+        nonCallerSelection.setAvailablePlayers(allPlayers);
 
         //Create schneider/schwarz group
         final CheckBox checkboxSchneider = findView(R.id.FillGameResult_checkbox_is_schneider);
@@ -176,7 +198,13 @@ public class FillGameResult extends AbstractBaseActivity {
         dropdownLaufende.setSelection(loadedIndex);
 
         updateCheckboxesForGameType();
-        updatePlayerSelectionForGameType();
+
+        callerSelection.onGameTypeSelectionChange(loadedType);
+        nonCallerSelection.onGameTypeSelectionChange(loadedType);
+        if (savedInstanceState != null) {
+            callerSelection.load(savedInstanceState);
+            nonCallerSelection.load(savedInstanceState);
+        }
 
         /*
         This adds a Listener to the game type selection, that fires when a new game type is selected
@@ -206,7 +234,9 @@ public class FillGameResult extends AbstractBaseActivity {
         gameTypeGroup.addOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatePlayerSelectionForGameType();
+                GameType selected = getCurrentlySelectedGameType();
+                callerSelection.onGameTypeSelectionChange(selected);
+                nonCallerSelection.onGameTypeSelectionChange(selected);
             }
         });
 
@@ -217,7 +247,13 @@ public class FillGameResult extends AbstractBaseActivity {
             @Override
             public void onClick(View v) {
                 GameType selectedGameType = getCurrentlySelectedGameType();
-                if (!selectedGameType.equals(GameType.LEER)) {
+                if (selectedGameType.equals(GameType.LEER)) {
+                    //No game type was selected -> Display message to user
+                    DialogUtils.showInfoDialog(FillGameResult.this, getString(R.string.FillGameResult_missing_game_type_msg), getString(R.string.FillGameResult_confirm_dialog), null);
+                } else if (callerSelection.getSelectedPlayers().size() + nonCallerSelection.getSelectedPlayers().size() != 4) {
+                    //The number of players does not match the game type
+                    DialogUtils.showInfoDialog(FillGameResult.this, getString(R.string.FillGameResult_invalidPlayerAmount), getString(R.string.FillGameResult_confirm_dialog), null);
+                } else {
                     SingleGameResult result = createSingleGameResult(selectedGameType);
                     Session currentSession = SheepsheadManagerApplication.getInstance().getCurrentSession();
                     currentSession.addGame(result);
@@ -229,31 +265,10 @@ public class FillGameResult extends AbstractBaseActivity {
                             startActivity(intent);
                         }
                     });
-                } else {
-                    //No game type was selected -> Display message to user
-                    DialogUtils.showInfoDialog(FillGameResult.this, getString(R.string.FillGameResult_missing_game_type_msg), getString(R.string.FillGameResult_confirm_dialog), null);
                 }
             }
         });
     }
-
-    private void updatePlayerSelectionForGameType() {
-        GameType type = getCurrentlySelectedGameType();
-        boolean enable = true;
-        View callerView = findViewById(R.id.FillGameResult_callerPanel);
-        View nonCallerView = findViewById(R.id.FillGameResult_nonCallerPanel);
-        if (type.equals(GameType.LEER)) {
-            //disable buttons
-            enable = false;
-
-        }
-        callerSelection.clearSelection();
-        nonCallerSelection.clearSelection();
-
-        callerView.findViewById(R.id.FillGameResultPlayerSelection_button).setEnabled(enable);
-        nonCallerView.findViewById(R.id.FillGameResultPlayerSelection_button).setEnabled(enable);
-    }
-
 
     private void updateCheckboxesForGameType() {
         CheckBox checkboxTout = findView(R.id.FillGameResult_checkbox_is_tout);
@@ -285,7 +300,6 @@ public class FillGameResult extends AbstractBaseActivity {
      * @return the result of the user made selections
      */
     private SingleGameResult createSingleGameResult(GameType selectedGameType) {
-        //Temporary, will be removed when selection activity is finished (TODO)
         CheckBox boxCallerSideWon = findView(R.id.FillGameResult_checkbox_callerside_won);
         boolean callerHasWon = boxCallerSideWon.isChecked();
         List<PlayerRole> roles = new ArrayList<>(callerSelection.getSelectedPlayers().size() + nonCallerSelection.getSelectedPlayers().size());
@@ -365,20 +379,9 @@ public class FillGameResult extends AbstractBaseActivity {
         int selectedIndex = dropdownLaufende.getSelectedItemPosition();
         b.putSerializable(bundlekey_selected_game_type_index, selectedIndex);
 
-    }
-
-    private void updatePlayerSelection(Set<Player> selectedPlayers, View playerSelectionView) {
-        TextView text = (TextView) playerSelectionView.findViewById(R.id.FillGameResultPlayerSelection_text);
-        StringBuilder b = new StringBuilder();
-        int index = 0;
-        for (Player player : selectedPlayers) {
-            if (index > 0) {
-                b.append('\n');
-            }
-            b.append(player.getName());
-            index++;
-        }
-        text.setText(b.toString());
+        //save current selected callers & non callers
+        callerSelection.store(b);
+        nonCallerSelection.store(b);
     }
 
     /**

@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.game.GameType;
 
 import static android.support.test.espresso.Espresso.onView;

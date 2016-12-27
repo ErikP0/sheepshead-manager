@@ -32,7 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.FillGameResult"></activity>
+        <activity android:name=".activities.fillgameresult.FillGameResult"></activity>
 	<activity android:name=".activities.HomeScreen"></activity>
 	<activity android:name=".activities.CreateSession"></activity>
     </application>

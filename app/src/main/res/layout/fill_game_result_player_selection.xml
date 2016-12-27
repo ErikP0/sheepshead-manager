@@ -15,31 +15,22 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
-
-    <ImageView
-        android:id="@+id/FillGameResultPlayerSelection.icon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        app:srcCompat="@android:drawable/presence_away"
-        android:cropToPadding="true" />
 
     <Button
         android:id="@+id/FillGameResultPlayerSelection.button"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/FillGameResult.editNonCallers" />
 
     <TextView
         android:id="@+id/FillGameResultPlayerSelection.text"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
         android:text=""
         android:textAlignment="center" />
 </LinearLayout>

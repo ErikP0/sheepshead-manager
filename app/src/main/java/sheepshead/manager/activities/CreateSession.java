@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.game.Player;
