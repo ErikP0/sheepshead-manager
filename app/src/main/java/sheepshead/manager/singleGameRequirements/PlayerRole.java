@@ -59,4 +59,9 @@ public class PlayerRole {
     public void setMoney(int money) {
         moneyWon = money;
     }
+
+    @Override
+    public String toString() {
+        return player + " isCaller=" + isCaller + ", isWinner=" + isWinner;
+    }
 }

@@ -18,6 +18,7 @@ package sheepshead.manager.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
@@ -283,17 +284,20 @@ public class CreateSession extends AbstractBaseActivity {
             Session session = new Session(playerInSession, stake);
             SheepsheadManagerApplication.getInstance().setCurrentSession(session);
 
-            //TODO create a session object here (instead of a message)
-            StringBuilder builder = new StringBuilder();
-            builder.append("Erzeuge Sitzung mit Preisen:\n");
-            builder.append(priceSauspiel).append(" für Sauspiel\n");
-            builder.append(priceSolo).append(" für Solo\n");
-            builder.append("Mit folgenden Spielern:\n");
-            for (Player player : players) {
-                builder.append(player.getName()).append('\n');
-            }
+            Intent intent = new Intent(CreateSession.this, FillGameResult.class);
+            startActivity(intent);
 
-            DialogUtils.showInfoDialog(CreateSession.this, builder.toString(), "Das is ja der Hammer!", null);
+            //TODO create a session object here (instead of a message)
+//            StringBuilder builder = new StringBuilder();
+//            builder.append("Erzeuge Sitzung mit Preisen:\n");
+//            builder.append(priceSauspiel).append(" für Sauspiel\n");
+//            builder.append(priceSolo).append(" für Solo\n");
+//            builder.append("Mit folgenden Spielern:\n");
+//            for (Player player : players) {
+//                builder.append(player.getName()).append('\n');
+//            }
+//
+//            DialogUtils.showInfoDialog(CreateSession.this, builder.toString(), "Das is ja der Hammer!", null);
 
         }
     }

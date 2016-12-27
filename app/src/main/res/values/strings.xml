@@ -27,6 +27,9 @@
     <string name="FillGameResult.sauspiel">Sauspiel</string>
     <string name="FillGameResult.wenz">Wenz</string>
     <string name="FillGameResult.farbsolo">Farbsolo</string>
+    <string name="FillGameResult.editCallers">Wer sagt an?</string>
+    <string name="FillGameResult.editNonCallers">Wer spielt mit?</string>
+    <string name="FillGameResult.invalidPlayerAmount">Anzahl an ausgewählten Spielern ungültig</string>
     <string name="FillGameResult.schneider">Schneider</string>
     <string name="FillGameResult.schwarz">Schwarz</string>
     <string name="FillGameResult.kontra">Kontra</string>

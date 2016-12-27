@@ -76,11 +76,25 @@
                 android:checked="true"
                 android:text="@string/FillGameResult.playerside_won" />
 
+            <include
+                android:id="@+id/FillGameResult.callerPanel"
+                layout="@layout/fill_game_result_player_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/FillGameResult.checkbox_callerside_won" />
+
+            <include
+                android:id="@+id/FillGameResult.nonCallerPanel"
+                layout="@layout/fill_game_result_player_selection"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/FillGameResult.callerPanel" />
+
             <LinearLayout
                 android:id="@+id/FillGameResult.modifier_panel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/FillGameResult.checkbox_callerside_won"
+                android:layout_below="@+id/FillGameResult.nonCallerPanel"
                 android:layout_centerHorizontal="true"
                 android:orientation="vertical">
 

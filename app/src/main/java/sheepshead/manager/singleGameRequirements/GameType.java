@@ -25,10 +25,10 @@ import java.io.Serializable;
 //Serializable is used in FillGameResult
 public enum GameType implements Serializable {
 
-    SAUSPIEL(1, 3, 8),
-    WENZ(3, 2, 4),
-    SOLO(3, 3, 8),
-    LEER(1, -1, -1);
+    SAUSPIEL(1, 3, 8, 2),
+    WENZ(3, 2, 4, 1),
+    SOLO(3, 3, 8, 1),
+    LEER(1, -1, -1, -1);
 
     private int teamMultiplier;
 
@@ -43,10 +43,20 @@ public enum GameType implements Serializable {
      */
     private int maxLaufendeIncl;
 
-    GameType(int teamMultiplier, int laufendeBegin, int laufendeEndIncl) {
+    /**
+     * The amount of callers that this game type can have
+     */
+    private int numberOfCallers;
+
+    GameType(int teamMultiplier, int laufendeBegin, int laufendeEndIncl, int numCallers) {
         this.teamMultiplier = teamMultiplier;
         minLaufende = laufendeBegin;
         maxLaufendeIncl = laufendeEndIncl;
+        numberOfCallers = numCallers;
+    }
+
+    public int getNumberOfCallers() {
+        return numberOfCallers;
     }
 
     public int getTeamMultiplier() {

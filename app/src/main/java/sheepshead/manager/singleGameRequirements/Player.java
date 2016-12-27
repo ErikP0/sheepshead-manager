@@ -58,6 +58,7 @@ public class Player {
         stringBuilder.append(name);
         stringBuilder.append("\"(");
         stringBuilder.append(number);
+        stringBuilder.append(')');
         return stringBuilder.toString();
     }
 
