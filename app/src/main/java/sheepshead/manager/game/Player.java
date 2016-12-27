@@ -57,7 +57,7 @@ public class Player {
         stringBuilder.append("Player \"");
         stringBuilder.append(name);
         stringBuilder.append("\"(");
-        stringBuilder.append(number);
+        stringBuilder.append(sessionMoney);
         stringBuilder.append(')');
         return stringBuilder.toString();
     }

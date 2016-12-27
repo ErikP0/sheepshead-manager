@@ -48,4 +48,18 @@ public class Session {
         return players;
     }
 
+    public String printInfo() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Aktueller Kontostand:\n");
+        for (Player p : players) {
+            builder.append(p).append('\n');
+        }
+        builder.append("Letztes Spiel:\n");
+        SingleGameResult lastGame = savedGames.get(savedGames.size() - 1);
+        for (PlayerRole pr : lastGame.getParticipants()) {
+            builder.append(pr.getPlayer().getName() + " (" + pr.getMoney() + ")\n");
+        }
+        return builder.toString();
+    }
+
 }

@@ -41,9 +41,9 @@ import java.util.ListIterator;
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.game.Player;
 import sheepshead.manager.session.Session;
 import sheepshead.manager.session.Stake;
-import sheepshead.manager.game.Player;
 import sheepshead.manager.uicontrolutils.AbstractListItem;
 import sheepshead.manager.uicontrolutils.DialogUtils;
 
@@ -286,19 +286,6 @@ public class CreateSession extends AbstractBaseActivity {
 
             Intent intent = new Intent(CreateSession.this, FillGameResult.class);
             startActivity(intent);
-
-            //TODO create a session object here (instead of a message)
-//            StringBuilder builder = new StringBuilder();
-//            builder.append("Erzeuge Sitzung mit Preisen:\n");
-//            builder.append(priceSauspiel).append(" für Sauspiel\n");
-//            builder.append(priceSolo).append(" für Solo\n");
-//            builder.append("Mit folgenden Spielern:\n");
-//            for (Player player : players) {
-//                builder.append(player.getName()).append('\n');
-//            }
-//
-//            DialogUtils.showInfoDialog(CreateSession.this, builder.toString(), "Das is ja der Hammer!", null);
-
         }
     }
 

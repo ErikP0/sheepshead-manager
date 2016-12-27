@@ -16,6 +16,8 @@
 
 package sheepshead.manager.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -34,12 +36,12 @@ import java.util.Set;
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.session.Session;
 import sheepshead.manager.game.GameType;
 import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.game.StakeModifier;
+import sheepshead.manager.session.Session;
 import sheepshead.manager.uicontrolutils.CheckBoxGroup;
 import sheepshead.manager.uicontrolutils.DialogUtils;
 import sheepshead.manager.uicontrolutils.EnumToggleButton;
@@ -217,11 +219,16 @@ public class FillGameResult extends AbstractBaseActivity {
                 GameType selectedGameType = getCurrentlySelectedGameType();
                 if (!selectedGameType.equals(GameType.LEER)) {
                     SingleGameResult result = createSingleGameResult(selectedGameType);
-                    String message = "";
-                    for (PlayerRole p : result.getParticipants()) {
-                        message += p + "\n";
-                    }
-                    DialogUtils.showInfoDialog(FillGameResult.this, message, getString(R.string.FillGameResult_confirm_dialog), null);
+                    Session currentSession = SheepsheadManagerApplication.getInstance().getCurrentSession();
+                    currentSession.addGame(result);
+                    DialogUtils.showInfoDialog(FillGameResult.this, currentSession.printInfo(), getString(R.string.FillGameResult_confirm_dialog), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //TODO intent to session home activity
+                            Intent intent = new Intent(FillGameResult.this, FillGameResult.class);
+                            startActivity(intent);
+                        }
+                    });
                 } else {
                     //No game type was selected -> Display message to user
                     DialogUtils.showInfoDialog(FillGameResult.this, getString(R.string.FillGameResult_missing_game_type_msg), getString(R.string.FillGameResult_confirm_dialog), null);
