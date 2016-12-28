@@ -14,28 +14,26 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.singleGameRequirements;
+package sheepshead.manager.game;
 
 import java.io.Serializable;
 
 /**
- * Created by Nicolas on 01.10.2016.
+ * A game type describes a game mode in Schafkopf.
+ * Currently available gamemodes are Sauspiel (2vs2), Wenz und Solo (1vs3).
+ * A dummy game type LEER is provided for easy representation of a game type not yet selected
  */
-
-//Serializable is used in FillGameResult
 public enum GameType implements Serializable {
 
-    SAUSPIEL(SheapsheadConstants.GRUNDTARIF, 1, 3, 8),
-    WENZ(SheapsheadConstants.SOLOTARIF, 3, 2, 4),
-    SOLO(SheapsheadConstants.SOLOTARIF, 3, 3, 8),
-    LEER(0, 1, -1, -1);
-
-    private int normalPriceForOnePlayer;
+    SAUSPIEL(1, 3, 8, 2),
+    WENZ(3, 2, 4, 1),
+    SOLO(3, 3, 8, 1),
+    LEER(1, -1, -1, -1);
 
     private int teamMultiplier;
 
     /**
-     * The first number where "Laufende" count (e.g. SAUSPIEL/SOLO 3, WENZ 2)
+     * The first number where "Laufende" are accounted for(e.g. SAUSPIEL/SOLO 3, WENZ 2)
      */
     private int minLaufende;
 
@@ -45,17 +43,25 @@ public enum GameType implements Serializable {
      */
     private int maxLaufendeIncl;
 
-    GameType(int normalPriceForOnePlayer, int teamMultiplier, int laufendeBegin, int laufendeEndIncl) {
-        this.normalPriceForOnePlayer = normalPriceForOnePlayer;
+    /**
+     * The amount of callers that this game type can have
+     */
+    private int numberOfCallers;
+
+    GameType(int teamMultiplier, int laufendeBegin, int laufendeEndIncl, int numCallers) {
         this.teamMultiplier = teamMultiplier;
         minLaufende = laufendeBegin;
         maxLaufendeIncl = laufendeEndIncl;
+        numberOfCallers = numCallers;
     }
 
-
-    public int getNormalPriceForOnePlayer() {
-        return normalPriceForOnePlayer;
+    /**
+     * @return The amount of players on the calling side for this game type
+     */
+    public int getNumberOfCallers() {
+        return numberOfCallers;
     }
+
 
     public int getTeamMultiplier() {
         return teamMultiplier;

@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import sheepshead.manager.R;
-import sheepshead.manager.activities.DisplayScoresPortrait;
+import sheepshead.manager.activities.HomeScreen;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 
@@ -68,8 +68,9 @@ public class LoadingScreen extends AbstractBaseActivity {
         activityPanel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoadingScreen.this, DisplayScoresPortrait.class);
+                Intent intent = new Intent(LoadingScreen.this, HomeScreen.class);
                 startActivity(intent);
+
             }
         });
     }

@@ -19,7 +19,7 @@ package sheepshead.manager.activities;
 
 import org.junit.Test;
 
-import sheepshead.manager.singleGameRequirements.GameType;
+import sheepshead.manager.game.GameType;
 
 import static junit.framework.Assert.assertEquals;
 

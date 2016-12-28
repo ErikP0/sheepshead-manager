@@ -14,37 +14,39 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.singleGameRequirements;
+package sheepshead.manager.game;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import sheepshead.manager.session.Stake;
 
 /**
  * Created by Nicolas on 01.10.2016.
  */
 
 public class SingleGameResult {
+    public static final int PLAYERS_PER_GAME = 4;
+
     /**
      * Wer spielt mit in aktuellem Spiel
      */
-    private List<Player> playerList;
+    private List<PlayerRole> participants;
 
     private GameType gameType;
 
     private StakeModifier stakeModifier;
-
-    private List<Integer> singleGameMoney;
 
 
     /**
      * Bei neuem Spiel: Wer spielt mit, welcher GameType, wer mit wem, wie ging das Spiel aus, welcher Spieler kriegt/verliert wieviel
      */
 
-    public SingleGameResult(List<Player> playerList, GameType gameType, StakeModifier stakeModifier) {
-
-        singleGameMoney = new ArrayList<Integer>(playerList.size() * 2); //Hier ist das Geld der Spieler, das sie in der Runde zahlen müssen und insgesamt besitzen/zahlen müssen aufgeführt. 1. Wert gesamt Geld 2. Geld in dem Spiel
-
-        this.playerList = playerList;
+    public SingleGameResult(List<PlayerRole> playerList, GameType gameType, StakeModifier stakeModifier) {
+        if (playerList.size() != PLAYERS_PER_GAME) {
+            throw new IllegalArgumentException("The amount of players must exactly be the amount of players per game");
+        }
+        participants = playerList;
 
         this.gameType = gameType;
 
@@ -52,43 +54,32 @@ public class SingleGameResult {
 
     }
 
-    public void setSingleGameResult() {
-        int winLoseMultiplier = 1;
+    public void calculate(Stake stake) {
+        int winLoseMultiplier;
 
-        final int stakeValue = calculateStakeValue();
+        final int stakeValue = calculateStakeValue(stake);
 
-        for (Player player : playerList) {
-            if (player.isParticipant()) {
-                if (player.hasWon()) {
-                    winLoseMultiplier = 1;
-                } else {
-                    winLoseMultiplier = -1;
-                }
-
-                if (player.isCaller()) {
-                    player.setPriceToGetInSingleGame(gameType.getTeamMultiplier() * winLoseMultiplier * stakeValue);
-                } else {
-                    player.setPriceToGetInSingleGame(winLoseMultiplier * stakeValue);
-                }
-
-                player.setPriceToGetInSession(player.getPriceToGetInSession() + player.getPriceToGetInSingleGame());
-
+        for (PlayerRole player : participants) {
+            if (player.isWinner()) {
+                winLoseMultiplier = 1;
             } else {
-                player.setPriceToGetInSingleGame(0);
+                winLoseMultiplier = -1;
             }
 
-            singleGameMoney.add(player.getPriceToGetInSession());
-            singleGameMoney.add(player.getPriceToGetInSingleGame());
-
+            if (player.isCaller()) {
+                player.setMoney(gameType.getTeamMultiplier() * winLoseMultiplier * stakeValue);
+            } else {
+                player.setMoney(winLoseMultiplier * stakeValue);
+            }
         }
     }
 
-    private int calculateStakeValue() {
-        int aktStakeValue = gameType.getNormalPriceForOnePlayer();
+    private int calculateStakeValue(Stake stake) {
+        int aktStakeValue = stake.getTarifFor(gameType);
 
         if (stakeModifier.getNumberOfLaufende() >= 3 && (gameType.equals(GameType.SOLO) || gameType.equals(GameType.SAUSPIEL))
                 || stakeModifier.getNumberOfLaufende() >= 2 && gameType.equals(GameType.WENZ)) {
-            aktStakeValue = aktStakeValue + stakeModifier.getNumberOfLaufende() * SheapsheadConstants.LAUFENDENTARIF;
+            aktStakeValue = aktStakeValue + stakeModifier.getNumberOfLaufende() * stake.getLaufendeTarif();
         }
 
         //Laut Wiki wird bei Tout und Sie kein Schneider oder Schwarz gerechnet
@@ -114,8 +105,7 @@ public class SingleGameResult {
 
     }
 
-    public List<Integer> getSingleGameMoney() {
-        return singleGameMoney;
+    public Collection<PlayerRole> getParticipants() {
+        return participants;
     }
-
 }
