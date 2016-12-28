@@ -210,10 +210,10 @@ class DialogPlayerSelection implements IPlayerSelection, DialogInterface.OnDismi
 
     @Override
     public void tryAutoFill(IPlayerSelection otherSelection) {
-        //player edited the other selection -> selections here may be invalid/unwanted
-        reset();
         int remaining = computeRemainingPlayers();
         if (availablePlayers.size() - otherSelection.getSelectedPlayers().size() == remaining) {
+            //player edited the other selection -> selections here may be invalid/unwanted
+            reset();
             //auto fill is possible
             Set<Player> alreadySelected = otherSelection.getSelectedPlayers();
             for (Player p : availablePlayers) {
