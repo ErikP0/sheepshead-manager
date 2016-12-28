@@ -17,17 +17,17 @@ import static org.junit.Assert.fail;
 
 public class SessionTest {
 
-    private Session createDefaultSession(Player[] players) {
+    private Session createDefaultSession(String[] players) {
         return createSession(players, new Stake(10, 50, 10));
     }
 
-    private Session createSession(Player[] players, Stake stake) {
+    private Session createSession(String[] players, Stake stake) {
         Session session = new Session(Arrays.asList(players), stake);
         assertEquals(0, session.getGameAmount());
         for (Player p : session.getPlayers()) {
             boolean found = false;
             for (int i = 0; i < players.length && !found; i++) {
-                found = players[i].equals(p);
+                found = players[i].equals(p.getName());
             }
             if (!found) {
                 fail("Player " + p.getName() + " was not added to session");
@@ -58,8 +58,9 @@ public class SessionTest {
 
     @Test
     public void test4PlayerSession() {
-        Player[] players = {new Player("Anton"), new Player("Berta"), new Player("Cäsar"), new Player("Dora")};
-        Session session = createDefaultSession(players);
+        String[] names = {"Anton", "Berta", "Cäsar", "Dora"};
+        Session session = createDefaultSession(names);
+        Player[] players = session.getPlayers().toArray(new Player[names.length]);
 
         //now add a game
         Player[] callers = {players[0], players[1]};
@@ -88,8 +89,9 @@ public class SessionTest {
 
     @Test
     public void test5PlayerSession() {
-        Player[] players = {new Player("Anton"), new Player("Berta"), new Player("Cäsar"), new Player("Dora"), new Player("Emil")};
-        Session session = createDefaultSession(players);
+        String[] names = {"Anton", "Berta", "Cäsar", "Dora", "Emil"};
+        Session session = createDefaultSession(names);
+        Player[] players = session.getPlayers().toArray(new Player[names.length]);
 
         //add a game: Anton, Berta vs Cäsar,Dora
         Player[] callers = {players[0], players[1]};
@@ -118,7 +120,13 @@ public class SessionTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidAmountOfPlayers() {
-        Player[] players = {new Player("Anton"), new Player("Berta"), new Player("Cäsar")};
+        String[] players = {"Anton", "Berta", "Cäsar"};
         new Session(Arrays.asList(players), new Stake(1, 1, 1));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDuplicates() {
+        String[] names = {"Anton", "Berta", "Cäsar", "anton", "Dora"};
+        new Session(Arrays.asList(names), new Stake(1, 1, 1));
     }
 }

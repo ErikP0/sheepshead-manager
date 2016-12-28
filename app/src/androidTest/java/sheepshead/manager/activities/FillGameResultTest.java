@@ -35,7 +35,6 @@ import sheepshead.manager.R;
 import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.game.GameType;
-import sheepshead.manager.game.Player;
 import sheepshead.manager.session.Session;
 import sheepshead.manager.session.Stake;
 
@@ -59,14 +58,14 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class FillGameResultTest {
 
-    private static Player[] players = {new Player("p1"), new Player("p2"), new Player("p3"), new Player("p4")};
+    private static String[] players = {"p1", "p2", "p3", "p4"};
 
     @Rule
     public ActivityTestRule<FillGameResult> activityRule = new ActivityTestRule<>(FillGameResult.class);
 
     @BeforeClass
     public static void setupSession() {
-        List<Player> allPlayers = Arrays.asList(players);
+        List<String> allPlayers = Arrays.asList(players);
         Session s = new Session(allPlayers, new Stake(10, 50, 10));
         new SheepsheadManagerApplication().onCreate();
         SheepsheadManagerApplication.getInstance().setCurrentSession(s);

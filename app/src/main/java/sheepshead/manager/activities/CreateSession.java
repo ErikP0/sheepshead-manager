@@ -42,7 +42,6 @@ import sheepshead.manager.R;
 import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.game.Player;
 import sheepshead.manager.session.Session;
 import sheepshead.manager.session.Stake;
 import sheepshead.manager.uicontrolutils.AbstractListItem;
@@ -76,7 +75,7 @@ public class CreateSession extends AbstractBaseActivity {
     /**
      * A list of currently added players
      */
-    private List<Player> players;
+    private List<String> players;
     /**
      * The list adapter
      */
@@ -150,14 +149,14 @@ public class CreateSession extends AbstractBaseActivity {
         }
 
         //add player if not already there
-        for (Player player : players) {
-            if (player.getName().equalsIgnoreCase(name)) {
+        for (String player : players) {
+            if (player.equalsIgnoreCase(name)) {
                 DialogUtils.showInfoDialog(this, getString(R.string.CreateSession_warning_player_already_exists), getString(R.string.FillGameResult_confirm_dialog), null);
                 return;//exit
             }
         }
 
-        players.add(new Player(name));
+        players.add(name);
         updatePlayerlist();
     }
 
@@ -167,10 +166,10 @@ public class CreateSession extends AbstractBaseActivity {
      * @param name The name of the player to remove from the list
      */
     private void removePlayer(String name) {
-        ListIterator<Player> it = players.listIterator();
+        ListIterator<String> it = players.listIterator();
         while (it.hasNext()) {
-            Player next = it.next();
-            if (next.getName().equalsIgnoreCase(name)) {
+            String next = it.next();
+            if (next.equalsIgnoreCase(name)) {
                 it.remove();
             }
         }
@@ -183,12 +182,11 @@ public class CreateSession extends AbstractBaseActivity {
     private void updatePlayerlist() {
         LinearLayout list = (LinearLayout) adapter.getItemView(PLAYER_INDEX).findViewById(R.id.CreateSession_playerlist);
         list.removeAllViews();//remove old player-entries
-        for (Player player : players) {
+        for (final String name : players) {
             //create a new player-entry
             LayoutInflater infalInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = infalInflater.inflate(R.layout.create_session_playerlist_row, null);
             TextView textPlayername = (TextView) child.findViewById(R.id.CreateSession_playername);
-            final String name = player.getName();
             textPlayername.setText(name);
 
             //add listener to remove button of this player-entry
@@ -280,7 +278,7 @@ public class CreateSession extends AbstractBaseActivity {
             int priceSolo = Integer.parseInt(inputSolo.getText().toString());
             Stake stake = new Stake(priceSauspiel, priceSolo, priceSauspiel);
 
-            List<Player> playerInSession = new ArrayList<>();
+            List<String> playerInSession = new ArrayList<>();
             playerInSession.addAll(players);
             Session session = new Session(playerInSession, stake);
             SheepsheadManagerApplication.getInstance().setCurrentSession(session);
@@ -334,7 +332,7 @@ public class CreateSession extends AbstractBaseActivity {
         @IdRes
         int elementSolo = R.id.CreateSession_input_solo;
 
-        public StakeSelectionListItem() {
+        StakeSelectionListItem() {
             super(R.layout.create_session_item_stake);
         }
 
@@ -362,15 +360,17 @@ public class CreateSession extends AbstractBaseActivity {
     private class PlayerSelectionListItem extends AbstractListItem {
         private static final String bundlekey_players = "create_session_players";
 
-        public PlayerSelectionListItem() {
+        PlayerSelectionListItem() {
             super(R.layout.create_session_item_players);
         }
 
         @Override
         public void save(Bundle saveTo, View headerView) {
             String[] names = new String[players.size()];
-            for (int i = 0; i < names.length; i++) {
-                names[i] = players.get(i).getName();
+            int i = 0;
+            for (String name : players) {
+                names[i] = name;
+                i++;
             }
             saveTo.putStringArray(bundlekey_players, names);
         }
