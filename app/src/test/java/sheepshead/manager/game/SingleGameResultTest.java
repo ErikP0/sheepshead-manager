@@ -30,10 +30,10 @@ import static junit.framework.Assert.assertEquals;
  */
 public class SingleGameResultTest {
 
-    private Player player1 = new Player("A", 0);
-    private Player player2 = new Player("B", 1);
-    private Player player3 = new Player("C", 2);
-    private Player player4 = new Player("D", 3);
+    private Player player1 = new Player("A");
+    private Player player2 = new Player("B");
+    private Player player3 = new Player("C");
+    private Player player4 = new Player("D");
 
     private Stake defaultStake = new Stake(10, 50, 10);
 

@@ -59,7 +59,7 @@ import static org.hamcrest.Matchers.not;
 @RunWith(AndroidJUnit4.class)
 public class FillGameResultTest {
 
-    private static Player[] players = {new Player("p1", 1), new Player("p2", 2), new Player("p3", 3), new Player("p4", 4)};
+    private static Player[] players = {new Player("p1"), new Player("p2"), new Player("p3"), new Player("p4")};
 
     @Rule
     public ActivityTestRule<FillGameResult> activityRule = new ActivityTestRule<>(FillGameResult.class);

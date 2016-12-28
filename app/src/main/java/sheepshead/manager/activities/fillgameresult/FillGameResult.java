@@ -63,8 +63,14 @@ public class FillGameResult extends AbstractBaseActivity {
      */
     private static final String bundlekey_selected_game_type_index = "game_type_index";
 
+    /**
+     * Key for storing/retrieving the selection of players on the caller side
+     */
     private static final String bundlekey_selected_callers = "callers_selected";
 
+    /**
+     * Key for storing/retrieving the selecting of players on the non-caller side
+     */
     private static final String bundlekey_selected_non_callers = "non_callers_selected";
     /**
      * The button group for selecting the game type.
@@ -94,9 +100,17 @@ public class FillGameResult extends AbstractBaseActivity {
 
     private Spinner dropdownLaufende;
 
-
+    /**
+     * All players in the current session
+     */
     private Collection<Player> allPlayers;
+    /**
+     * Controller for the selection of participating players of the caller side
+     */
     private IPlayerSelection callerSelection;
+    /**
+     * Controller for the selection of participating players of the non-caller side
+     */
     private IPlayerSelection nonCallerSelection;
 
     public FillGameResult() {
@@ -199,6 +213,7 @@ public class FillGameResult extends AbstractBaseActivity {
 
         updateCheckboxesForGameType();
 
+        //load player selections from bundle (if available)
         callerSelection.onGameTypeSelectionChange(loadedType);
         nonCallerSelection.onGameTypeSelectionChange(loadedType);
         if (savedInstanceState != null) {

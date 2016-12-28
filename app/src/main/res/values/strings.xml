@@ -63,6 +63,8 @@
     <!-- Strings for HomeScreenActivity -->
     <string name="HomeScreen.continue_last_session">Weitermachen</string>
     <string name="HomeScreen.new_session">Neue Sitzung</string>
+
+
     <!-- Strings for CreateSessionActivity -->
     <string name="CreateSession.header_stake">Einsatz auswählen</string>
     <string name="CreateSession.header_players">Mitspieler auswählen</string>

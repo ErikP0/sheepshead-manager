@@ -17,9 +17,9 @@
 package sheepshead.manager.game;
 
 /**
- * Created by Nicolas on 06.10.2016.
+ * The class StakeModifier is a collection of information that modify the stake of a single game.
+ * E.g. the "Schneider" modifier adds the base stake, the "Kontra" modifier doubles the stake
  */
-
 public class StakeModifier {
 
     private boolean isKontra;
@@ -42,8 +42,10 @@ public class StakeModifier {
 
     private int numberOfLaufende;
 
-
-    public StakeModifier(){
+    /**
+     * Creates an empty stake modifier (no modifiers are set)
+     */
+    public StakeModifier() {
         this.isKontra = false;
         this.isRe = false;
         this.isTout = false;

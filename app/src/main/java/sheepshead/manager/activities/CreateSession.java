@@ -157,7 +157,7 @@ public class CreateSession extends AbstractBaseActivity {
             }
         }
 
-        players.add(new Player(name, players.size()));//TODO richtige ID vergeben
+        players.add(new Player(name));
         updatePlayerlist();
     }
 

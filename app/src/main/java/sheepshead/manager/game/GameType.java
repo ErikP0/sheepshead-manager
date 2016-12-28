@@ -19,10 +19,10 @@ package sheepshead.manager.game;
 import java.io.Serializable;
 
 /**
- * Created by Nicolas on 01.10.2016.
+ * A game type describes a game mode in Schafkopf.
+ * Currently available gamemodes are Sauspiel (2vs2), Wenz und Solo (1vs3).
+ * A dummy game type LEER is provided for easy representation of a game type not yet selected
  */
-
-//Serializable is used in FillGameResult
 public enum GameType implements Serializable {
 
     SAUSPIEL(1, 3, 8, 2),
@@ -33,7 +33,7 @@ public enum GameType implements Serializable {
     private int teamMultiplier;
 
     /**
-     * The first number where "Laufende" count (e.g. SAUSPIEL/SOLO 3, WENZ 2)
+     * The first number where "Laufende" are accounted for(e.g. SAUSPIEL/SOLO 3, WENZ 2)
      */
     private int minLaufende;
 
@@ -55,9 +55,13 @@ public enum GameType implements Serializable {
         numberOfCallers = numCallers;
     }
 
+    /**
+     * @return The amount of players on the calling side for this game type
+     */
     public int getNumberOfCallers() {
         return numberOfCallers;
     }
+
 
     public int getTeamMultiplier() {
         return teamMultiplier;

@@ -18,12 +18,25 @@ package sheepshead.manager.uicontrolutils;
 
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 
+/**
+ * A CheckBox that also contains a value of type T.
+ * This value can be put and retrieved.
+ *
+ * @param <T> The type of value that this CheckBox can store
+ */
 public class DataCheckBox<T> extends CheckBox {
-    private T data;
+    /**
+     * stored data
+     */
+    private
+    @Nullable
+    T data;
 
+    // some constructors for creation by layout inflation
     public DataCheckBox(Context context) {
         super(context);
     }
@@ -36,11 +49,21 @@ public class DataCheckBox<T> extends CheckBox {
         super(context, attrs, defStyleAttr);
     }
 
-    public void put(T newData) {
+    /**
+     * Puts the given data into the storage of this CheckBox
+     *
+     * @param newData data to be stored
+     */
+    public void put(@Nullable T newData) {
         data = newData;
     }
 
-    public T getData() {
+    /**
+     * @return The stored data, or null if no data has been put in (yet)
+     */
+    public
+    @Nullable
+    T getData() {
         return data;
     }
 

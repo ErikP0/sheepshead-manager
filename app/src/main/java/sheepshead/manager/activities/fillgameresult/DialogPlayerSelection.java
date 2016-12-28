@@ -22,6 +22,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,22 +43,67 @@ import sheepshead.manager.game.GameType;
 import sheepshead.manager.game.Player;
 import sheepshead.manager.uicontrolutils.DataCheckBox;
 
+/**
+ * Controller class for the player selection dialog in FillGameResultActivity.
+ * This class creates a dialog that is closed after the user checked the correct amount of players
+ * to participate on the given side (caller side or non caller side).
+ * E.g. When game mode Wenz is selected, the caller side dialog closes after 1 selected player; the
+ * non-caller side dialog closes after 3 selected players.
+ * If there are in total 4 players available, selecting players to participate in one side will cause
+ * the other side to be automatically filled with the remaining players (as their selection would be
+ * the next action). If there are more than 4 players available the automatic filling might not be the
+ * desired behaviour and is therefore not used.
+ */
 class DialogPlayerSelection implements IPlayerSelection, DialogInterface.OnDismissListener {
 
+    /**
+     * Indicates if this selection is for caller or non-caller side
+     */
     private final boolean isCallingSide;
+    /**
+     * The bundle key for storing and loading the selected players in case of a context change
+     */
     private final String loadStoreKey;
+    //UI elements
     private final TextView text;
     private final Button button;
     private final String noPlayerSelectedText;
     private final String needMorePlayersText;
 
+    /**
+     * The other selection controller (is needed for auto filling)
+     */
     private DialogPlayerSelection otherSelection;
-    private Dialog dialog;
+    /**
+     * The dialog, or null when it is not currently displayed
+     */
+    private
+    @Nullable
+    Dialog dialog;
+
+    /**
+     * All available players. These are used to build the options in the dialog
+     */
     private Collection<Player> availablePlayers;
+    /**
+     * The currently selected players
+     */
     private Set<Player> selectedPlayers;
+    /**
+     * The currently selected game type
+     */
     private GameType selectedGameType;
 
-    public DialogPlayerSelection(boolean isCaller, String bundleKey, View view, String noPlayerSelected, String needMorePlayers) {
+    /**
+     * Creates a new controller for a player selection dialog
+     *
+     * @param isCaller         determines the side (true if caller side; false if non-caller side)
+     * @param bundleKey        A key for storing and loading the selection
+     * @param view             The view with a button and a TextView corresponding to this controller
+     * @param noPlayerSelected String to display in the TextView when no player is currently selected
+     * @param needMorePlayers  String to display in the TextView when more players need to be selected
+     */
+    DialogPlayerSelection(boolean isCaller, String bundleKey, View view, String noPlayerSelected, String needMorePlayers) {
         isCallingSide = isCaller;
         loadStoreKey = bundleKey;
         noPlayerSelectedText = noPlayerSelected;
@@ -66,6 +113,10 @@ class DialogPlayerSelection implements IPlayerSelection, DialogInterface.OnDismi
         selectedPlayers = new HashSet<>();
     }
 
+    /**
+     * Updates the TextView element with the currently selected players, possible more needed players,
+     * or a message indicating that no players were selected
+     */
     private void updateText() {
         StringBuilder builder = new StringBuilder();
         if (selectedPlayers.isEmpty()) {
@@ -84,7 +135,12 @@ class DialogPlayerSelection implements IPlayerSelection, DialogInterface.OnDismi
         text.setText(builder.toString());
     }
 
-    public void setOther(DialogPlayerSelection other) {
+    /**
+     * Sets the other controller for features like auto filling
+     *
+     * @param other Other dialog controller
+     */
+    void setOther(@NonNull DialogPlayerSelection other) {
         otherSelection = other;
     }
 
@@ -144,6 +200,9 @@ class DialogPlayerSelection implements IPlayerSelection, DialogInterface.OnDismi
         button.setEnabled(!disable);
     }
 
+    /**
+     * Resets (clears) the selected players
+     */
     private void reset() {
         selectedPlayers.clear();
         updateText();
@@ -165,18 +224,30 @@ class DialogPlayerSelection implements IPlayerSelection, DialogInterface.OnDismi
         }
     }
 
+    /**
+     * @return The amount of players that the user needs to select before the dialog can be closed
+     * automatically
+     */
     private int computeRemainingPlayers() {
         int max = isCallingSide ? selectedGameType.getNumberOfCallers() : 4 - selectedGameType.getNumberOfCallers();
         return max - selectedPlayers.size();
     }
 
+    /**
+     * Closes the dialog if enough players are selected
+     */
     private void evaluateClose() {
-        if (computeRemainingPlayers() <= 0) {
+        if (computeRemainingPlayers() <= 0 && dialog != null) {
             dialog.dismiss();
         }
     }
 
-    public void showDialog(Activity activity) {
+    /**
+     * Builds and displays a dialog where the user can select participating players for the corresponding side
+     *
+     * @param activity Needed for inflating the dialog layout
+     */
+    void showDialog(Activity activity) {
         LayoutInflater infalInflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup dialogPanel = (ViewGroup) infalInflater.inflate(R.layout.player_selection_dialog, null);

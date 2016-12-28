@@ -16,37 +16,53 @@
 
 package sheepshead.manager.game;
 
-/**
- * Created by Nicolas on 01.10.2016.
- */
 
+/**
+ * The player class represents a participating player with name and money who is persistent through a
+ * whole session
+ */
 public class Player {
 
+    /**
+     * Name of the player which is unique in the session
+     */
     private String name;
 
-    private int number; //it should always start with 0 for the first player, 1 for the second ...
+    /**
+     * current balance of this player
+     */
+    private int sessionMoney;
 
-    private int sessionMoney = 0;
-
-
-    public Player(String name, int number) {
+    /**
+     * Creates a new player with the given name.
+     * Note that the name must be unique in the session
+     *
+     * @param name The name of this player
+     */
+    public Player(String name) {
         this.name = name;
-        this.number = number;
+        sessionMoney = 0;
     }
 
+    /**
+     * @return The name of the player
+     */
     public String getName() {
         return name;
     }
 
-    public int getNumber() {
-        return number;
-    }
-
-
+    /**
+     * @return The current balance of the player
+     */
     public int getSessionMoney() {
         return sessionMoney;
     }
 
+    /**
+     * Sets the current balance of this player
+     *
+     * @param sessionMoney The new balance
+     */
     public void setSessionMoney(int sessionMoney) {
         this.sessionMoney = sessionMoney;
     }

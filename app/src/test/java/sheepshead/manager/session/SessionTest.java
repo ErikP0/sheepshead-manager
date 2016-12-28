@@ -58,7 +58,7 @@ public class SessionTest {
 
     @Test
     public void test4PlayerSession() {
-        Player[] players = {new Player("Anton", 1), new Player("Berta", 2), new Player("Cäsar", 3), new Player("Dora", 4)};
+        Player[] players = {new Player("Anton"), new Player("Berta"), new Player("Cäsar"), new Player("Dora")};
         Session session = createDefaultSession(players);
 
         //now add a game
@@ -88,7 +88,7 @@ public class SessionTest {
 
     @Test
     public void test5PlayerSession() {
-        Player[] players = {new Player("Anton", 1), new Player("Berta", 2), new Player("Cäsar", 3), new Player("Dora", 4), new Player("Emil", 5)};
+        Player[] players = {new Player("Anton"), new Player("Berta"), new Player("Cäsar"), new Player("Dora"), new Player("Emil")};
         Session session = createDefaultSession(players);
 
         //add a game: Anton, Berta vs Cäsar,Dora
@@ -118,7 +118,7 @@ public class SessionTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidAmountOfPlayers() {
-        Player[] players = {new Player("Anton", 1), new Player("Berta", 2), new Player("Cäsar", 3)};
+        Player[] players = {new Player("Anton"), new Player("Berta"), new Player("Cäsar")};
         new Session(Arrays.asList(players), new Stake(1, 1, 1));
     }
 }

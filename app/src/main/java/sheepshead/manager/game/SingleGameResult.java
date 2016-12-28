@@ -55,7 +55,7 @@ public class SingleGameResult {
     }
 
     public void calculate(Stake stake) {
-        int winLoseMultiplier = 1;
+        int winLoseMultiplier;
 
         final int stakeValue = calculateStakeValue(stake);
 
