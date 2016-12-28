@@ -23,7 +23,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="sheepshead.manager.activities.DisplayScoresPortrait">
+    tools:context="sheepshead.manager.activities.displayscores.DisplayScoresPortrait">
 
     <RelativeLayout
         android:id="@+id/DisplayScores.panel_buttons"

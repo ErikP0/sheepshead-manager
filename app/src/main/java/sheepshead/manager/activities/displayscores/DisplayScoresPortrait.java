@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.activities;
+package sheepshead.manager.activities.displayscores;
 
 import android.content.Intent;
 import android.os.Bundle;
