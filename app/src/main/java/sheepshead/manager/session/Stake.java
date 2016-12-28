@@ -26,6 +26,9 @@ public class Stake {
     private int laufendeTarif;
 
     public Stake(int priceSauspiel, int priceSolo, int priceLaufende) {
+        if (priceSauspiel <= 0 || priceSolo <= 0 || priceLaufende <= 0)
+            throw new IllegalArgumentException("Stake must be a positive number");
+
         this.grundTarif = priceSauspiel;
         this.soloTarif = priceSolo;
         laufendeTarif = priceLaufende;
