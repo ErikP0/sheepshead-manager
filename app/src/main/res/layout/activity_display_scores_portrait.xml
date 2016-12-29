@@ -29,8 +29,10 @@
         android:id="@+id/DisplayScores.panel_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:orientation="horizontal">
 
@@ -40,15 +42,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="Neues Spiel hinzufügen"
+            android:layout_alignParentStart="true"
+            android:text="@string/DisplayScores.btn_text_add_result"
             android:textAllCaps="false" />
 
         <Button
             android:id="@+id/DisplayScores.btn_show_table"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="Mehr anzeigen"
+            android:text="@string/DisplayScores.btn_text_show_more"
             android:textAllCaps="false" />
 
     </RelativeLayout>

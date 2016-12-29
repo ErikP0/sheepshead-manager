@@ -77,6 +77,10 @@
     <string name="CreateSession.default_value_solo">50</string>
     <string name="CreateSession.warning_invalid_player_name">Ungültiger Name</string>
 
+    <!-- String for DisplayScoresActivity -->
+    <string name="DisplayScores.btn_text_add_result">Neues Spiel hinzufügen</string>
+    <string name="DisplayScores.btn_text_show_more">Mehr anzeigen</string>
+    <string name="DisplayScores.text_number_of_game">Nr.</string>
     <string name="title_activity_display_scores_landscape">DisplayScoresLandscape</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

@@ -22,12 +22,14 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import sheepshead.manager.R;
+import sheepshead.manager.game.PlayerRole;
 
 public class PlayerScoreOverwievBuilder {
 
@@ -44,20 +46,19 @@ public class PlayerScoreOverwievBuilder {
     @IdRes
     int playerIconId = R.id.DisplayScoresOverview_status_icon;
 
-    private String name;
-    private int score;
-    private int latestDelta;
+    private
+    @NonNull
+    PlayerScoreEntry data;
 
-    public PlayerScoreOverwievBuilder(String name, int score, int latestDelta) {
-        this.name = name;
-        this.score = score;
-        this.latestDelta = latestDelta;
+    public PlayerScoreOverwievBuilder(PlayerScoreEntry entry) {
+        data = entry;
     }
 
     public View build(Context context) {
-        String displayedScore = Integer.toString(score);
-        if (latestDelta != 0) {
-            displayedScore += "(" + Integer.toString(latestDelta) + ")";
+        String displayedScore = Integer.toString(data.getBalance());
+        PlayerRole role = data.getRole();
+        if (role != null) {
+            displayedScore += "(" + Integer.toString(role.getMoney()) + ")";
         }
         LayoutInflater infalInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,21 +68,22 @@ public class PlayerScoreOverwievBuilder {
         TextView scoreView = (TextView) buildView.findViewById(playerScoreId);
         ImageView iconView = (ImageView) buildView.findViewById(playerIconId);
 
-        nameView.setText(name);
+        nameView.setText(data.getName());
         scoreView.setText(displayedScore);
-        ScoreState state = determineScoreState(latestDelta);
+        ScoreState state = determineScoreState();
         iconView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), state.getIcon()));
 
         return buildView;
     }
 
-    private ScoreState determineScoreState(int latestDelta) {
-        if (latestDelta < 0) {
-            return ScoreState.FALLING;
-        } else if (latestDelta > 0) {
-            return ScoreState.RISING;
-        } else {
+    private ScoreState determineScoreState() {
+        PlayerRole role = data.getRole();
+        if (role == null) {
             return ScoreState.NOT_PARTICIPATET;
+        } else if (role.getMoney() < 0) {
+            return ScoreState.FALLING;
+        } else {
+            return ScoreState.RISING;
         }
     }
 

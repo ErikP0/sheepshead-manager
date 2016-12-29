@@ -23,44 +23,69 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/scoreboard_background">
+        android:layout_height="match_parent">
 
-        <TableLayout
-            android:id="@+id/DisplayScoresLandscape.header_container"
+        <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true">
+            android:layout_height="wrap_content">
 
-            <include layout="@layout/display_scores_header" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/scoreboard_background">
+
+                <TableLayout
+                    android:id="@+id/DisplayScoresLandscape.header_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true">
+
+                    <include layout="@layout/display_scores_header" />
+                </TableLayout>
+
+                <TableLayout
+                    android:id="@+id/DisplayScoresLandscape.table"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/DisplayScoresLandscape.header_container">
+
+                </TableLayout>
+
+            </RelativeLayout>
+
+        </HorizontalScrollView>
 
 
-        </TableLayout>
-
-
-    </RelativeLayout>
+    </ScrollView>
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows.
          This holds the controls, that pop up-->
     <FrameLayout
-        android:id="@+id/fullscreen_content"
+        android:id="@+id/DisplayScoresLandscape.fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
+            android:id="@+id/DisplayScoresLandscape.fullscreen_content_controls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
+            <Button
+                android:id="@+id/DisplayScoresLandscape.bnt_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Dialog_text_back"
+                android:textAllCaps="false" />
         </LinearLayout>
     </FrameLayout>
 

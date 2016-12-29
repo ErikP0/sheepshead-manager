@@ -49,6 +49,8 @@ public class PlayerRole {
      */
     private int moneyWon = 0;
 
+    private int balance = 0;
+
     /**
      * Creates a player role
      *
@@ -101,6 +103,14 @@ public class PlayerRole {
      */
     public void setMoney(int money) {
         moneyWon = money;
+    }
+
+    public int getPlayerBalance() {
+        return balance;
+    }
+
+    public void setPlayerBalance(int newBalance) {
+        balance = newBalance;
     }
 
     @Override

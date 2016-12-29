@@ -16,6 +16,8 @@
 
 package sheepshead.manager.game;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -108,4 +110,17 @@ public class SingleGameResult {
     public Collection<PlayerRole> getParticipants() {
         return participants;
     }
+
+    public
+    @Nullable
+    PlayerRole findRole(Player p) {
+        for (PlayerRole role : participants) {
+            if (role.getPlayer() == p) {
+                return role;
+            }
+        }
+        return null;
+    }
+
+
 }

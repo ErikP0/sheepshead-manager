@@ -23,13 +23,25 @@ import android.widget.Button;
 import android.widget.TableLayout;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.game.Player;
+import sheepshead.manager.game.PlayerRole;
+import sheepshead.manager.game.SingleGameResult;
+import sheepshead.manager.session.Session;
 
 public class DisplayScoresPortrait extends AbstractBaseActivity {
 
-    public static final String bundlekey_players = "DisplayScores_players";
+    private Session session;
 
-    private String[] names = {"Erik", "Simon", "Arian", "Clemens", "Nico"};
+    public DisplayScoresPortrait() {
+        super();
+        session = SheepsheadManagerApplication.getInstance().getCurrentSession();
+        if (session == null) {
+            throw new IllegalStateException(DisplayScoresPortrait.class.getSimpleName() + ": Cannot find session");
+        }
+    }
 
     @Override
     protected void registerActivitySpecificServices() {
@@ -53,20 +65,32 @@ public class DisplayScoresPortrait extends AbstractBaseActivity {
             }
         });
 
-        //TODO temporary, replace with use of real session object
+        Button addResultButton = findView(R.id.DisplayScores_btn_add_single_game_result);
+        addResultButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DisplayScoresPortrait.this, FillGameResult.class);
+                startActivity(intent);
+            }
+        });
 
-        int[] scores = {100, 60, -100, -30, -30};
-        int[] deltas = {10, 10, 0, -10, -10};
         TableLayout playerPanel = findView(R.id.DisplayScores_panel_player_scores);
-        for (int i = 0; i < names.length; i++) {
-            View player = new PlayerScoreOverwievBuilder(names[i], scores[i], deltas[i]).build(this);
-            playerPanel.addView(player);
+        createPlayerOverviewArea(playerPanel);
+    }
+
+    private void createPlayerOverviewArea(TableLayout panel) {
+        SingleGameResult latestGame = session.getLatestResult();
+        for (Player player : session.getPlayers()) {
+            PlayerRole role = null;
+            if (latestGame != null) {
+                role = latestGame.findRole(player);
+            }
+            panel.addView(new PlayerScoreOverwievBuilder(new PlayerScoreEntry(player, role)).build(this));
         }
     }
 
     private void showScoreboard() {
         Intent intent = new Intent(DisplayScoresPortrait.this, DisplayScoresLandscape.class);
-        intent.putExtra(bundlekey_players, names);
         startActivity(intent);
     }
 }

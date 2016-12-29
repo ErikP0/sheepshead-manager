@@ -22,7 +22,10 @@ import android.view.View;
 import android.widget.Button;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.displayscores.DisplayScoresPortrait;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.session.DummySession;
 
 /**
  * A home screen where the user can chose to continue the last session or to create a new session
@@ -51,7 +54,9 @@ public class HomeScreen extends AbstractBaseActivity {
         newSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeScreen.this, CreateSession.class);
+                SheepsheadManagerApplication.getInstance().setCurrentSession(new DummySession());
+                //TODO intent to CreateSession
+                Intent intent = new Intent(HomeScreen.this, DisplayScoresPortrait.class);
                 startActivity(intent);
             }
         });

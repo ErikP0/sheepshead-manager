@@ -33,6 +33,7 @@ import java.util.List;
 
 import sheepshead.manager.R;
 import sheepshead.manager.activities.LaufendeElement;
+import sheepshead.manager.activities.displayscores.DisplayScoresPortrait;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.game.GameType;
@@ -275,8 +276,7 @@ public class FillGameResult extends AbstractBaseActivity {
                     DialogUtils.showInfoDialog(FillGameResult.this, currentSession.printInfo(), getString(R.string.FillGameResult_confirm_dialog), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //TODO intent to session home activity
-                            Intent intent = new Intent(FillGameResult.this, FillGameResult.class);
+                            Intent intent = new Intent(FillGameResult.this, DisplayScoresPortrait.class);
                             startActivity(intent);
                         }
                     });
