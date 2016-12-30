@@ -30,7 +30,7 @@
     <color name="black_overlay">#66000000</color>
 
     <!-- Colors for ScoreBoardStyle -->
-    <color name="scoreboard_background">#ffeadd4d</color>
+    <color name="scoreboard_background">#fffcfae8</color>
     <color name="scoreboard_normal_text">#ff30302e</color>
     <color name="scoreboard_negative_text">#ffc63113</color>
     <color name="scoreboard_positive_text">#ff5ec613</color>

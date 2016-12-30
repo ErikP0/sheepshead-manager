@@ -19,7 +19,13 @@ package sheepshead.manager.activities.displayscores;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
@@ -35,10 +41,14 @@ import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.session.Session;
 import sheepshead.manager.uicontrolutils.DynamicSizeTableBuilder;
+import sheepshead.manager.utils.Consumer;
 
 class ScoreBoardBuilder {
 
     private static final int CELL_WIDTH = 150;
+    private static final int SMALL_CELL_WIDTH = CELL_WIDTH / 3;
+    private static final int FONT_SIZE_NORMAL_SP = 16;
+    private static final int FONT_SIZE_HEADER_SP = 20;
 
     @NonNull
     private final TableLayout headerContainer;
@@ -51,21 +61,25 @@ class ScoreBoardBuilder {
 
     private final DynamicSizeTableBuilder builder;
 
+    private final String playerNotParticipating;
+
     ScoreBoardBuilder(@NonNull Activity a, @NonNull TableLayout header, @NonNull TableLayout existingTable) {
         activity = a;
         headerContainer = header;
         table = existingTable;
-        builder = new DynamicSizeTableBuilder(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        playerNotParticipating = activity.getString(R.string.DisplayScores_text_player_not_participating);
+        builder = new DynamicSizeTableBuilder(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT), new BoardBackgroundDrawer(), new BoardBackgroundDrawer());
     }
 
     void addHeader(Collection<Player> players) {
         builder.enableHeader();
         //insert "Nr." header cell
         String nr = activity.getString(R.string.DisplayScores_text_number_of_game);
-        builder.putHeaderCell(new DynamicSizeTableBuilder.TextViewCellBuilder(nr));
+        builder.putHeaderCell(new FixedSizeTextViewBuilder(nr, SMALL_CELL_WIDTH, FONT_SIZE_HEADER_SP));
         for (Player player : players) {
-            String description = player.getName() + " (" + player.getSessionMoney() + ")";
-            builder.putHeaderCell(new FixedSizeTextViewBuilder(description));
+            String description = player.getName() + "\n(" + player.getSessionMoney() + ")";
+            builder.putHeaderCell(new FixedSizeTextViewBuilder(description, CELL_WIDTH, FONT_SIZE_HEADER_SP));
         }
     }
 
@@ -85,27 +99,40 @@ class ScoreBoardBuilder {
 
     private void addGame(int number, SingleGameResult result, Collection<Player> players) {
         builder.startRow();
-        DynamicSizeTableBuilder.ITableCellBuilder nr = new FixedSizeTextViewBuilder(Integer.toString(number));
+        DynamicSizeTableBuilder.ITableCellBuilder nr = new FixedSizeTextViewBuilder(Integer.toString(number), SMALL_CELL_WIDTH, FONT_SIZE_NORMAL_SP);
         builder.putRowCell(nr);
         for (Player p : players) {
             PlayerRole role = result.findRole(p);
             if (role == null) {
                 //player did not participate in this game
                 //cell is empty
-                builder.putRowCell(new DynamicSizeTableBuilder.EmptyCellBuilder(CELL_WIDTH));
+                builder.putRowCell(new FixedSizeTextViewBuilder(playerNotParticipating, CELL_WIDTH, FONT_SIZE_NORMAL_SP));
             } else {
-                String text = role.getPlayerBalance() + " (" + role.getMoney() + ")";
-                DynamicSizeTableBuilder.ITableCellBuilder playerGameResult = new FixedSizeTextViewBuilder(text);
+                DynamicSizeTableBuilder.ITableCellBuilder playerGameResult = new ScoreBuilder(role.getPlayerBalance(), role.getMoney());
                 builder.putRowCell(playerGameResult);
             }
         }
     }
 
+    private static class BoardBackgroundDrawer implements Consumer<View> {
+        @DrawableRes
+        private static final int drawable = R.drawable.display_scores_table_bg;
+
+        @Override
+        public void accept(View view) {
+            view.setBackgroundResource(drawable);
+        }
+    }
+
     private static class FixedSizeTextViewBuilder implements DynamicSizeTableBuilder.ITableCellBuilder {
         private CharSequence text;
+        private int width;
+        private int fontsize;
 
-        public FixedSizeTextViewBuilder(CharSequence s) {
+        FixedSizeTextViewBuilder(CharSequence s, int cellwidth, int size) {
             text = s;
+            width = cellwidth;
+            fontsize = size;
         }
 
         @Override
@@ -113,8 +140,46 @@ class ScoreBoardBuilder {
             TextView t = new TextView(context);
             t.setText(text);
             t.setSingleLine(false);
-            t.setWidth(CELL_WIDTH);
+            t.setWidth(width);
+            t.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontsize);
             return t;
+        }
+    }
+
+    private static class ScoreBuilder implements DynamicSizeTableBuilder.ITableCellBuilder {
+        @ColorRes
+        private static final int COLOR_NEGATIVE = R.color.scoreboard_negative_text;
+        @ColorRes
+        private static final int COLOR_POSITIVE = R.color.scoreboard_positive_text;
+        private int balance;
+        private int delta;
+
+        ScoreBuilder(int balance, int delta) {
+            this.balance = balance;
+            this.delta = delta;
+        }
+
+        @Override
+        public View build(Context context) {
+            String balanceString = Integer.toString(balance);
+            String deltaString = "(" + delta + ")";
+            SpannableString text = new SpannableString(balanceString + " " + deltaString);
+            text.setSpan(new ForegroundColorSpan(getColor(context, balance)), 0, balanceString.length(), 0);
+            text.setSpan(new ForegroundColorSpan(getColor(context, delta)), balanceString.length() + 1, balanceString.length() + 1 + deltaString.length(), 0);
+
+            TextView textView = new TextView(context);
+            textView.setText(text, TextView.BufferType.SPANNABLE);
+            textView.setWidth(CELL_WIDTH);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE_NORMAL_SP);
+            return textView;
+        }
+
+        private int getColor(Context c, int i) {
+            if (i < 0) {
+                return ContextCompat.getColor(c, COLOR_NEGATIVE);
+            } else {
+                return ContextCompat.getColor(c, COLOR_POSITIVE);
+            }
         }
     }
 }

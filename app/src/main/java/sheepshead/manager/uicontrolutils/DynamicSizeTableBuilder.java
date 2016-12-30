@@ -21,26 +21,27 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sheepshead.manager.utils.Consumer;
 import sheepshead.manager.utils.Optional;
 
 public class DynamicSizeTableBuilder {
 
     private final TableRow.LayoutParams layoutParams;
+    private final Consumer<View> headerConsumer;
+    private final Consumer<View> bodyConsumer;
     private List<ITableCellBuilder> header;
     private boolean isHeaderEnabled;
     private List<List<ITableCellBuilder>> tableRows;
     private List<ITableCellBuilder> currentRow;
     private int maxWidth = 0;
 
-    public DynamicSizeTableBuilder(@Nullable TableRow.LayoutParams params) {
+    public DynamicSizeTableBuilder(@Nullable TableRow.LayoutParams params, @Nullable Consumer<View> headerSpecs, @Nullable Consumer<View> bodySpecs) {
         header = new ArrayList<>();
         tableRows = new ArrayList<>();
         isHeaderEnabled = false;
@@ -49,6 +50,8 @@ public class DynamicSizeTableBuilder {
         } else {
             layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
         }
+        headerConsumer = headerSpecs;
+        bodyConsumer = bodySpecs;
     }
 
     public void enableHeader() {
@@ -85,16 +88,24 @@ public class DynamicSizeTableBuilder {
         currentRow.add(builder);
     }
 
-    private TableRow buildRow(Context c, List<ITableCellBuilder> cells) {
+    private TableRow buildRow(Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
         TableRow row = new TableRow(c);
         row.setLayoutParams(layoutParams);
         for (ITableCellBuilder builder : cells) {
-            row.addView(builder.build(c));
+            View child = builder.build(c);
+            if (consumer != null) {
+                consumer.accept(child);
+            }
+            row.addView(child);
         }
         int neededSpace = maxWidth - cells.size();
         if (neededSpace > 0) {
             for (int i = 0; i < neededSpace; i++) {
-                row.addView(new EmptyCellBuilder().build(c));
+                View child = new EmptyCellBuilder().build(c);
+                if (consumer != null) {
+                    consumer.accept(child);
+                }
+                row.addView(child);
             }
         }
         return row;
@@ -130,12 +141,12 @@ public class DynamicSizeTableBuilder {
         }
         if (isHeaderEnabled) {
             //create Header
-            TableRow headerRow = buildRow(context, header);
+            TableRow headerRow = buildRow(context, header, headerConsumer);
             headerContainer.addView(headerRow);
         }
         for (List<ITableCellBuilder> row : tableRows) {
             //create one row
-            TableRow tableRow = buildRow(context, row);
+            TableRow tableRow = buildRow(context, row, bodyConsumer);
             table.addView(tableRow);
         }
         return table;
@@ -163,27 +174,11 @@ public class DynamicSizeTableBuilder {
 
         @Override
         public View build(Context context) {
-            Space space = new Space(context);
-            space.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            View space = new View(context);
             if (!optWidth.isEmpty()) {
                 space.setMinimumWidth(optWidth.getValue());
             }
             return space;
-        }
-    }
-
-    public static class TextViewCellBuilder implements ITableCellBuilder {
-        private final CharSequence text;
-
-        public TextViewCellBuilder(CharSequence text) {
-            this.text = text;
-        }
-
-        @Override
-        public View build(Context context) {
-            TextView textView = new TextView(context);
-            textView.setText(text);
-            return textView;
         }
     }
 }

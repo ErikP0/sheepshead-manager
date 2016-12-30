@@ -38,8 +38,7 @@
             android:name=".activities.displayscores.DisplayScoresLandscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_display_scores_landscape"
-            android:parentActivityName=".activities.displayscores.DisplayScoresPortrait"
-            android:theme="@style/FullscreenTheme">
+            android:parentActivityName=".activities.displayscores.DisplayScoresPortrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.displayscores.DisplayScoresPortrait" />

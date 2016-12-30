@@ -55,6 +55,36 @@ public class DummySession extends Session {
         addGame(createGame(createMod(3, true), GameType.SOLO, "Clemens"));
         addGame(createGame(createMod(3, true), GameType.SOLO, "Nico"));
         addGame(createGame(createMod(3, true), GameType.SOLO, "Erik"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Arian"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Simon"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Clemens"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Nico"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Erik"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Arian"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Simon"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Clemens"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Nico"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Erik"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Arian"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Simon"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Clemens"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Nico"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Erik"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Arian"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Simon"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Clemens"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Nico"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Erik"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Arian"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Simon"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Clemens"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Nico"));
+        addGame(createGame(createMod(0, false), GameType.SAUSPIEL, "Erik"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Arian"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Simon"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Clemens"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Nico"));
+        addGame(createGame(createMod(3, true), GameType.SOLO, "Erik"));
     }
 
     private StakeModifier createMod(int laufende, boolean schneider) {
