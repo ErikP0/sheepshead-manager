@@ -16,7 +16,12 @@
 
 package sheepshead.manager.utils;
 
-
+/**
+ * A simple consumer interface.
+ * Not in the android library, so added here
+ *
+ * @param <T>
+ */
 public interface Consumer<T> {
 
     void accept(T t);

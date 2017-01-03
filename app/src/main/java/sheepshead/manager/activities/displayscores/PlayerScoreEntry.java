@@ -23,6 +23,10 @@ import android.support.annotation.Nullable;
 import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 
+/**
+ * Data class for the session overview.
+ * Associates the player with his balance (at that time) and his role in the latest game
+ */
 class PlayerScoreEntry {
 
     private

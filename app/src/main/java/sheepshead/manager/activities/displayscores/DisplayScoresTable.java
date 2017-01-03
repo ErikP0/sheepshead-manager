@@ -25,17 +25,22 @@ import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.session.Session;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * Activity that lists the results of all game results of the current session in a table-style
  */
-public class DisplayScoresLandscape extends AbstractBaseActivity {
+public class DisplayScoresTable extends AbstractBaseActivity {
+    /**
+     * The current session
+     */
     private Session session;
 
-    public DisplayScoresLandscape() {
+    /**
+     * Don't create this activity by hand. Use an intent
+     */
+    public DisplayScoresTable() {
         super();
         session = SheepsheadManagerApplication.getInstance().getCurrentSession();
         if (session == null) {
-            throw new IllegalStateException(DisplayScoresLandscape.class.getSimpleName() + " cannot find session");
+            throw new IllegalStateException(DisplayScoresTable.class.getSimpleName() + " cannot find session");
         }
     }
 
@@ -51,7 +56,7 @@ public class DisplayScoresLandscape extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_display_scores_landscape);
+        setContentView(R.layout.activity_display_scores_table);
 
         //Populate table
         TableLayout header = findView(R.id.DisplayScoresLandscape_header);

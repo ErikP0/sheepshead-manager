@@ -30,19 +30,78 @@ import java.util.List;
 import sheepshead.manager.utils.Consumer;
 import sheepshead.manager.utils.Optional;
 
+/**
+ * Convenience builder class for building a table (TableLayout with multiple TableRows) with an arbitrary amount of columns and rows.
+ * The builder works by specifying a generator (implementor of {@link ITableCellBuilder}) for each header and table body cell.
+ * Example:
+ * Let b1 be a generator creating a TextView displaying "1", b2 one that displays "2":
+ * <pre>
+ *     builder.enableHeader();
+ *     builder.putHeaderCell(b1);
+ *     builder.putHeaderCell(b1);
+ *     builder.putHeaderCell(b2);
+ *     builder.startRow();
+ *     builder.putRowCell(b2);
+ *     builder.startRow();
+ *     builder.putRowCell(b1);
+ *     builder.putRowCell(b2);
+ *     builder.putRowCell(b2);
+ * </pre>
+ * Will generate this table:
+ * <pre>
+ *     1 | 1 | 2
+ *     2 |   |
+ *     1 | 2 | 2
+ * </pre>
+ * Note the incomplete first table row ( 2 | |). Spaces/empty cells are inserted automatically to
+ * fit the maximum column width
+ */
 public class DynamicSizeTableBuilder {
 
+    /**
+     * the desired layout parameters
+     */
     private final TableRow.LayoutParams layoutParams;
+    /**
+     * A consumer for more customization of header cells
+     */
+    @Nullable
     private final Consumer<View> headerConsumer;
+    /**
+     * A consumer for more customization of body cells
+     */
+    @Nullable
     private final Consumer<View> bodyConsumer;
+    /**
+     * List of header cells
+     */
     private List<ITableCellBuilder> header;
+    /**
+     * Indicates if a header is desired
+     */
     private boolean isHeaderEnabled;
+    /**
+     * List of table rows (table row aka list of cells)
+     */
     private List<List<ITableCellBuilder>> tableRows;
+    /**
+     * The current row of which the building is currently in progress
+     */
     private List<ITableCellBuilder> currentRow;
+    /**
+     * The amount of columns of this table
+     */
     private int maxWidth = 0;
 
+    /**
+     * Creates a new builder
+     *
+     * @param params      desired layout params, can be null
+     * @param headerSpecs consumer for more customization of each header cell, can be null
+     * @param bodySpecs   consumer for more customization of each body cell, can be null
+     */
     public DynamicSizeTableBuilder(@Nullable TableRow.LayoutParams params, @Nullable Consumer<View> headerSpecs, @Nullable Consumer<View> bodySpecs) {
-        header = new ArrayList<>();
+        header = null;
         tableRows = new ArrayList<>();
         isHeaderEnabled = false;
         if (params != null) {
@@ -54,10 +113,21 @@ public class DynamicSizeTableBuilder {
         bodyConsumer = bodySpecs;
     }
 
+    /**
+     * Enables the header for this table. The header is disabled by default
+     */
     public void enableHeader() {
         isHeaderEnabled = true;
+        header = new ArrayList<>();
     }
 
+    /**
+     * Appends a single cell to the header.
+     *
+     * @param builder The builder for this single cell
+     * @throws IllegalStateException If the header is disabled
+     * @see #enableHeader()
+     */
     public void putHeaderCell(@NonNull ITableCellBuilder builder) {
         if (!isHeaderEnabled) {
             throw new IllegalStateException("Enable Header first");
@@ -72,6 +142,9 @@ public class DynamicSizeTableBuilder {
         }
     }
 
+    /**
+     * Starts a new, empty row in the body of the table
+     */
     public void startRow() {
         if (currentRow != null) {
             maxWidth = Math.max(maxWidth, currentRow.size());
@@ -80,6 +153,12 @@ public class DynamicSizeTableBuilder {
         tableRows.add(currentRow);
     }
 
+    /**
+     * Appends a single table body cell to the current table row
+     *
+     * @param builder The builder for this single cell
+     * @throws IllegalStateException If no row has been started
+     */
     public void putRowCell(@NonNull ITableCellBuilder builder) {
         if (currentRow == null) {
             throw new IllegalStateException("Start a row first");
@@ -111,18 +190,45 @@ public class DynamicSizeTableBuilder {
         return row;
     }
 
+    /**
+     * Builds the table. Creates a new table, adds the header to the top (if enabled) and the appends
+     * the body
+     *
+     * @return The generated table view
+     */
     public
     @NonNull
     TableLayout build(Context c) {
         return build(c, null, null);
     }
 
+    /**
+     * Builds the table. If the given table layout is not null, the contents are appended to the existing table.
+     * If it is null, a new table is created. In both cases the table that was edited, is returned.
+     * If the header is enabled, its content is inserted into the top of the table.
+     *
+     * @param context       The current context
+     * @param existingTable An existing table layout to append the contents, if null a new table will be created
+     * @return The edited table
+     */
     public
     @NonNull
     TableLayout build(Context context, @NonNull TableLayout existingTable) {
         return build(context, existingTable, null);
     }
 
+    /**
+     * Builds the table. If the given table layout is not null, the contents are appended to the existing table.
+     * If it is null, a new table is created. In both cases the table that was edited, is returned.
+     * If the external header is null, the header is added to the top of the table, if not the header
+     * contents are appended to the existing header. If the header is disabled, no header content is appended in any case.
+     *
+     * @param context        The current context
+     * @param existing       An existing table layout to append the contents, if null a new table will be created
+     * @param externalHeader An existing (external) header to append the header content,
+     *                       if null the header will be inserted into the top of the table
+     * @return The edited table
+     */
     public
     @NonNull
     TableLayout build(Context context, @Nullable TableLayout existing, @Nullable ViewGroup externalHeader) {
@@ -152,11 +258,23 @@ public class DynamicSizeTableBuilder {
         return table;
     }
 
+    /**
+     * Interface for building cells for the table
+     */
     public interface ITableCellBuilder {
 
+        /**
+         * Creates and returns the child view that will be used for the cell
+         *
+         * @param context The context
+         * @return A child view for the cell
+         */
         View build(Context context);
     }
 
+    /**
+     * Builds an empty table cell (a cell with no content to display)
+     */
     public static class EmptyCellBuilder implements ITableCellBuilder {
         Optional<Integer> optWidth;
 

@@ -23,6 +23,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,7 +32,10 @@ import android.widget.TextView;
 import sheepshead.manager.R;
 import sheepshead.manager.game.PlayerRole;
 
-public class PlayerScoreOverwievBuilder {
+/**
+ * Builder convenience class for generating the balance overview for the DisplayScoresHome-Activity
+ */
+class PlayerScoreOverwievBuilder {
 
     private static final
     @LayoutRes
@@ -50,10 +54,21 @@ public class PlayerScoreOverwievBuilder {
     @NonNull
     PlayerScoreEntry data;
 
-    public PlayerScoreOverwievBuilder(PlayerScoreEntry entry) {
+    /**
+     * Creates a new builder with the given data
+     *
+     * @param entry The PlayerScoreEntry that should be displayed
+     */
+    PlayerScoreOverwievBuilder(@NonNull PlayerScoreEntry entry) {
         data = entry;
     }
 
+    /**
+     * Creates and returns a view displaying the PlayerScoreEntry
+     *
+     * @param context Context for inflating the layout
+     * @return The view displaying the player data
+     */
     public View build(Context context) {
         String displayedScore = Integer.toString(data.getBalance());
         PlayerRole role = data.getRole();
@@ -70,25 +85,28 @@ public class PlayerScoreOverwievBuilder {
 
         nameView.setText(data.getName());
         scoreView.setText(displayedScore);
-        ScoreState state = determineScoreState();
+        ScoreState state = ScoreState.determinateScoreState(data.getRole());
         iconView.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), state.getIcon()));
 
         return buildView;
     }
 
-    private ScoreState determineScoreState() {
-        PlayerRole role = data.getRole();
-        if (role == null) {
-            return ScoreState.NOT_PARTICIPATET;
-        } else if (role.getMoney() < 0) {
-            return ScoreState.FALLING;
-        } else {
-            return ScoreState.RISING;
-        }
-    }
-
+    /**
+     * Enum for associating a participation state with a symbol to display
+     */
     private enum ScoreState {
-        NOT_PARTICIPATET(android.R.drawable.presence_offline), RISING(android.R.drawable.presence_online), FALLING(android.R.drawable.presence_busy);
+        /**
+         * The player did not participate in the latest game
+         */
+        NOT_PARTICIPATET(android.R.drawable.presence_offline),
+        /**
+         * The player participated and earned some money in the latest game
+         */
+        RISING(android.R.drawable.presence_online),
+        /**
+         * The player participated and lost some money in the latest game
+         */
+        FALLING(android.R.drawable.presence_busy);
 
         private
         @DrawableRes
@@ -96,6 +114,25 @@ public class PlayerScoreOverwievBuilder {
 
         ScoreState(@DrawableRes int icon) {
             iconId = icon;
+        }
+
+        /**
+         * Returns the appropriate ScoreState for the given PlayerRole:
+         * If the role is null, {@link #NOT_PARTICIPATET} is returned.
+         * If the earned money greater than zero, {@link #RISING}, otherwise
+         * {@link #FALLING} is returned.
+         *
+         * @param playerRole The role to associate a ScoreState
+         * @return An appropriate score state
+         */
+        static ScoreState determinateScoreState(@Nullable PlayerRole playerRole) {
+            if (playerRole == null) {
+                return ScoreState.NOT_PARTICIPATET;
+            } else if (playerRole.getMoney() < 0) {
+                return ScoreState.FALLING;
+            } else {
+                return ScoreState.RISING;
+            }
         }
 
         public

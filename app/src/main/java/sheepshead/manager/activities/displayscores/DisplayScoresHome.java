@@ -31,15 +31,26 @@ import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.session.Session;
 
-public class DisplayScoresPortrait extends AbstractBaseActivity {
+/**
+ * Activity that shows an overview for the current session.
+ * It shows the current balance of all players inclusive their earnings/losses in the latest game.
+ * The user can fill in a new game result or show the whole result table ("ScoreBoard")
+ */
+public class DisplayScoresHome extends AbstractBaseActivity {
 
+    /**
+     * The current session
+     */
     private Session session;
 
-    public DisplayScoresPortrait() {
+    /**
+     * Don't create this activity by hand. Use an intent
+     */
+    public DisplayScoresHome() {
         super();
         session = SheepsheadManagerApplication.getInstance().getCurrentSession();
         if (session == null) {
-            throw new IllegalStateException(DisplayScoresPortrait.class.getSimpleName() + ": Cannot find session");
+            throw new IllegalStateException(DisplayScoresHome.class.getSimpleName() + ": Cannot find session");
         }
     }
 
@@ -55,8 +66,9 @@ public class DisplayScoresPortrait extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_display_scores_portrait);
+        setContentView(R.layout.activity_display_scores_home);
 
+        //add functionality to the scoreboard button
         Button showScoreboardButton = findView(R.id.DisplayScores_btn_show_table);
         showScoreboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,15 +77,17 @@ public class DisplayScoresPortrait extends AbstractBaseActivity {
             }
         });
 
+        //add functionality to the fill game result button
         Button addResultButton = findView(R.id.DisplayScores_btn_add_single_game_result);
         addResultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DisplayScoresPortrait.this, FillGameResult.class);
+                Intent intent = new Intent(DisplayScoresHome.this, FillGameResult.class);
                 startActivity(intent);
             }
         });
 
+        //generate and show the overview of players balances
         TableLayout playerPanel = findView(R.id.DisplayScores_panel_player_scores);
         createPlayerOverviewArea(playerPanel);
     }
@@ -90,7 +104,7 @@ public class DisplayScoresPortrait extends AbstractBaseActivity {
     }
 
     private void showScoreboard() {
-        Intent intent = new Intent(DisplayScoresPortrait.this, DisplayScoresLandscape.class);
+        Intent intent = new Intent(DisplayScoresHome.this, DisplayScoresTable.class);
         startActivity(intent);
     }
 }

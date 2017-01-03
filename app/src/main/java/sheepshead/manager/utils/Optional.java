@@ -19,6 +19,12 @@ package sheepshead.manager.utils;
 
 import android.support.annotation.NonNull;
 
+/**
+ * Simple, naive implementation of an optional value.
+ * As it is not in the android library, it is added here
+ *
+ * @param <T>
+ */
 public class Optional<T> {
     private boolean isEmpty;
     private T value;

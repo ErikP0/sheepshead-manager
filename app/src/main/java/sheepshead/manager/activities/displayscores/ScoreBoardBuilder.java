@@ -43,26 +43,67 @@ import sheepshead.manager.session.Session;
 import sheepshead.manager.uicontrolutils.DynamicSizeTableBuilder;
 import sheepshead.manager.utils.Consumer;
 
+/**
+ * Convenience builder class for populating the score board table with the desired content.
+ * Note: The content-methods (like {@link #addHeader(Collection)}, {@link #addBody(Session, Collection)})
+ * can be called in any order, but before calling {@link #build()}.
+ * The table uses a fixed cell width and a fixed font size.
+ * The score board consists of a header bar and the table body. The header is a separate table with
+ * the same widths in order to make the header fixed while scrolling.
+ * The header: Nr. | PlayerName (balance) | PlayerName2 (balance2) | ...
+ * The body:   42  | 120 (+50)            | ausgesetzt             | ...
+ */
 class ScoreBoardBuilder {
 
+    /**
+     * Width for normal cells
+     */
     private static final int CELL_WIDTH = 150;
+    /**
+     * Width for small cells
+     */
     private static final int SMALL_CELL_WIDTH = CELL_WIDTH / 3;
+    /**
+     * Font size for text in the table body
+     */
     private static final int FONT_SIZE_NORMAL_SP = 16;
+    /**
+     * Font size for text in the header
+     */
     private static final int FONT_SIZE_HEADER_SP = 20;
 
+    /**
+     * The table used for the fixed header
+     */
     @NonNull
     private final TableLayout headerContainer;
 
+    /**
+     * The table used for the table body
+     */
     @NonNull
     private final TableLayout table;
 
     @NonNull
     private final Activity activity;
 
+    /**
+     * A internal builder for building the table
+     */
     private final DynamicSizeTableBuilder builder;
 
+    /**
+     * The string description displayed when a player did not participate in that game
+     */
     private final String playerNotParticipating;
 
+    /**
+     * Creates the builder
+     *
+     * @param a             The current activity
+     * @param header        The TableLayout used for the fixed header
+     * @param existingTable The TableLayout for the table
+     */
     ScoreBoardBuilder(@NonNull Activity a, @NonNull TableLayout header, @NonNull TableLayout existingTable) {
         activity = a;
         headerContainer = header;
@@ -72,6 +113,12 @@ class ScoreBoardBuilder {
                 ViewGroup.LayoutParams.WRAP_CONTENT), new BoardBackgroundDrawer(), new BoardBackgroundDrawer());
     }
 
+    /**
+     * Sets the header for this score board.
+     * This creates the following header: Nr. | PlayerName (balance) | PlayerName2 (balance2) | ...
+     *
+     * @param players The players of the session
+     */
     void addHeader(Collection<Player> players) {
         builder.enableHeader();
         //insert "Nr." header cell
@@ -83,6 +130,12 @@ class ScoreBoardBuilder {
         }
     }
 
+    /**
+     * Sets the body for this score board
+     *
+     * @param session The current session to get game results from
+     * @param players The players of the session
+     */
     void addBody(@NonNull Session session, Collection<Player> players) {
         int number = session.getGameAmount();
         Iterator<SingleGameResult> revIt = session.getLatestFirstIterator();
@@ -93,6 +146,9 @@ class ScoreBoardBuilder {
         }
     }
 
+    /**
+     * Generates and adds the appropriate child views to the matching header/table layouts
+     */
     void build() {
         builder.build(activity, table, headerContainer);
     }
@@ -114,6 +170,14 @@ class ScoreBoardBuilder {
         }
     }
 
+    /**
+     * This consumer is called for each header and table body cell.
+     * <p>
+     * As TableLayout has no way to draw column/row splitting lines for the table,
+     * a solution is to set a rectangular shape as background of each cell.
+     * The rectangular cell has a border of a different color to create splitting lines
+     * See: http://stackoverflow.com/questions/2108456/how-can-i-create-a-table-with-borders-in-android
+     */
     private static class BoardBackgroundDrawer implements Consumer<View> {
         @DrawableRes
         private static final int drawable = R.drawable.display_scores_table_bg;
@@ -124,6 +188,9 @@ class ScoreBoardBuilder {
         }
     }
 
+    /**
+     * Builder class for a TextView with a fixed width and font size
+     */
     private static class FixedSizeTextViewBuilder implements DynamicSizeTableBuilder.ITableCellBuilder {
         private CharSequence text;
         private int width;
@@ -146,6 +213,12 @@ class ScoreBoardBuilder {
         }
     }
 
+    /**
+     * Builder for a single table body cell.
+     * It consists of a single TextView that contains the balance of the player (at the time the game
+     * happened) and his earnings/losses. The values are color annotated, green for a non-negative value,
+     * red for a negative value
+     */
     private static class ScoreBuilder implements DynamicSizeTableBuilder.ITableCellBuilder {
         @ColorRes
         private static final int COLOR_NEGATIVE = R.color.scoreboard_negative_text;

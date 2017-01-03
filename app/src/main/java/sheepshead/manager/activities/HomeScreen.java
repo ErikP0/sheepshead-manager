@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.Button;
 
 import sheepshead.manager.R;
-import sheepshead.manager.activities.displayscores.DisplayScoresPortrait;
+import sheepshead.manager.activities.displayscores.DisplayScoresHome;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.session.DummySession;
@@ -56,7 +56,7 @@ public class HomeScreen extends AbstractBaseActivity {
             public void onClick(View v) {
                 SheepsheadManagerApplication.getInstance().setCurrentSession(new DummySession());
                 //TODO intent to CreateSession
-                Intent intent = new Intent(HomeScreen.this, DisplayScoresPortrait.class);
+                Intent intent = new Intent(HomeScreen.this, DisplayScoresHome.class);
                 startActivity(intent);
             }
         });

@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import sheepshead.manager.R;
-import sheepshead.manager.activities.displayscores.DisplayScoresPortrait;
+import sheepshead.manager.activities.displayscores.DisplayScoresHome;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.session.Session;
@@ -283,7 +283,7 @@ public class CreateSession extends AbstractBaseActivity {
             Session session = new Session(playerInSession, stake);
             SheepsheadManagerApplication.getInstance().setCurrentSession(session);
 
-            Intent intent = new Intent(CreateSession.this, DisplayScoresPortrait.class);
+            Intent intent = new Intent(CreateSession.this, DisplayScoresHome.class);
             startActivity(intent);
         }
     }

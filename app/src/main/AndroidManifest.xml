@@ -33,15 +33,15 @@
         <activity android:name=".activities.fillgameresult.FillGameResult" />
         <activity android:name=".activities.HomeScreen"></activity>
         <activity android:name=".activities.CreateSession"></activity>
-        <activity android:name=".activities.displayscores.DisplayScoresPortrait" />
+        <activity android:name=".activities.displayscores.DisplayScoresHome" />
         <activity
-            android:name=".activities.displayscores.DisplayScoresLandscape"
+            android:name=".activities.displayscores.DisplayScoresTable"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_display_scores_landscape"
-            android:parentActivityName=".activities.displayscores.DisplayScoresPortrait">
+            android:parentActivityName=".activities.displayscores.DisplayScoresHome">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="sheepshead.manager.activities.displayscores.DisplayScoresPortrait" />
+                android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
         </activity>
     </application>
 
