@@ -37,7 +37,6 @@
         <activity
             android:name=".activities.displayscores.DisplayScoresTable"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_display_scores_landscape"
             android:parentActivityName=".activities.displayscores.DisplayScoresHome">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
