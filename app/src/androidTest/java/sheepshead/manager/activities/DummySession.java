@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.session;
+package sheepshead.manager.activities;
 
 
 import java.util.ArrayList;
@@ -28,6 +28,8 @@ import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.game.StakeModifier;
+import sheepshead.manager.session.Session;
+import sheepshead.manager.session.Stake;
 
 public class DummySession extends Session {
 

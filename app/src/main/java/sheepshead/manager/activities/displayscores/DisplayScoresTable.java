@@ -59,8 +59,8 @@ public class DisplayScoresTable extends AbstractBaseActivity {
         setContentView(R.layout.activity_display_scores_table);
 
         //Populate table
-        TableLayout header = findView(R.id.DisplayScoresLandscape_header);
-        TableLayout scoreboard = findView(R.id.DisplayScoresLandscape_table);
+        TableLayout header = findView(R.id.DisplayScoresTable_header);
+        TableLayout scoreboard = findView(R.id.DisplayScoresTable_table);
         ScoreBoardBuilder builder = new ScoreBoardBuilder(this, header, scoreboard);
         builder.addHeader(session.getPlayers());
         builder.addBody(session, session.getPlayers());

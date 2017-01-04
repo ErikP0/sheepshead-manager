@@ -123,7 +123,7 @@ class ScoreBoardBuilder {
         builder.enableHeader();
         //insert "Nr." header cell
         String nr = activity.getString(R.string.DisplayScores_text_number_of_game);
-        builder.putHeaderCell(new FixedSizeTextViewBuilder(nr, SMALL_CELL_WIDTH, FONT_SIZE_HEADER_SP));
+        builder.putHeaderCell(new FixedSizeTextViewBuilder(nr + "\n", SMALL_CELL_WIDTH, FONT_SIZE_HEADER_SP));
         for (Player player : players) {
             String description = player.getName() + "\n(" + player.getSessionMoney() + ")";
             builder.putHeaderCell(new FixedSizeTextViewBuilder(description, CELL_WIDTH, FONT_SIZE_HEADER_SP));

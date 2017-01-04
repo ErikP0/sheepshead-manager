@@ -81,6 +81,5 @@
     <string name="DisplayScores.btn_text_add_result">Neues Spiel hinzufügen</string>
     <string name="DisplayScores.btn_text_show_more">Mehr anzeigen</string>
     <string name="DisplayScores.text_number_of_game">Nr.</string>
-    <string name="title_activity_display_scores_landscape">DisplayScoresLandscape</string>
     <string name="DisplayScores.text_player_not_participating">ausgesetzt</string>
 </resources>
