@@ -22,6 +22,7 @@
         <item name="android:autoLink">none</item>
         <item name="android:textSize">@dimen/sheepshead_text_size_normal</item>
         <item name="android:textStyle">normal</item>
+        <item name="colorControlNormal">@color/color_main_texts</item>
     </style>
 
     <style name="SheepsheadText.Big">
@@ -38,6 +39,7 @@
         <!-- inherits from SheepdheadText -->
         <item name="android:textColor">@color/color_title_texts</item>
         <item name="android:textStyle">bold</item>
+        <item name="colorControlNormal">@color/color_title_texts</item>
     </style>
 
     <style name="SheepsheadText.Title.Big">
@@ -48,6 +50,10 @@
     <style name="SheepsheadText.Title.Small">
         <!-- inherits from SheepsheadText.Title -->
         <item name="android:textSize">@dimen/sheepshead_text_size_small</item>
+    </style>
+
+    <style name="SheepsheadToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/color_title_texts</item>
     </style>
 
     <style name="SheepsheadAppTheme" parent="Theme.AppCompat.Light.NoActionBar">

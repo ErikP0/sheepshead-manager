@@ -54,8 +54,8 @@ import sheepshead.manager.uicontrolutils.DialogUtils;
 public class CreateSession extends AbstractBaseActivity {
 
     private static final ActivityDescriptor CREATE_SESSION = new ActivityDescriptor(R.layout.activity_create_session)
-            .toolbar(R.id.CreateSession_toolbar)
             .title(R.string.Title_CreateSession)
+            .toolbar(R.id.CreateSession_toolbar)
             .enableNavigationBackToParent();
 
     /**

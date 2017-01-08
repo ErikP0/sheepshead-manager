@@ -53,10 +53,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     private void createToolbar() {
         if (!activityDescriptor.getToolbarId().isEmpty()) {
-            Toolbar bar = findView(activityDescriptor.getToolbarId().getValue());
+            Toolbar bar = (Toolbar) findView(activityDescriptor.getToolbarId().getValue()).findViewById(R.id.toolbar);
             setSupportActionBar(bar);
             toolbar = getSupportActionBar();
-            toolbar.setElevation(4.0f);
             toolbar.setDisplayHomeAsUpEnabled(activityDescriptor.hasNavigationBackToParentEnabled());
             bar.setTitleTextAppearance(this, R.style.SheepsheadText_Title_Big);
             if (!activityDescriptor.getTitle().isEmpty()) {
