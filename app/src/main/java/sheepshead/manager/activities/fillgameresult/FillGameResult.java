@@ -17,7 +17,6 @@
 package sheepshead.manager.activities.fillgameresult;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import sheepshead.manager.R;
 import sheepshead.manager.activities.LaufendeElement;
-import sheepshead.manager.activities.displayscores.DisplayScoresHome;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
@@ -286,8 +284,7 @@ public class FillGameResult extends AbstractBaseActivity {
                     DialogUtils.showInfoDialog(FillGameResult.this, currentSession.printInfo(), getString(R.string.FillGameResult_confirm_dialog), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(FillGameResult.this, DisplayScoresHome.class);
-                            startActivity(intent);
+                            FillGameResult.this.finish();
                         }
                     });
                 }
@@ -336,15 +333,14 @@ public class FillGameResult extends AbstractBaseActivity {
         }
 
         StakeModifier modifier = createStakeModifier();
-        SingleGameResult result = new SingleGameResult(roles, selectedGameType, modifier);
-        return result;
+        return new SingleGameResult(roles, selectedGameType, modifier);
     }
 
     /**
      * Creates and returns a {@link StakeModifier} instance that contains all the selection the user
      * made regarding point modifiers (schneider/schwarz, kontra/re, tout/sie and Laufende)
      *
-     * @return
+     * @return The created StakeModifier
      */
     private StakeModifier createStakeModifier() {
         StakeModifier modifier = new StakeModifier();
@@ -375,14 +371,12 @@ public class FillGameResult extends AbstractBaseActivity {
      * @param elements the new content for the "Laufende"-Dropdown
      */
     private void switchAdapter(LaufendeElement[] elements) {
-        SpinnerAdapter adapter = new ArrayAdapter<LaufendeElement>(this, android.R.layout.simple_dropdown_item_1line, elements);
+        SpinnerAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, elements);
         dropdownLaufende.setAdapter(adapter);
     }
 
     /**
-     * Returns the current selected {@link GameType}
-     *
-     * @return
+     * @return Returns the current selected {@link GameType}
      */
     GameType getCurrentlySelectedGameType() {
         Collection<ToggleButton> pressedButtons = gameTypeGroup.getPressedButtons();

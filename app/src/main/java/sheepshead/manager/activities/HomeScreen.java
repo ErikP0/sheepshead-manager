@@ -16,7 +16,6 @@
 
 package sheepshead.manager.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -58,17 +57,14 @@ public class HomeScreen extends AbstractBaseActivity {
         newSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeScreen.this, CreateSession.class);
-                startActivity(intent);
+                intentToUpActivity(CreateSession.class);
             }
         });
         Button continueSession = findView(R.id.HomeScreen_btn_continue_last_session);
         continueSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomeScreen.this, DisplayScoresHome.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                intentToUpActivity(DisplayScoresHome.class);
             }
         });
     }

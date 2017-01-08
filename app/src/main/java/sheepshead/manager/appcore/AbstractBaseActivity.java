@@ -16,6 +16,7 @@
 
 package sheepshead.manager.appcore;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -134,5 +135,11 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
      */
     protected <T extends android.view.View> T findView(@android.support.annotation.IdRes int id) {
         return (T) findViewById(id);
+    }
+
+    protected void intentToUpActivity(Class<? extends AbstractBaseActivity> target) {
+        Intent intent = new Intent(this, target);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

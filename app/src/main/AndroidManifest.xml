@@ -25,7 +25,9 @@
         android:theme="@style/SheepsheadAppTheme">
 
 
-        <activity android:name=".main.LoadingScreen">
+        <activity
+            android:name=".main.LoadingScreen"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +55,9 @@
         </activity>
 
 
-        <activity android:name=".activities.fillgameresult.FillGameResult">
+        <activity
+            android:name=".activities.fillgameresult.FillGameResult"
+            android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />

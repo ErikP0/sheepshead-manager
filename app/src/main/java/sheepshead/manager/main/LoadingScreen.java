@@ -16,7 +16,6 @@
 
 package sheepshead.manager.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -71,8 +70,7 @@ public class LoadingScreen extends AbstractBaseActivity {
         activityPanel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoadingScreen.this, HomeScreen.class);
-                startActivity(intent);
+                intentToUpActivity(HomeScreen.class);
 
             }
         });

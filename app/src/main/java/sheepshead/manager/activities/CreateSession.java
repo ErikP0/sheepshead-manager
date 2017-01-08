@@ -18,7 +18,6 @@ package sheepshead.manager.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
@@ -294,8 +293,7 @@ public class CreateSession extends AbstractBaseActivity {
             Session session = new Session(playerInSession, stake);
             SheepsheadManagerApplication.getInstance().setCurrentSession(session);
 
-            Intent intent = new Intent(CreateSession.this, DisplayScoresHome.class);
-            startActivity(intent);
+            intentToUpActivity(DisplayScoresHome.class);
         }
     }
 

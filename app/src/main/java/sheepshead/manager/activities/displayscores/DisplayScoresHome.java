@@ -16,7 +16,6 @@
 
 package sheepshead.manager.activities.displayscores;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -94,8 +93,7 @@ public class DisplayScoresHome extends AbstractBaseActivity {
         addResultButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DisplayScoresHome.this, FillGameResult.class);
-                startActivity(intent);
+                intentToUpActivity(FillGameResult.class);
             }
         });
     }
@@ -113,7 +111,6 @@ public class DisplayScoresHome extends AbstractBaseActivity {
     }
 
     private void showScoreboard() {
-        Intent intent = new Intent(DisplayScoresHome.this, DisplayScoresTable.class);
-        startActivity(intent);
+        intentToUpActivity(DisplayScoresTable.class);
     }
 }
