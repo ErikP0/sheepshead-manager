@@ -21,6 +21,7 @@ import android.widget.TableLayout;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.session.Session;
 
@@ -28,6 +29,11 @@ import sheepshead.manager.session.Session;
  * Activity that lists the results of all game results of the current session in a table-style
  */
 public class DisplayScoresTable extends AbstractBaseActivity {
+
+    private static final ActivityDescriptor DISPLAY_SCORES_TABLE = new ActivityDescriptor(R.layout.activity_display_scores_table)
+            .toolbar(R.id.DisplayScoresTable_toolbar)
+            .title(R.string.Title_DisplayScoresTable)
+            .enableNavigationBackToParent();
     /**
      * The current session
      */
@@ -37,7 +43,7 @@ public class DisplayScoresTable extends AbstractBaseActivity {
      * Don't create this activity by hand. Use an intent
      */
     public DisplayScoresTable() {
-        super();
+        super(DISPLAY_SCORES_TABLE);
         session = SheepsheadManagerApplication.getInstance().getCurrentSession();
         if (session == null) {
             throw new IllegalStateException(DisplayScoresTable.class.getSimpleName() + " cannot find session");
@@ -56,7 +62,6 @@ public class DisplayScoresTable extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_display_scores_table);
 
         //Populate table
         TableLayout header = findView(R.id.DisplayScoresTable_header);

@@ -41,6 +41,7 @@ import java.util.ListIterator;
 import sheepshead.manager.R;
 import sheepshead.manager.activities.displayscores.DisplayScoresHome;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.session.Session;
 import sheepshead.manager.session.Stake;
@@ -52,6 +53,11 @@ import sheepshead.manager.uicontrolutils.DialogUtils;
  * should be part of the new created session
  */
 public class CreateSession extends AbstractBaseActivity {
+
+    private static final ActivityDescriptor CREATE_SESSION = new ActivityDescriptor(R.layout.activity_create_session)
+            .toolbar(R.id.CreateSession_toolbar)
+            .title(R.string.Title_CreateSession)
+            .enableNavigationBackToParent();
 
     /**
      * List index where to find the stake selection
@@ -84,6 +90,7 @@ public class CreateSession extends AbstractBaseActivity {
     private Button btnCreateSession;
 
     public CreateSession() {
+        super(CREATE_SESSION);
         addNewPlayerListener = new AddNewPlayerListener();
         stakeInputWatcher = new StakeInputWatcher();
         players = new ArrayList<>();
@@ -101,7 +108,6 @@ public class CreateSession extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_create_session);
 
         //build the expandable list & fill it with content
         CreateSessionListAdapter.Builder builder = new CreateSessionListAdapter.Builder(this);

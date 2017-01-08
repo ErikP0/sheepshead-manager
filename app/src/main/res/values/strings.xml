@@ -18,6 +18,11 @@
     <string name="app_name">Sheepshead Manager</string>
     <!-- Global strings -->
     <string name="Dialog_text_back">Zurück</string>
+    <string name="Title_DisplayScoresHome">Übersicht</string>
+    <string name="Title_DisplayScoresTable">Spieltabelle</string>
+    <string name="Title_FillGameResult">Spielergebnis eintragen</string>
+    <string name="Title_CreateSession">Sitzung erstellen</string>
+    <string name="Title_HomeScreen">@string/app_name</string>
 
     <!-- Strings for LoadingScreenActivity -->
     <string name="loading_screen_load_message">Schafkopf-Manager\nLade..</string>

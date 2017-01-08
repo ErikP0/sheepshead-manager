@@ -25,12 +25,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="sheepshead.manager.activities.fillgameresult.FillGameResult">
 
+    <include
+        android:id="@+id/FillGameResult.toolbar"
+        layout="@layout/toolbar" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/FillGameResult.toolbar"
         android:fillViewport="true">
 
         <RelativeLayout

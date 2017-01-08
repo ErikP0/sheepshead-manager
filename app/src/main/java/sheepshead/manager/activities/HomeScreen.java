@@ -23,11 +23,21 @@ import android.widget.Button;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.ActivityDescriptor;
 
 /**
  * A home screen where the user can chose to continue the last session or to create a new session
  */
 public class HomeScreen extends AbstractBaseActivity {
+
+    private static final ActivityDescriptor HOME_SCREEN = new ActivityDescriptor(R.layout.activity_home_screen)
+            .toolbar(R.id.HomeScreen_toolbar)
+            .title(R.string.Title_HomeScreen);
+
+    public HomeScreen() {
+        super(HOME_SCREEN);
+    }
+
     @Override
     protected void registerActivitySpecificServices() {
 
@@ -40,7 +50,6 @@ public class HomeScreen extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_home_screen);
 
         //disable continue button (for now)
         Button continueSession = findView(R.id.HomeScreen_btn_continue_last_session);

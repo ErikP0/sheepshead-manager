@@ -16,18 +16,18 @@
 
 <resources>
     <!-- Main-Color used e.g. in the title bar-->
-    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimary">#0e8441</color>
     <!-- Darker version of colorPrimary -->
-    <color name="colorPrimaryDark">#AAAAAA</color>
+    <color name="colorPrimaryDark">#FF095E2E</color>
     <!-- Color for outlining components-->
-    <color name="colorAccent">#6b840e</color>
+    <color name="colorAccent">#17cc66</color>
 
     <!-- Main-Background color (green)-->
-    <color name="color_background">#0e8441</color>
-    <!-- Main-text color (white) -->
-    <color name="color_main_texts">#FFFFFF</color>
-
-    <color name="black_overlay">#66000000</color>
+    <color name="color_background">#FFFFFF</color>
+    <!-- Main-text color -->
+    <color name="color_main_texts">#000000</color>
+    <!-- Title-bar color -->
+    <color name="color_title_texts">#ffffff</color>
 
     <!-- Colors for ScoreBoardStyle -->
     <color name="scoreboard_background">#fffcfae8</color>

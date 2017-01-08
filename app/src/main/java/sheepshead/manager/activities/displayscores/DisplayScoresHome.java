@@ -25,6 +25,7 @@ import android.widget.TableLayout;
 import sheepshead.manager.R;
 import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
@@ -38,6 +39,11 @@ import sheepshead.manager.session.Session;
  */
 public class DisplayScoresHome extends AbstractBaseActivity {
 
+    private static final ActivityDescriptor DISPLAY_SCORES_HOME = new ActivityDescriptor(R.layout.activity_display_scores_home)
+            .toolbar(R.id.DisplayScores_toolbar)
+            .title(R.string.Title_DisplayScoresHome)
+            .enableNavigationBackToParent();
+
     /**
      * The current session
      */
@@ -47,7 +53,7 @@ public class DisplayScoresHome extends AbstractBaseActivity {
      * Don't create this activity by hand. Use an intent
      */
     public DisplayScoresHome() {
-        super();
+        super(DISPLAY_SCORES_HOME);
         session = SheepsheadManagerApplication.getInstance().getCurrentSession();
         if (session == null) {
             throw new IllegalStateException(DisplayScoresHome.class.getSimpleName() + ": Cannot find session");
@@ -66,7 +72,6 @@ public class DisplayScoresHome extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_display_scores_home);
 
         //add functionality to the scoreboard button
         Button showScoreboardButton = findView(R.id.DisplayScores_btn_show_table);

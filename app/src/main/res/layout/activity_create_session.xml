@@ -25,12 +25,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="sheepshead.manager.activities.CreateSession">
 
+    <include
+        android:id="@+id/CreateSession.toolbar"
+        layout="@layout/toolbar" />
+
     <ExpandableListView
         android:id="@+id/CreateSession.listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/CreateSession.btn_create"
-        android:layout_alignParentTop="true">
+        android:layout_below="@id/CreateSession.toolbar">
 
     </ExpandableListView>
 

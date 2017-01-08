@@ -26,9 +26,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="sheepshead.manager.activities.HomeScreen">
 
+    <include
+        android:id="@+id/HomeScreen.toolbar"
+        layout="@layout/toolbar" />
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/HomeScreen.toolbar">
 
         <ImageView
             android:id="@+id/HomeScreen_imageView"

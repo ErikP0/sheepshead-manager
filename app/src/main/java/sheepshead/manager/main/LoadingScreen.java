@@ -23,6 +23,7 @@ import android.view.View;
 import sheepshead.manager.R;
 import sheepshead.manager.activities.HomeScreen;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 
 /**
@@ -30,6 +31,8 @@ import sheepshead.manager.appcore.SheepsheadManagerApplication;
  * The loading screen is the entry-point of the application.
  */
 public class LoadingScreen extends AbstractBaseActivity {
+
+    private static final ActivityDescriptor LOADING_SCREEN = new ActivityDescriptor(R.layout.activity_loading_screen);
 
     /**
      * Ensures that the {@link SheepsheadManagerApplication#loadingScreen()} is not called more than once.
@@ -39,7 +42,7 @@ public class LoadingScreen extends AbstractBaseActivity {
     private static boolean loadingStarted = false;
 
     public LoadingScreen() {
-
+        super(LOADING_SCREEN);
     }
 
 
@@ -55,7 +58,6 @@ public class LoadingScreen extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_loading_screen);
 
         if (!loadingStarted) {
             loadingStarted = true;
@@ -63,7 +65,7 @@ public class LoadingScreen extends AbstractBaseActivity {
 
         }
 
-        //Temporarly go to the home screen by one click
+        //Temporarily go to the home screen by one click
         View activityPanel = findView(R.id.activity_loading_screen);
         activityPanel.setOnClickListener(new View.OnClickListener() {
             @Override

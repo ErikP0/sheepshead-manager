@@ -22,7 +22,9 @@
         android:icon="@mipmap/logo_v1"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppThemeNoTitleBar">
+        android:theme="@style/SheepsheadAppTheme">
+
+
         <activity android:name=".main.LoadingScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,10 +32,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.fillgameresult.FillGameResult" />
-        <activity android:name=".activities.HomeScreen"></activity>
-        <activity android:name=".activities.CreateSession"></activity>
-        <activity android:name=".activities.displayscores.DisplayScoresHome" />
+
+
+        <activity android:name=".activities.HomeScreen" />
+
+
+        <activity
+            android:name=".activities.CreateSession"
+            android:noHistory="true">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sheepshead.manager.activities.HomeScreen" />
+        </activity>
+
+
+        <activity android:name=".activities.displayscores.DisplayScoresHome">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sheepshead.manager.activities.HomeScreen" />
+        </activity>
+
+
+        <activity android:name=".activities.fillgameresult.FillGameResult">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
+        </activity>
+
+
         <activity
             android:name=".activities.displayscores.DisplayScoresTable"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -42,6 +68,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
         </activity>
+
+
     </application>
 
 </manifest>

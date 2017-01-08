@@ -35,6 +35,7 @@ import sheepshead.manager.R;
 import sheepshead.manager.activities.LaufendeElement;
 import sheepshead.manager.activities.displayscores.DisplayScoresHome;
 import sheepshead.manager.appcore.AbstractBaseActivity;
+import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.game.GameType;
 import sheepshead.manager.game.Player;
@@ -63,16 +64,18 @@ public class FillGameResult extends AbstractBaseActivity {
      * Key for storing/retrieving the index of the laufende spinner when the activity is reloaded
      */
     private static final String bundlekey_selected_game_type_index = "game_type_index";
-
     /**
      * Key for storing/retrieving the selection of players on the caller side
      */
     private static final String bundlekey_selected_callers = "callers_selected";
-
     /**
      * Key for storing/retrieving the selecting of players on the non-caller side
      */
     private static final String bundlekey_selected_non_callers = "non_callers_selected";
+    private static final ActivityDescriptor FILL_GAME_RESULT = new ActivityDescriptor(R.layout.activity_fill_game_result)
+            .toolbar(R.id.FillGameResult_toolbar)
+            .title(R.string.Title_FillGameResult)
+            .enableNavigationBackToParent();
     /**
      * The button group for selecting the game type.
      * A group is required because there cannot be more than one game type selected
@@ -115,6 +118,7 @@ public class FillGameResult extends AbstractBaseActivity {
     private IPlayerSelection nonCallerSelection;
 
     public FillGameResult() {
+        super(FILL_GAME_RESULT);
         Session session = SheepsheadManagerApplication.getInstance().getCurrentSession();
         if (session == null) {
             throw new IllegalStateException("FillGameResultActivity did not find a session");
@@ -141,7 +145,6 @@ public class FillGameResult extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_fill_game_result);
 
         //Create game type button group
         EnumToggleButton<GameType> buttonSauspiel = findView(R.id.FillGameResult_toggleBtn_sauspiel);

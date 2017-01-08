@@ -25,6 +25,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="sheepshead.manager.activities.displayscores.DisplayScoresHome">
 
+    <include
+        android:id="@+id/DisplayScores.toolbar"
+        layout="@layout/toolbar" />
+
     <RelativeLayout
         android:id="@+id/DisplayScores.panel_buttons"
         android:layout_width="match_parent"
@@ -33,7 +37,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/DisplayScores.toolbar"
         android:orientation="horizontal">
 
 
