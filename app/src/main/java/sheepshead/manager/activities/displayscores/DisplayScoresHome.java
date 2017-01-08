@@ -38,6 +38,9 @@ import sheepshead.manager.session.Session;
  */
 public class DisplayScoresHome extends AbstractBaseActivity {
 
+    /**
+     * Describes static behaviour of this activity
+     */
     private static final ActivityDescriptor DISPLAY_SCORES_HOME = new ActivityDescriptor(R.layout.activity_display_scores_home)
             .toolbar(R.id.DisplayScores_toolbar)
             .title(R.string.Title_DisplayScoresHome)
@@ -99,6 +102,7 @@ public class DisplayScoresHome extends AbstractBaseActivity {
     }
 
     private void createPlayerOverviewArea(TableLayout panel) {
+        //remove all old child views before adding the latest ones
         panel.removeAllViews();
         SingleGameResult latestGame = session.getLatestResult();
         for (Player player : session.getPlayers()) {

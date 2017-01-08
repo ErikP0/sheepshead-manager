@@ -30,6 +30,9 @@ import sheepshead.manager.session.Session;
  */
 public class DisplayScoresTable extends AbstractBaseActivity {
 
+    /**
+     * Describes static behaviour of this activity
+     */
     private static final ActivityDescriptor DISPLAY_SCORES_TABLE = new ActivityDescriptor(R.layout.activity_display_scores_table)
             .toolbar(R.id.DisplayScoresTable_toolbar)
             .title(R.string.Title_DisplayScoresTable)
@@ -55,8 +58,11 @@ public class DisplayScoresTable extends AbstractBaseActivity {
         //Populate table
         TableLayout header = findView(R.id.DisplayScoresTable_header);
         TableLayout scoreboard = findView(R.id.DisplayScoresTable_table);
+
+        //remove potentially old views
         header.removeAllViews();
         scoreboard.removeAllViews();
+
         ScoreBoardBuilder builder = new ScoreBoardBuilder(this, header, scoreboard);
         builder.addHeader(session.getPlayers());
         builder.addBody(session, session.getPlayers());

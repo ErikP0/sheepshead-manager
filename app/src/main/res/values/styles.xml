@@ -16,6 +16,7 @@
 
 <resources>
 
+    <!-- Style for default sized text -->
     <style name="SheepsheadText" parent="@android:style/TextAppearance.DeviceDefault.Medium">
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/color_main_texts</item>
@@ -25,16 +26,19 @@
         <item name="colorControlNormal">@color/color_main_texts</item>
     </style>
 
+    <!-- Style for big sized text -->
     <style name="SheepsheadText.Big">
         <!-- inherits from SheepsheadText -->
         <item name="android:textSize">@dimen/sheepshead_text_size_big</item>
     </style>
 
+    <!-- Style for small sized text -->
     <style name="SheepsheadText.Small">
         <!-- inherits from SheepsheadText -->
         <item name="android:textSize">@dimen/sheepshead_text_size_small</item>
     </style>
 
+    <!-- Style for default sized text in the toolbar -->
     <style name="SheepsheadText.Title">
         <!-- inherits from SheepdheadText -->
         <item name="android:textColor">@color/color_title_texts</item>
@@ -42,20 +46,24 @@
         <item name="colorControlNormal">@color/color_title_texts</item>
     </style>
 
+    <!-- Style for big sized text in the toolbar -->
     <style name="SheepsheadText.Title.Big">
         <!-- inherits from SheepsheadText.Title -->
         <item name="android:textSize">@dimen/sheepshead_text_size_big</item>
     </style>
 
+    <!-- Style for small sized text in the toolbar -->
     <style name="SheepsheadText.Title.Small">
         <!-- inherits from SheepsheadText.Title -->
         <item name="android:textSize">@dimen/sheepshead_text_size_small</item>
     </style>
 
+    <!-- ToolbarTheme -->
     <style name="SheepsheadToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <item name="colorControlNormal">@color/color_title_texts</item>
     </style>
 
+    <!-- The custom app theme -->
     <style name="SheepsheadAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

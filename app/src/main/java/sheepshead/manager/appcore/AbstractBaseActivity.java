@@ -32,9 +32,20 @@ import sheepshead.manager.R;
  */
 public abstract class AbstractBaseActivity extends AppCompatActivity {
 
+    /**
+     * The creation description of the specific activity
+     */
     private final ActivityDescriptor activityDescriptor;
+    /**
+     * The toolbar of this activity (if available)
+     */
     private ActionBar toolbar;
 
+    /**
+     * Creates the superclass for basic funtionality
+     *
+     * @param descriptor for description of static behaviour, title, toolbar, etc
+     */
     protected AbstractBaseActivity(ActivityDescriptor descriptor) {
         activityDescriptor = descriptor;
     }
@@ -51,8 +62,12 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         createUserInterface(savedInstanceState);
     }
 
+    /**
+     * Enables the toolbar and sets the title (if available)
+     */
     private void createToolbar() {
         if (!activityDescriptor.getToolbarId().isEmpty()) {
+            //look for the toolbar widget in the given view container
             Toolbar bar = (Toolbar) findView(activityDescriptor.getToolbarId().getValue()).findViewById(R.id.toolbar);
             setSupportActionBar(bar);
             toolbar = getSupportActionBar();
@@ -113,12 +128,15 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     /**
      * Create the userinterface for this activity here.
-     * Use <code>setContentView(R.activity_name)</code> when using a layout.xml
      *
      * @param savedInstanceState {@link AppCompatActivity#onCreate(Bundle)}
      */
     protected abstract void createUserInterface(Bundle savedInstanceState);
 
+    /**
+     * Update the userinterface for this activity here.
+     * Beware that the session object might have changed
+     */
     protected abstract void updateUserInterface();
 
     /**
@@ -136,6 +154,12 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         return (T) findViewById(id);
     }
 
+    /**
+     * Performs an intent to a "up" activity (an activity that belongs on top of the backstack).
+     * Consider {@link #finish()} if the activity wants to return to its parent/a activity on the backstack below it
+     *
+     * @param target
+     */
     protected void intentToUpActivity(Class<? extends AbstractBaseActivity> target) {
         Intent intent = new Intent(this, target);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -22,11 +22,11 @@
     <!-- Color for outlining components-->
     <color name="colorAccent">#17cc66</color>
 
-    <!-- Main-Background color (green)-->
+    <!-- Main-Background color-->
     <color name="color_background">#FFFFFF</color>
     <!-- Main-text color -->
     <color name="color_main_texts">#000000</color>
-    <!-- Title-bar color -->
+    <!-- Title-bar text color -->
     <color name="color_title_texts">#ffffff</color>
 
     <!-- Colors for ScoreBoardStyle -->

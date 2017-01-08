@@ -70,6 +70,10 @@ public class FillGameResult extends AbstractBaseActivity {
      * Key for storing/retrieving the selecting of players on the non-caller side
      */
     private static final String bundlekey_selected_non_callers = "non_callers_selected";
+
+    /**
+     * Describes static behaviour of this activity
+     */
     private static final ActivityDescriptor FILL_GAME_RESULT = new ActivityDescriptor(R.layout.activity_fill_game_result)
             .toolbar(R.id.FillGameResult_toolbar)
             .title(R.string.Title_FillGameResult)
@@ -284,6 +288,7 @@ public class FillGameResult extends AbstractBaseActivity {
                     DialogUtils.showInfoDialog(FillGameResult.this, currentSession.printInfo(), getString(R.string.FillGameResult_confirm_dialog), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //Finishing this activity will return to DisplayScoresHome
                             FillGameResult.this.finish();
                         }
                     });

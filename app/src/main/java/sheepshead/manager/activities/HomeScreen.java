@@ -31,6 +31,9 @@ import sheepshead.manager.appcore.SheepsheadManagerApplication;
  */
 public class HomeScreen extends AbstractBaseActivity {
 
+    /**
+     * Describes static behaviour of this activity
+     */
     private static final ActivityDescriptor HOME_SCREEN = new ActivityDescriptor(R.layout.activity_home_screen)
             .toolbar(R.id.HomeScreen_toolbar)
             .title(R.string.Title_HomeScreen);
@@ -60,6 +63,7 @@ public class HomeScreen extends AbstractBaseActivity {
                 intentToUpActivity(CreateSession.class);
             }
         });
+        //add listener to continue button
         Button continueSession = findView(R.id.HomeScreen_btn_continue_last_session);
         continueSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +75,7 @@ public class HomeScreen extends AbstractBaseActivity {
 
     @Override
     protected void updateUserInterface() {
-        //disable continue button (for now)
+        //enable continue button if a session is present
         Button continueSession = findView(R.id.HomeScreen_btn_continue_last_session);
         continueSession.setEnabled(SheepsheadManagerApplication.getInstance().getCurrentSession() != null);
     }

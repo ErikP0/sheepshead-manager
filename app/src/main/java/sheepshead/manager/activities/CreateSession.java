@@ -53,6 +53,9 @@ import sheepshead.manager.uicontrolutils.DialogUtils;
  */
 public class CreateSession extends AbstractBaseActivity {
 
+    /**
+     * Describes static behaviour of this activity
+     */
     private static final ActivityDescriptor CREATE_SESSION = new ActivityDescriptor(R.layout.activity_create_session)
             .title(R.string.Title_CreateSession)
             .toolbar(R.id.CreateSession_toolbar)
@@ -292,7 +295,7 @@ public class CreateSession extends AbstractBaseActivity {
             playerInSession.addAll(players);
             Session session = new Session(playerInSession, stake);
             SheepsheadManagerApplication.getInstance().setCurrentSession(session);
-
+            // Intent to DisplayScoresHome
             intentToUpActivity(DisplayScoresHome.class);
         }
     }

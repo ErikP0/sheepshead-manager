@@ -24,17 +24,41 @@ import android.support.annotation.StringRes;
 
 import sheepshead.manager.utils.Optional;
 
+/**
+ * Attribute object for {@link AbstractBaseActivity}.
+ * Contains information about toolbar title and back-to-parent navigation.
+ * Can be used as static final constant for each activity.
+ * Not all setters must be called, attributes that were not set, will be filled with appropriate default values
+ */
 public class ActivityDescriptor {
 
+    /**
+     * The id of the container containing the toolbar widget, if any
+     */
     @NonNull
     private Optional<Integer> toolbarId;
+    /**
+     * The title of the toolbar, if any
+     */
     @NonNull
     private Optional<Integer> toolbarTitle;
 
+    /**
+     * The layout of this activity
+     */
     @LayoutRes
     private int layoutId;
+    /**
+     * Indicates if this activity is meant to have an "Up"-Navigation in the toolbar
+     */
     private boolean hasBackToParent;
 
+    /**
+     * Creates a new {@link AbstractBaseActivity} parameter object.
+     * Only the layout is mandatory
+     *
+     * @param layout The layout id of the activity
+     */
     public ActivityDescriptor(@LayoutRes int layout) {
         layoutId = layout;
         toolbarId = Optional.empty();
@@ -42,16 +66,33 @@ public class ActivityDescriptor {
         hasBackToParent = false;
     }
 
+    /**
+     * Sets the id of a ViewGroup or View containing the toolbar widget
+     *
+     * @param id The id of the toolbar widget container
+     * @return this instance for chaining convenience
+     */
     public ActivityDescriptor toolbar(@IdRes int id) {
         toolbarId = Optional.ofValue(id);
         return this;
     }
 
+    /**
+     * Sets the id of the title that will be displayed in the toolbar
+     *
+     * @param id The id of the title for this activity
+     * @return this instance for chaining convenience
+     */
     public ActivityDescriptor title(@StringRes int id) {
         toolbarTitle = Optional.ofValue(id);
         return this;
     }
 
+    /**
+     * Enables the "Up"-Navigation to the parent activity described in the AndroidManifest.xml
+     *
+     * @return this instance for chaining convenience
+     */
     public ActivityDescriptor enableNavigationBackToParent() {
         hasBackToParent = true;
         return this;

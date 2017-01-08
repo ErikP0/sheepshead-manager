@@ -31,6 +31,9 @@ import sheepshead.manager.appcore.SheepsheadManagerApplication;
  */
 public class LoadingScreen extends AbstractBaseActivity {
 
+    /**
+     * Describes static behaviour of this activity
+     */
     private static final ActivityDescriptor LOADING_SCREEN = new ActivityDescriptor(R.layout.activity_loading_screen);
 
     /**

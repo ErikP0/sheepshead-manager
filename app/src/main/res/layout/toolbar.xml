@@ -14,6 +14,7 @@
   ~    limitations under the License.
   -->
 
+<!-- A linear layout is required for using the custom shadow underneath the toolbar.-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
