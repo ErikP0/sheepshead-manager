@@ -22,8 +22,10 @@ import android.view.View;
 import android.widget.Button;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.displayscores.DisplayScoresHome;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
+import sheepshead.manager.appcore.SheepsheadManagerApplication;
 
 /**
  * A home screen where the user can chose to continue the last session or to create a new session
@@ -51,19 +53,30 @@ public class HomeScreen extends AbstractBaseActivity {
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
 
-        //disable continue button (for now)
-        Button continueSession = findView(R.id.HomeScreen_btn_continue_last_session);
-        continueSession.setEnabled(false);
-
         //add listener to new session button
         Button newSession = findView(R.id.HomeScreen_btn_new_session);
         newSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO intent to CreateSession
                 Intent intent = new Intent(HomeScreen.this, CreateSession.class);
                 startActivity(intent);
             }
         });
+        Button continueSession = findView(R.id.HomeScreen_btn_continue_last_session);
+        continueSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreen.this, DisplayScoresHome.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void updateUserInterface() {
+        //disable continue button (for now)
+        Button continueSession = findView(R.id.HomeScreen_btn_continue_last_session);
+        continueSession.setEnabled(SheepsheadManagerApplication.getInstance().getCurrentSession() != null);
     }
 }

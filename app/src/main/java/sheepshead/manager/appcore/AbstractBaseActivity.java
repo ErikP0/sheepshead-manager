@@ -78,6 +78,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         super.onResume();
         SheepsheadManagerApplication.getInstance().registerServices();
         registerActivitySpecificServices();
+        updateUserInterface();
     }
 
     @Override
@@ -117,6 +118,8 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
      * @param savedInstanceState {@link AppCompatActivity#onCreate(Bundle)}
      */
     protected abstract void createUserInterface(Bundle savedInstanceState);
+
+    protected abstract void updateUserInterface();
 
     /**
      * Utility method for {@link #findViewById(int)}.

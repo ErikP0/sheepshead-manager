@@ -71,6 +71,13 @@ public class DisplayScoresHome extends AbstractBaseActivity {
     }
 
     @Override
+    protected void updateUserInterface() {
+        //generate and show the overview of players balances
+        TableLayout playerPanel = findView(R.id.DisplayScores_panel_player_scores);
+        createPlayerOverviewArea(playerPanel);
+    }
+
+    @Override
     protected void createUserInterface(Bundle savedInstanceState) {
 
         //add functionality to the scoreboard button
@@ -91,13 +98,10 @@ public class DisplayScoresHome extends AbstractBaseActivity {
                 startActivity(intent);
             }
         });
-
-        //generate and show the overview of players balances
-        TableLayout playerPanel = findView(R.id.DisplayScores_panel_player_scores);
-        createPlayerOverviewArea(playerPanel);
     }
 
     private void createPlayerOverviewArea(TableLayout panel) {
+        panel.removeAllViews();
         SingleGameResult latestGame = session.getLatestResult();
         for (Player player : session.getPlayers()) {
             PlayerRole role = null;

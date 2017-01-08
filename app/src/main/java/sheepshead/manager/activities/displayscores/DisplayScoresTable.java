@@ -51,6 +51,19 @@ public class DisplayScoresTable extends AbstractBaseActivity {
     }
 
     @Override
+    protected void updateUserInterface() {
+        //Populate table
+        TableLayout header = findView(R.id.DisplayScoresTable_header);
+        TableLayout scoreboard = findView(R.id.DisplayScoresTable_table);
+        header.removeAllViews();
+        scoreboard.removeAllViews();
+        ScoreBoardBuilder builder = new ScoreBoardBuilder(this, header, scoreboard);
+        builder.addHeader(session.getPlayers());
+        builder.addBody(session, session.getPlayers());
+        builder.build();
+    }
+
+    @Override
     protected void registerActivitySpecificServices() {
 
     }
@@ -62,13 +75,6 @@ public class DisplayScoresTable extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-
-        //Populate table
-        TableLayout header = findView(R.id.DisplayScoresTable_header);
-        TableLayout scoreboard = findView(R.id.DisplayScoresTable_table);
-        ScoreBoardBuilder builder = new ScoreBoardBuilder(this, header, scoreboard);
-        builder.addHeader(session.getPlayers());
-        builder.addBody(session, session.getPlayers());
-        builder.build();
+        //Populating is done in update
     }
 }

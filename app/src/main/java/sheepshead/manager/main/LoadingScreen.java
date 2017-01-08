@@ -45,6 +45,14 @@ public class LoadingScreen extends AbstractBaseActivity {
         super(LOADING_SCREEN);
     }
 
+    @Override
+    protected void updateUserInterface() {
+        if (!loadingStarted) {
+            loadingStarted = true;
+            SheepsheadManagerApplication.getInstance().loadingScreen();
+
+        }
+    }
 
     @Override
     protected void registerActivitySpecificServices() {
@@ -58,13 +66,6 @@ public class LoadingScreen extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-
-        if (!loadingStarted) {
-            loadingStarted = true;
-            SheepsheadManagerApplication.getInstance().loadingScreen();
-
-        }
-
         //Temporarily go to the home screen by one click
         View activityPanel = findView(R.id.activity_loading_screen);
         activityPanel.setOnClickListener(new View.OnClickListener() {

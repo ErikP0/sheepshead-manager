@@ -126,6 +126,12 @@ public class FillGameResult extends AbstractBaseActivity {
         allPlayers = session.getPlayers();
     }
 
+    @Override
+    protected void updateUserInterface() {
+        //this activity will return to its parent
+        // & has no session relevant information to display
+    }
+
 
     @Override
     protected void registerActivitySpecificServices() {
@@ -137,7 +143,7 @@ public class FillGameResult extends AbstractBaseActivity {
 
     @Override
     protected void removeActivitySpecificServices() {
-        gameTypeGroup.addListener();
+        gameTypeGroup.removeListener();
         schneiderSchwarzGroup.removeListener();
         kontraReGroup.removeListener();
         toutSieGroup.removeListener();
@@ -187,6 +193,7 @@ public class FillGameResult extends AbstractBaseActivity {
         nonCallerSelection = specNonCallerSelection;
         callerSelection.setAvailablePlayers(allPlayers);
         nonCallerSelection.setAvailablePlayers(allPlayers);
+
 
         //Create schneider/schwarz group
         final CheckBox checkboxSchneider = findView(R.id.FillGameResult_checkbox_is_schneider);

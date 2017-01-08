@@ -141,6 +141,11 @@ public class CreateSession extends AbstractBaseActivity {
         revalidateIcons();
     }
 
+    @Override
+    protected void updateUserInterface() {
+        //noHistory activity i.e. it won't be placed on the back stack
+    }
+
     /**
      * Attempts to add a new player with <code>name</code>.
      * Is a player with the same name already added, the user gets notifier via Dialog and the new
