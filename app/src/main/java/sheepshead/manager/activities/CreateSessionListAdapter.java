@@ -39,7 +39,7 @@ import sheepshead.manager.uicontrolutils.MultiViewFixedSizeExpanableListAdapter;
  * Customized adapter for the CreateSession-Activity.
  * This adapter can be created via its Builder ({@link CreateSessionListAdapter.Builder}
  */
-public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAdapter<CreateSessionListAdapter.CustomListHeader, AbstractListItem> {
+class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAdapter<CreateSessionListAdapter.CustomListHeader, AbstractListItem> {
 
     private CreateSessionListAdapter(Context c, CustomListHeader[] header, AbstractListItem[] items) {
         super(c, header, items);
@@ -52,7 +52,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
      *                 the last pair has position <code>getGroupCount()-1</code>
      * @param newState The new state for the header
      */
-    public void changeItemState(int position, @NonNull ListItemState newState) {
+    void changeItemState(int position, @NonNull ListItemState newState) {
         View headerView = getHeaderView(position);
         getHeader(position).setState(headerView, newState);
     }
@@ -60,7 +60,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
     /**
      * A state for the completeness of each selection header-item-pair.
      */
-    public enum ListItemState {
+    enum ListItemState {
         /**
          * Indicates that the selection is missing something or is invalid
          */
@@ -88,7 +88,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
      * A custom header for the CreateSession-Activity. This header consists of a title message and a
      * state icon that shows the completeness of the current section
      */
-    protected static class CustomListHeader extends AbstractListHeader {
+    static class CustomListHeader extends AbstractListHeader {
         private static final
         @IdRes
         int titleElement = R.id.ListGroupHeader_header_textView;
@@ -99,13 +99,13 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
         private String title;
         private ListItemState headerState;
 
-        public CustomListHeader(String headerText, ListItemState state) {
+        CustomListHeader(String headerText, ListItemState state) {
             super(R.layout.list_group_header);
             title = headerText;
             headerState = state;
         }
 
-        public void setState(View v, @NonNull ListItemState newState) {
+        void setState(View v, @NonNull ListItemState newState) {
             if (!headerState.equals(newState)) {
                 headerState = newState;
                 updateIcon(v);
@@ -138,7 +138,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
     /**
      * Convenience Builder for {@link CreateSessionListAdapter}.
      */
-    public static class Builder {
+    static class Builder {
         private Context context;
         private List<CustomListHeader> headerList;
         private List<AbstractListItem> itemList;
@@ -146,7 +146,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
         /**
          * Creates a new builder with the given Context c
          *
-         * @param c
+         * @param c The context
          */
         public Builder(@NonNull Context c) {
             context = c;
@@ -164,7 +164,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
          * @see CreateSessionListAdapter#getHeader(int)
          * @see CreateSessionListAdapter#getItem(int)
          */
-        public int addItem(String headerText, ListItemState state, @NonNull AbstractListItem item) {
+        int addItem(String headerText, ListItemState state, @NonNull AbstractListItem item) {
             int index = headerList.size();
             headerList.add(new CustomListHeader(headerText, state));
             itemList.add(item);
@@ -181,7 +181,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
          * @see CreateSessionListAdapter#getHeader(int)
          * @see CreateSessionListAdapter#getItem(int)
          */
-        public int addItem(String headerText, @NonNull AbstractListItem item) {
+        int addItem(String headerText, @NonNull AbstractListItem item) {
             return addItem(headerText, ListItemState.PENDING, item);
         }
 
@@ -189,7 +189,7 @@ public class CreateSessionListAdapter extends MultiViewFixedSizeExpanableListAda
          * @return a {@link CreateSessionListAdapter} containing all header-item-pairs that were added
          * prior to this call
          */
-        public CreateSessionListAdapter build() {
+        CreateSessionListAdapter build() {
             CustomListHeader[] headers = new CustomListHeader[headerList.size()];
             AbstractListItem[] items = new AbstractListItem[itemList.size()];
             headers = headerList.toArray(headers);

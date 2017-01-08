@@ -146,9 +146,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
      * <code>Button b = findView(someId)</code> instead of
      * <code>Button b = (Button)findViewById(someId)</code>
      *
-     * @param id
-     * @param <T> result type
-     * @return
+     * @param id  The id of the view to find
+     * @param <T> result type Type of the resulting view
+     * @return The same result as {@link #findViewById(int)} but casted to the receiving variable type
      */
     protected <T extends android.view.View> T findView(@android.support.annotation.IdRes int id) {
         return (T) findViewById(id);
@@ -158,7 +158,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
      * Performs an intent to a "up" activity (an activity that belongs on top of the backstack).
      * Consider {@link #finish()} if the activity wants to return to its parent/a activity on the backstack below it
      *
-     * @param target
+     * @param target The activity class where the intent will be headed
      */
     protected void intentToUpActivity(Class<? extends AbstractBaseActivity> target) {
         Intent intent = new Intent(this, target);

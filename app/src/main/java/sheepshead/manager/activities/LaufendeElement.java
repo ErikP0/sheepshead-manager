@@ -30,9 +30,7 @@ public abstract class LaufendeElement {
     public abstract String toString();
 
     /**
-     * Returns the amount of "Laufende" represented by this element
-     *
-     * @return
+     * @return Returns the amount of "Laufende" represented by this element
      */
     public abstract int getAnzLaufende();
 
@@ -61,7 +59,7 @@ public abstract class LaufendeElement {
          * <li>{@link GameType#WENZ} returns 4 elements (0, 2, 3, 4 laufende) </li>
          * <lie>{@link GameType#SAUSPIEL}, {@link GameType#SOLO} return 7 elements (0, 3-8 laufende)</lie>
          *
-         * @return
+         * @return an array containing matching elements depending on the game type
          */
         public LaufendeElement[] build() {
             if (type.equals(GameType.LEER)) {
@@ -83,9 +81,7 @@ public abstract class LaufendeElement {
         }
 
         /**
-         * Creates and returns a element for {@link GameType#LEER}
-         *
-         * @return
+         * @return Creates and returns an element for {@link GameType#LEER}
          */
         private LaufendeElement[] createEmptySpinner() {
             LaufendeElement[] result = {new LaufendeElementNoGameTypeSelected()};
@@ -99,7 +95,7 @@ public abstract class LaufendeElement {
     private static class LaufendeElementNumber extends LaufendeElement {
         private int number;
 
-        public LaufendeElementNumber(int n) {
+        LaufendeElementNumber(int n) {
             number = n;
         }
 

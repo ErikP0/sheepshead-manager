@@ -283,7 +283,7 @@ class DialogPlayerSelection implements IPlayerSelection, DialogInterface.OnDismi
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onDismiss(DialogInterface d) {
         dialog = null;
         otherSelection.tryAutoFill(this);
     }
