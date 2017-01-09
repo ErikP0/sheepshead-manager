@@ -16,6 +16,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sheepshead.manager">
 
+    <!-- Need a permission to write files to external storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
     <application
         android:name=".appcore.SheepsheadManagerApplication"
         android:allowBackup="true"

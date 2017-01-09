@@ -119,6 +119,10 @@ public class Session {
         return savedGames.descendingIterator();
     }
 
+    public Iterator<SingleGameResult> iterator() {
+        return savedGames.iterator();
+    }
+
     public String printInfo() {
         StringBuilder builder = new StringBuilder();
         builder.append("Aktueller Kontostand:\n");
