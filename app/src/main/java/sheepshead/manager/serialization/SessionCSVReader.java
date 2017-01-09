@@ -85,7 +85,7 @@ public class SessionCSVReader implements ISessionReader {
             if (inEscaped) {
                 if (cellContent.endsWith(escape)) {
                     //add the whole cell group (excludng the escape character at the end)
-                    mergedCells.add(currentCell + cellContent.substring(0, cellContent.length() - 1));
+                    mergedCells.add(currentCell + separator + cellContent.substring(0, cellContent.length() - 1));
                     currentCell = "";
                     inEscaped = false;
                 } else {

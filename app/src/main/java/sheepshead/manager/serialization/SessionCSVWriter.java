@@ -51,13 +51,14 @@ public class SessionCSVWriter implements ISessionWriter {
         while (it.hasNext()) {
             write(rule.getWriter().writeGame(session, it.next()), writer);
         }
+        writer.flush();
     }
 
     private void write(List<String> row, Writer writer) throws IOException, SessionDataCorruptedException {
         int index = 0;
         for (String cell : row) {
             String pre = index > 0 ? separator : "";
-            String post = index < row.size() - 1 ? separator : "";
+            String post = "";
             if (cell.contains(escape)) {
                 throw new SessionDataCorruptedException("The following string contains the control character (" + escape + ") which is not allowed: " + cell);
             }
