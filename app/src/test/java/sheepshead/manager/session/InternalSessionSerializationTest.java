@@ -19,8 +19,10 @@ package sheepshead.manager.session;
 
 import android.support.annotation.Nullable;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,6 +50,16 @@ import static org.junit.Assert.assertTrue;
 public class InternalSessionSerializationTest {
 
     private static final String outputPath = "test.csv";
+
+    @AfterClass
+    public static void cleanup() {
+        //remove the file, if existing
+        File f = new File(outputPath);
+        if (f.exists()) {
+            boolean success = f.delete();
+            assertTrue(success);
+        }
+    }
 
     @Test
     public void testDummySession() throws IOException, SessionDataCorruptedException {
