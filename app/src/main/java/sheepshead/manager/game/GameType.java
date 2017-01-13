@@ -18,12 +18,15 @@ package sheepshead.manager.game;
 
 import java.io.Serializable;
 
+import sheepshead.manager.serialization.CSVCellContent;
+import sheepshead.manager.serialization.ICSVSerializable;
+
 /**
  * A game type describes a game mode in Schafkopf.
  * Currently available gamemodes are Sauspiel (2vs2), Wenz und Solo (1vs3).
  * A dummy game type LEER is provided for easy representation of a game type not yet selected
  */
-public enum GameType implements Serializable {
+public enum GameType implements Serializable, ICSVSerializable {
 
     SAUSPIEL(1, 3, 8, 2),
     WENZ(3, 2, 4, 1),
@@ -55,13 +58,17 @@ public enum GameType implements Serializable {
         numberOfCallers = numCallers;
     }
 
+    public static GameType getGameType(CSVCellContent.Reader data) {
+        int index = data.getInteger();
+        return GameType.values()[index];
+    }
+
     /**
      * @return The amount of players on the calling side for this game type
      */
     public int getNumberOfCallers() {
         return numberOfCallers;
     }
-
 
     public int getTeamMultiplier() {
         return teamMultiplier;
@@ -81,4 +88,8 @@ public enum GameType implements Serializable {
         return maxLaufendeIncl;
     }
 
+    @Override
+    public void toCSVSerializableString(CSVCellContent content) {
+        content.put(ordinal());
+    }
 }

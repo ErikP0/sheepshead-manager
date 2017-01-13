@@ -19,12 +19,15 @@ package sheepshead.manager.game;
 
 import android.support.annotation.NonNull;
 
+import sheepshead.manager.serialization.CSVCellContent;
+import sheepshead.manager.serialization.ICSVSerializable;
+
 /**
  * A PlayerRole represents a player in a specific single game.
  * So a player role is connected to the session persistent player representation (class Player) but
  * it contains game specific members like being on the calling side or having won the game.
  */
-public class PlayerRole {
+public class PlayerRole implements ICSVSerializable {
 
     /**
      * The connected session persistent player
@@ -62,6 +65,21 @@ public class PlayerRole {
         player = associatedPlayer;
         isCaller = hasCalled;
         isWinner = hasWon;
+    }
+
+    public PlayerRole(@NonNull Player associatedPlayer, CSVCellContent.Reader data) {
+        this(associatedPlayer, data.getBoolean(), data.getBoolean());
+        setMoney(data.getInteger());
+        setPlayerBalance(data.getInteger());
+    }
+
+    @Override
+    public void toCSVSerializableString(CSVCellContent content) {
+        //watch out! the order is important!
+        content.put(isCaller);
+        content.put(isWinner);
+        content.put(moneyWon);
+        content.put(balance);
     }
 
     /**

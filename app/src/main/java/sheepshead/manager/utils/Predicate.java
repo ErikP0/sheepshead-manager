@@ -14,18 +14,12 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.serialization;
+package sheepshead.manager.utils;
 
 
-import java.util.List;
+import android.support.annotation.Nullable;
 
-import sheepshead.manager.session.Session;
+public interface Predicate<T> {
 
-public interface CSVRead {
-
-    void readHeader(List<String> headerCellContent) throws SessionDataCorruptedException;
-
-    void readGame(List<String> rowContent) throws SessionDataCorruptedException;
-
-    Session buildSession();
+    boolean evaluate(@Nullable T element);
 }

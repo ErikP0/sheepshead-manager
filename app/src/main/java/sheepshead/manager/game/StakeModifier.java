@@ -16,11 +16,14 @@
 
 package sheepshead.manager.game;
 
+import sheepshead.manager.serialization.CSVCellContent;
+import sheepshead.manager.serialization.ICSVSerializable;
+
 /**
  * The class StakeModifier is a collection of information that modify the stake of a single game.
  * E.g. the "Schneider" modifier adds the base stake, the "Kontra" modifier doubles the stake
  */
-public class StakeModifier {
+public class StakeModifier implements ICSVSerializable {
 
     private boolean isKontra;
 
@@ -55,6 +58,28 @@ public class StakeModifier {
         this.numberOfLaufende = 0;
     }
 
+    public StakeModifier(CSVCellContent.Reader data) {
+        this();
+        setKontra(data.getBoolean());
+        setRe(data.getBoolean());
+        setTout(data.getBoolean());
+        setSie(data.getBoolean());
+        setSchneider(data.getBoolean());
+        setSchwarz(data.getBoolean());
+        setNumberOfLaufende(data.getInteger());
+    }
+
+    @Override
+    public void toCSVSerializableString(CSVCellContent content) {
+        // The order is important!
+        content.put(isKontra);
+        content.put(isRe);
+        content.put(isTout);
+        content.put(isSie);
+        content.put(isSchneider);
+        content.put(isSchwarz);
+        content.put(numberOfLaufende);
+    }
 
     public boolean isRe() {
         return isRe;

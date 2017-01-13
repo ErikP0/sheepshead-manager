@@ -14,18 +14,22 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.serialization;
+package sheepshead.manager.utils;
 
 
-import java.util.List;
+import android.support.annotation.NonNull;
 
-import sheepshead.manager.session.Session;
+import java.util.Collection;
 
-public interface CSVRead {
+public class CollectionUtils {
 
-    void readHeader(List<String> headerCellContent) throws SessionDataCorruptedException;
-
-    void readGame(List<String> rowContent) throws SessionDataCorruptedException;
-
-    Session buildSession();
+    @NonNull
+    public static <T> Optional<T> findFirst(@NonNull Collection<T> collection, @NonNull Predicate<T> pred) {
+        for (T element : collection) {
+            if (pred.evaluate(element)) {
+                return Optional.ofValue(element);
+            }
+        }
+        return Optional.empty();
+    }
 }

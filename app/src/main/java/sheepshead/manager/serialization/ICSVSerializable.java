@@ -17,15 +17,7 @@
 package sheepshead.manager.serialization;
 
 
-import java.util.List;
+public interface ICSVSerializable {
 
-import sheepshead.manager.session.Session;
-
-public interface CSVRead {
-
-    void readHeader(List<String> headerCellContent) throws SessionDataCorruptedException;
-
-    void readGame(List<String> rowContent) throws SessionDataCorruptedException;
-
-    Session buildSession();
+    void toCSVSerializableString(CSVCellContent content);
 }

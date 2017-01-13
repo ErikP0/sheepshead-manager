@@ -122,5 +122,13 @@ public class SingleGameResult {
         return null;
     }
 
+    public GameType getGameType() {
+        return gameType;
+    }
+
+    public StakeModifier getStakeModifier() {
+        return stakeModifier;
+    }
+
 
 }

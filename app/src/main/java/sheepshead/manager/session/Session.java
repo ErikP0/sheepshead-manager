@@ -101,6 +101,10 @@ public class Session {
         return null;
     }
 
+    public Stake getSessionStake() {
+        return sessionStake;
+    }
+
     /**
      * @return The amount of game results stored in the session
      */
