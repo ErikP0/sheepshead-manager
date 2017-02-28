@@ -33,6 +33,7 @@ public class SessionCSVWriter implements ISessionWriter {
     private final CSVRules rule;
     private String escape;
     private String separator;
+    private int bytesWritten;
 
     public SessionCSVWriter(CSVRules csvRule) {
         rule = csvRule;
@@ -42,6 +43,7 @@ public class SessionCSVWriter implements ISessionWriter {
 
     @Override
     public void writeOut(Session session, OutputStream stream) throws IOException, SessionDataCorruptedException {
+        bytesWritten = 0;
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, rule.getEncoding()));
         //Write header
         write(rule.getWriter().writeHeader(session), writer);
@@ -66,10 +68,16 @@ public class SessionCSVWriter implements ISessionWriter {
                 pre += escape;
                 post += escape;
             }
-            writer.write(pre + cell + post);
+            String toWrite = pre + cell + post;
+            bytesWritten += toWrite.getBytes(rule.getEncoding()).length;
+            writer.write(toWrite);
 
             index++;
         }
         writer.write(System.getProperty("line.separator"));
+    }
+
+    public int getBytesWritten() {
+        return bytesWritten;
     }
 }

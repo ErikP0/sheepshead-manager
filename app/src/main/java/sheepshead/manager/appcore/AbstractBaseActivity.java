@@ -107,15 +107,6 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         removeActivitySpecificServices();
     }
 
-    @Override
-    public void onStop() {
-        /*
-        onStop is called when the application gets terminated
-         */
-        super.onStop();
-        SheepsheadManagerApplication.getInstance().saveApplicationState();
-    }
-
     /**
      * Add/Register UserInterface-Listener or specific services here
      */

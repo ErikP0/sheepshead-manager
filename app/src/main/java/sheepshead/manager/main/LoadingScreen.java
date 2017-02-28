@@ -49,10 +49,30 @@ public class LoadingScreen extends AbstractBaseActivity {
 
     @Override
     protected void updateUserInterface() {
+        final View loadingScreen = findViewById(R.id.activity_loading_screen);
         if (!loadingStarted) {
             loadingStarted = true;
-            SheepsheadManagerApplication.getInstance().loadingScreen();
+            //start loading the saved game in a separate worker thread
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SheepsheadManagerApplication.getInstance().loadingScreen();
+                    loadingScreen.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            intentToUpActivity(HomeScreen.class);
+                        }
+                    });
+                }
+            }).start();
 
+        } else {
+            loadingScreen.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    intentToUpActivity(HomeScreen.class);
+                }
+            }, 200);
         }
     }
 
@@ -68,14 +88,6 @@ public class LoadingScreen extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        //Temporarily go to the home screen by one click
-        View activityPanel = findView(R.id.activity_loading_screen);
-        activityPanel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intentToUpActivity(HomeScreen.class);
 
-            }
-        });
     }
 }

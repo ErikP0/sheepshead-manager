@@ -21,7 +21,6 @@ import sheepshead.manager.session.InternalSessionReader;
 import sheepshead.manager.session.InternalSessionWriter;
 
 public class CSVRules {
-    public static final CSVRules INTERNAL_LOAD_SAVE_RULE = new CSVRules(';', '"', "utf8", false, new InternalSessionWriter(), new InternalSessionReader());
 
 
     private char separator;

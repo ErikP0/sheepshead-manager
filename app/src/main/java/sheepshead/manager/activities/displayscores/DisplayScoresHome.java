@@ -117,4 +117,10 @@ public class DisplayScoresHome extends AbstractBaseActivity {
     private void showScoreboard() {
         intentToUpActivity(DisplayScoresTable.class);
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        SheepsheadManagerApplication.getInstance().saveApplicationState();
+    }
 }
