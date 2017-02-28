@@ -49,6 +49,11 @@ public class Optional<T> {
         return new Optional<>(value);
     }
 
+    @NonNull
+    public static <T> Optional<T> ofNullable(T value) {
+        return value == null ? Optional.<T>empty() : ofValue(value);
+    }
+
     public T getValue() {
         if (isEmpty) {
             throw new IllegalStateException("Optional is empty");

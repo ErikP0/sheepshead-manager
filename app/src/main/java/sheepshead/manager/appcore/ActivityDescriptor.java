@@ -17,10 +17,15 @@
 package sheepshead.manager.appcore;
 
 
+import android.app.Activity;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 import sheepshead.manager.utils.Optional;
 
@@ -43,6 +48,12 @@ public class ActivityDescriptor {
     @NonNull
     private Optional<Integer> toolbarTitle;
 
+    @NonNull
+    private Optional<Integer> toolbarMenuId;
+
+    @NonNull
+    private Map<Integer, MenuAction> actions;
+
     /**
      * The layout of this activity
      */
@@ -63,7 +74,23 @@ public class ActivityDescriptor {
         layoutId = layout;
         toolbarId = Optional.empty();
         toolbarTitle = Optional.empty();
+        toolbarMenuId = Optional.empty();
+        actions = new TreeMap<>();
         hasBackToParent = false;
+    }
+
+    public ActivityDescriptor toolbarMenu(@MenuRes int id) {
+        toolbarMenuId = Optional.ofValue(id);
+        return this;
+    }
+
+    public ActivityDescriptor menuAction(@IdRes int menuItem, @NonNull MenuAction action) {
+        if (!actions.containsKey(menuItem)) {
+            actions.put(menuItem, action);
+            return this;
+        } else {
+            throw new IllegalArgumentException("Duplicate action for menu id " + menuItem);
+        }
     }
 
     /**
@@ -108,11 +135,28 @@ public class ActivityDescriptor {
         return toolbarId;
     }
 
+    @NonNull
     Optional<Integer> getTitle() {
         return toolbarTitle;
+    }
+
+    @NonNull
+    Optional<Integer> getToolbarMenuId() {
+        return toolbarMenuId;
     }
 
     boolean hasNavigationBackToParentEnabled() {
         return hasBackToParent;
     }
+
+    @NonNull
+    Optional<MenuAction> getActionFor(@IdRes int menuId) {
+        return Optional.ofNullable(actions.get(menuId));
+    }
+
+    public interface MenuAction {
+        void onAction(Activity activity);
+    }
+
+
 }

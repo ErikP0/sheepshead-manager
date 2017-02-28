@@ -18,12 +18,16 @@ package sheepshead.manager.appcore;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import sheepshead.manager.R;
+import sheepshead.manager.utils.Optional;
 
 /**
  * Abstract superclass for all activities used.
@@ -76,7 +80,28 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             if (!activityDescriptor.getTitle().isEmpty()) {
                 toolbar.setTitle(activityDescriptor.getTitle().getValue());
             }
+
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!activityDescriptor.getToolbarMenuId().isEmpty()) {
+            getMenuInflater().inflate(activityDescriptor.getToolbarMenuId().getValue(), menu);
+        }
+        //return true for the menu to be shown
+        return !activityDescriptor.getToolbarMenuId().isEmpty();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        @IdRes int menuId = item.getItemId();
+        Optional<ActivityDescriptor.MenuAction> action = activityDescriptor.getActionFor(menuId);
+        if (!action.isEmpty()) {
+            action.getValue().onAction(this);
+            return true;//consume
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Nullable

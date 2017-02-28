@@ -87,4 +87,18 @@
     <string name="DisplayScores.btn_text_show_more">Mehr anzeigen</string>
     <string name="DisplayScores.text_number_of_game">Nr.</string>
     <string name="DisplayScores.text_player_not_participating">ausgesetzt</string>
+
+    <!-- Strings for Menu Items -->
+    <string name="Menu.saveSession">Sitzung speichern</string>
+    <string name="Menu.settings">Einstellungen</string>
+    <string name="Menu.no_session_available">Keine Sitzung vorhanden</string>
+
+    <!-- Strings for Dialogs -->
+    <!-- Dialog "Save Session" -->
+    <string name="DialogSaveSession.title_text">Sitzung speichern</string>
+    <string name="DialogSaveSession.insert_filename">Dateiname</string>
+    <string name="DialogSaveSession.btn_text_save">Speichern</string>
+    <string name="DialogSaveSession.info_text" formatted="false">Speicherort "%s"\n%s</string>
+    <string name="DialogSaveSession.error_empty_name">Der Dateiname darf nicht leer sein</string>
+    <string name="DialogSaveSession.error_invalid_name">Der Dateiname enthält ungültige Zeichen</string>
 </resources>

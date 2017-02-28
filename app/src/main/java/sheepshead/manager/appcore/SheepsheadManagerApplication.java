@@ -21,17 +21,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 import sheepshead.manager.serialization.CSVRules;
-import sheepshead.manager.serialization.SessionCSVReader;
-import sheepshead.manager.serialization.SessionCSVWriter;
+import sheepshead.manager.serialization.SerializationActions;
 import sheepshead.manager.serialization.SessionDataCorruptedException;
 import sheepshead.manager.session.InternalSessionReader;
 import sheepshead.manager.session.InternalSessionWriter;
@@ -100,33 +94,10 @@ public final class SheepsheadManagerApplication extends Application {
      * Called by {@link AbstractBaseActivity} when the application is terminating
      */
     public void saveApplicationState() {
-        //nothing to save yet
-        //System.out.println("Save");
-
         if (currentSession != null) {
             File dir = getFilesDir();
             File saveTo = new File(dir, sessionSavePath);
-            try {
-                FileOutputStream fos = new FileOutputStream(saveTo);
-                saveSession(fos);
-                fos.close();
-            } catch (FileNotFoundException ignore) {
-                //aparently we cannot save
-            } catch (IOException e) {
-                throw new RuntimeException("When closing: ", e);
-            }
-        }
-    }
-
-    private void saveSession(FileOutputStream fos) {
-        SessionCSVWriter writer = new SessionCSVWriter(INTERNAL_LOAD_SAVE_RULE);
-        try {
-            writer.writeOut(currentSession, fos);
-        } catch (IOException e) {
-            int bytes = writer.getBytesWritten();
-            throw new RuntimeException("Couldn't save session (I/O Error). Wrote " + bytes + "Bytes");
-        } catch (SessionDataCorruptedException e) {
-            throw new RuntimeException("Cannot save session due to ", e);
+            SerializationActions.saveSessionTo(currentSession, saveTo, INTERNAL_LOAD_SAVE_RULE);
         }
     }
 
@@ -134,27 +105,14 @@ public final class SheepsheadManagerApplication extends Application {
         File dir = getFilesDir();
         File loadFrom = new File(dir, sessionSavePath);
         if (loadFrom.exists() && currentSession == null) {
-            SessionCSVReader reader = new SessionCSVReader(INTERNAL_LOAD_SAVE_RULE);
             try {
-                FileInputStream fis = new FileInputStream(loadFrom);
-                currentSession = reader.readFrom(fis);
-                fis.close();
+                currentSession = SerializationActions.loadSession(loadFrom, INTERNAL_LOAD_SAVE_RULE);
             } catch (FileNotFoundException e) {
+                //should never be called (loadFrom.exists() -> true)
                 throw new RuntimeException(e);
-            } catch (IOException | SessionDataCorruptedException e) {
-                System.out.println("Could not load save file: " + e.getMessage());
-                e.printStackTrace();
-                //rename the file and keep it for debugging purposes
-                String newName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
-                        .format(Calendar.getInstance().getTime()) + "_corrupted_" + sessionSavePath;
-                File corr = new File(loadFrom.getParentFile(), newName);
-                boolean success = loadFrom.renameTo(corr);
-                System.out.print("Renamed corrupted file to " + newName);
-                if (success) {
-                    System.out.println(" with success");
-                } else {
-                    System.out.println(" with a failure");
-                }
+            } catch (IOException | SessionDataCorruptedException ignore) {
+                // could not load last session -> ignore
+                currentSession = null;
             }
         } else {
             System.out.println("No last session found");

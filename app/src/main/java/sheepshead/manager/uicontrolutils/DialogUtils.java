@@ -23,6 +23,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * Util class that contains methods to show different dialogs
  */
@@ -48,5 +51,14 @@ public final class DialogUtils {
         builder.setPositiveButton(buttonText, listener);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public static void showErrorDialog(@NonNull Context context, @NonNull Throwable throwable, @Nullable DialogInterface.OnClickListener listener) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter, true);
+        throwable.printStackTrace(writer);
+        String msg = stringWriter.getBuffer().toString();
+        showInfoDialog(context, msg, context.getString(android.R.string.ok), listener);
+
     }
 }
