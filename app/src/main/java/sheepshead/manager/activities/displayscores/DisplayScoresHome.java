@@ -26,6 +26,8 @@ import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.export.EmailExport;
+import sheepshead.manager.export.FileExport;
 import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
@@ -45,7 +47,8 @@ public class DisplayScoresHome extends AbstractBaseActivity {
     private static final ActivityDescriptor DISPLAY_SCORES_HOME = new ActivityDescriptor(R.layout.activity_display_scores_home)
             .toolbar(R.id.DisplayScores_toolbar)
             .title(R.string.Title_DisplayScoresHome)
-            .menuAction(R.id.menu_saveSession, SerializationActions.saveCurrentSessionAction(SerializationActions.sessionSaveDirectory))
+            .menuAction(R.id.menu_saveSession, FileExport.saveCurrentSession(SerializationActions.sessionSaveDirectory))
+            .menuAction(R.id.menu_shareEmail, EmailExport.emailCurrentSession())
             .toolbarMenu(R.menu.menu_display_scores_home)
             .enableNavigationBackToParent();
 

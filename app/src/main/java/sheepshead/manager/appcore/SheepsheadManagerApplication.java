@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import sheepshead.manager.export.FileExport;
 import sheepshead.manager.serialization.CSVRules;
 import sheepshead.manager.serialization.SerializationActions;
 import sheepshead.manager.serialization.SessionDataCorruptedException;
@@ -97,7 +98,8 @@ public final class SheepsheadManagerApplication extends Application {
         if (currentSession != null) {
             File dir = getFilesDir();
             File saveTo = new File(dir, sessionSavePath);
-            SerializationActions.saveSessionTo(currentSession, saveTo, INTERNAL_LOAD_SAVE_RULE);
+            FileExport.ExportParams params = new FileExport.ExportParams(saveTo, currentSession, INTERNAL_LOAD_SAVE_RULE);
+            new FileExport(null).startActionChain(params, null);//a null activity is ok as it is not needed for the action
         }
     }
 

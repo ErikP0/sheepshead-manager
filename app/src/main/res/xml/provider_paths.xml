@@ -14,23 +14,8 @@
   ~    limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <item
-        android:id="@+id/menu.saveSession"
-        android:orderInCategory="0"
-        android:title="@string/Menu.saveSession"
-        app:showAsAction="never" />
-
-    <item android:id="@+id/menu.shareEmail"
-        android:orderInCategory="1"
-        android:title="@string/Menu.shareEmail"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu.settings"
-        android:orderInCategory="2"
-        android:title="@string/Menu.settings"
-        app:showAsAction="never" />
-</menu>
+<paths>
+    <files-path
+        name="session.csv"
+        path="mailed/" />
+</paths>

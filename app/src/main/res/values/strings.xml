@@ -92,6 +92,7 @@
     <string name="Menu.saveSession">Sitzung speichern</string>
     <string name="Menu.settings">Einstellungen</string>
     <string name="Menu.no_session_available">Keine Sitzung vorhanden</string>
+    <string name="Menu.shareEmail">Per Email versenden</string>
 
     <!-- Strings for Dialogs -->
     <!-- Dialog "Save Session" -->
@@ -101,4 +102,19 @@
     <string name="DialogSaveSession.info_text" formatted="false">Speicherort "%s"\n%s</string>
     <string name="DialogSaveSession.error_empty_name">Der Dateiname darf nicht leer sein</string>
     <string name="DialogSaveSession.error_invalid_name">Der Dateiname enthält ungültige Zeichen</string>
+    <string name="EmailExport.subject">Ergebnisse meiner Schafkopfrunde</string>
+    <string name="EmailExport.chooser_title">Wähle Mailprogramm</string>
+    <string name="EmailExport.no_mail_installed">Kann keinen Email-Client auf dem Gerät finden.\nInstalliere einen Email-Client, der einen Nachrichten des Typs "message/rfc822" verarbeiten kann</string>
+
+    <!-- Dialog "Select CSV Rules" -->
+    <string name="DialogSelectCSVRule.title_text">Formatierung auswählen</string>
+    <string name="DialogSelectCSVRule.info_text">Das Spielergebnis wird im .csv-Format exportiert
+        und kann mit jedem gängigen Tabellenkalkulationsprogramm eingelesen und verarbeitet werden.
+    Dafür sind folgende Spezialzeichen auszuwählen, die auch beim Import im Tabellenprogramm einzustellen sind</string>
+    <string name="DialogSelectCSVRule.text_quote_cells">Jede Zelle maskieren</string>
+    <string name="DialogSelectCSVRule.text_separator">Trennzeichen</string>
+    <string name="DialogSelectCSVRule.text_escape_character">Maskierungszeichen</string>
+    <string name="DialogSelectCSVRule.text_encoding">Kodierung</string>
+    <string name="DialogSelectCSVRule.writer_delta_header">Im Spiel gewonnen</string>
+    <string name="DialogSelectCSVRule.writer_nr_header">SpielNr.</string>
 </resources>
