@@ -87,4 +87,7 @@
     <string name="DisplayScores.btn_text_show_more">Mehr anzeigen</string>
     <string name="DisplayScores.text_number_of_game">Nr.</string>
     <string name="DisplayScores.text_player_not_participating">ausgesetzt</string>
+    <string name="DisplayScores.dialog_delete_message">Letztes Ergbnis löschen?</string>
+    <string name="DisplayScores.dialog_delete_confirm">Löschen</string>
+    <string name="DisplayScores.dialog_delete_abort">Abbrechen</string>
 </resources>

@@ -15,6 +15,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_display_scores_portrait"
     android:layout_width="match_parent"
@@ -61,6 +62,15 @@
                 android:layout_alignParentRight="true"
                 android:text="@string/DisplayScores.btn_text_show_more"
                 android:textAllCaps="false" />
+
+            <ImageButton
+                android:id="@+id/DisplayScores.btn_delete_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/DisplayScores.btn_show_table"
+                app:srcCompat="@android:drawable/ic_menu_delete" />
 
         </RelativeLayout>
 

@@ -16,9 +16,12 @@
 
 package sheepshead.manager.activities.displayscores;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 
 import sheepshead.manager.R;
@@ -51,6 +54,8 @@ public class DisplayScoresHome extends AbstractBaseActivity {
      */
     private Session session;
 
+    private ImageButton deleteGameButton;
+
     /**
      * Don't create this activity by hand. Use an intent
      */
@@ -77,6 +82,7 @@ public class DisplayScoresHome extends AbstractBaseActivity {
         //generate and show the overview of players balances
         TableLayout playerPanel = findView(R.id.DisplayScores_panel_player_scores);
         createPlayerOverviewArea(playerPanel);
+        deleteGameButton.setEnabled(session.getLatestResult() != null);
     }
 
     @Override
@@ -99,6 +105,15 @@ public class DisplayScoresHome extends AbstractBaseActivity {
                 intentToUpActivity(FillGameResult.class);
             }
         });
+
+        //add functionality to the delete result button
+        deleteGameButton = findView(R.id.DisplayScores_btn_delete_result);
+        deleteGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteLatestGameResult();
+            }
+        });
     }
 
     private void createPlayerOverviewArea(TableLayout panel) {
@@ -116,5 +131,21 @@ public class DisplayScoresHome extends AbstractBaseActivity {
 
     private void showScoreboard() {
         intentToUpActivity(DisplayScoresTable.class);
+    }
+
+    private void deleteLatestGameResult() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.DisplayScores_dialog_delete_message);
+        builder.setCancelable(true).setNegativeButton(R.string.DisplayScores_dialog_delete_abort, null);
+        builder.setPositiveButton(R.string.DisplayScores_dialog_delete_confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == AlertDialog.BUTTON_POSITIVE) {
+                    session.removeLatestGameResult();
+                    updateUserInterface();
+                }
+            }
+        });
+        builder.show();
     }
 }

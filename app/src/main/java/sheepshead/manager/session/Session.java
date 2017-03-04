@@ -133,4 +133,16 @@ public class Session {
         return builder.toString();
     }
 
+    public void removeLatestGameResult() {
+        if (!savedGames.isEmpty()) {
+            SingleGameResult remove = savedGames.removeLast();
+            for (Player player : players) {
+                PlayerRole role = remove.findRole(player);
+                if (role != null) {
+                    player.setSessionMoney(player.getSessionMoney() - role.getMoney());
+                }
+            }
+        }
+    }
+
 }
