@@ -101,6 +101,10 @@ public class Session {
         return null;
     }
 
+    public Stake getSessionStake() {
+        return sessionStake;
+    }
+
     /**
      * @return The amount of game results stored in the session
      */
@@ -117,6 +121,13 @@ public class Session {
 
     public Iterator<SingleGameResult> getLatestFirstIterator() {
         return savedGames.descendingIterator();
+    }
+
+    /**
+     * @return An iterator ranging from the first (oldest) game result to the last (latest) game result
+     */
+    public Iterator<SingleGameResult> iterator() {
+        return savedGames.iterator();
     }
 
     public String printInfo() {

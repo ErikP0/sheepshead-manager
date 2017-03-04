@@ -66,13 +66,22 @@
 
         <activity
             android:name=".activities.displayscores.DisplayScoresTable"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".activities.displayscores.DisplayScoresHome">
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
         </activity>
 
+        <!-- The application can provide .csv files (saved sessions) for other applications -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="sheepshead.manager.export.EmailExport"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
     </application>
 

@@ -17,10 +17,15 @@
 package sheepshead.manager.appcore;
 
 
+import android.app.Activity;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 import sheepshead.manager.utils.Optional;
 
@@ -44,6 +49,18 @@ public class ActivityDescriptor {
     private Optional<Integer> toolbarTitle;
 
     /**
+     * The menu-resource-id describing the options menu for the toolbar, if available
+     */
+    @NonNull
+    private Optional<Integer> toolbarMenuId;
+
+    /**
+     * Describes the actions associated with the option menu items (specific their ids).
+     */
+    @NonNull
+    private Map<Integer, MenuAction> actions;
+
+    /**
      * The layout of this activity
      */
     @LayoutRes
@@ -63,7 +80,37 @@ public class ActivityDescriptor {
         layoutId = layout;
         toolbarId = Optional.empty();
         toolbarTitle = Optional.empty();
+        toolbarMenuId = Optional.empty();
+        actions = new TreeMap<>();
         hasBackToParent = false;
+    }
+
+    /**
+     * Sets the given menu to be the options menu of the toolbar
+     *
+     * @param id The id of the menu resource describing the menu structure
+     * @return this instance for chaining convenience
+     */
+    public ActivityDescriptor toolbarMenu(@MenuRes int id) {
+        toolbarMenuId = Optional.ofValue(id);
+        return this;
+    }
+
+    /**
+     * Assigns an action to a option menu item with the given id
+     *
+     * @param menuItem The id of the option item
+     * @param action   The associated action
+     * @return this instance for chaining convenience
+     * @throws IllegalArgumentException If there already is an action associated with the given item id
+     */
+    public ActivityDescriptor menuAction(@IdRes int menuItem, @NonNull MenuAction action) {
+        if (!actions.containsKey(menuItem)) {
+            actions.put(menuItem, action);
+            return this;
+        } else {
+            throw new IllegalArgumentException("Duplicate action for menu id " + menuItem);
+        }
     }
 
     /**
@@ -98,21 +145,68 @@ public class ActivityDescriptor {
         return this;
     }
 
+    /**
+     * @return the layout id
+     */
     @LayoutRes
     int getLayoutId() {
         return layoutId;
     }
 
+    /**
+     * @return the id of the toolbar widget, if any
+     */
     @NonNull
     Optional<Integer> getToolbarId() {
         return toolbarId;
     }
 
+    /**
+     * @return the string id of the toolbar title, if any
+     */
+    @NonNull
     Optional<Integer> getTitle() {
         return toolbarTitle;
     }
 
+    /**
+     * @return the menu resource id of the option menu of the toolbar, if any
+     */
+    @NonNull
+    Optional<Integer> getToolbarMenuId() {
+        return toolbarMenuId;
+    }
+
+    /**
+     * @return true if this activity defined a parent in AndroidManifest.xml
+     */
     boolean hasNavigationBackToParentEnabled() {
         return hasBackToParent;
     }
+
+    /**
+     * Returns the associated action for an item of the toolbar's options menu of this activity
+     *
+     * @param menuId The id of the menu item
+     * @return The associated action for the given menu item id, if any
+     */
+    @NonNull
+    Optional<MenuAction> getActionFor(@IdRes int menuId) {
+        return Optional.ofNullable(actions.get(menuId));
+    }
+
+    /**
+     * Specifies the action that will be called whenever the user selects a menu item of the toolbar's
+     * options menu
+     */
+    public interface MenuAction {
+        /**
+         * Will be called when the user selects a menu item with which this action is associated
+         *
+         * @param activity The current activity
+         */
+        void onAction(Activity activity);
+    }
+
+
 }

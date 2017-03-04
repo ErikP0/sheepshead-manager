@@ -18,11 +18,12 @@ package sheepshead.manager.session;
 
 
 import sheepshead.manager.game.GameType;
+import sheepshead.manager.serialization.CSVCellContent;
 
 /**
  * The stake class represents the different stake values for the game types and stake modifiers
  */
-public class Stake {
+public class Stake implements ICSVSerializable {
 
     /**
      * The base value used for Sauspiel and most of the stake modifiers
@@ -52,6 +53,18 @@ public class Stake {
         this.grundTarif = priceSauspiel;
         this.soloTarif = priceSolo;
         laufendeTarif = priceLaufende;
+    }
+
+    public Stake(CSVCellContent.Reader data) {
+        this(data.getInteger(), data.getInteger(), data.getInteger());
+    }
+
+    @Override
+    public void toCSVSerializableString(CSVCellContent content) {
+        // The order is important!
+        content.put(grundTarif);
+        content.put(soloTarif);
+        content.put(laufendeTarif);
     }
 
     /**
