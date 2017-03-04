@@ -53,6 +53,15 @@ public final class DialogUtils {
         dialog.show();
     }
 
+    /**
+     * Immediately shows a user information dialog with only one (confirm) button.
+     * A click on the button closes the dialog.
+     * The message of this dialog is the stacktrace of the given throwable
+     *
+     * @param context   The context/view this dialog operates in
+     * @param throwable Throwable to display the stacktrace
+     * @param listener  A listener that will be attached to the button
+     */
     public static void showErrorDialog(@NonNull Context context, @NonNull Throwable throwable, @Nullable DialogInterface.OnClickListener listener) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter, true);

@@ -20,7 +20,7 @@ package sheepshead.manager.game;
 import android.support.annotation.NonNull;
 
 import sheepshead.manager.serialization.CSVCellContent;
-import sheepshead.manager.serialization.ICSVSerializable;
+import sheepshead.manager.session.ICSVSerializable;
 
 /**
  * A PlayerRole represents a player in a specific single game.
@@ -67,6 +67,12 @@ public class PlayerRole implements ICSVSerializable {
         isWinner = hasWon;
     }
 
+    /**
+     * Creates a player role
+     *
+     * @param associatedPlayer the connected session persistent player
+     * @param data             A readonly csv data cell encoding a player role
+     */
     public PlayerRole(@NonNull Player associatedPlayer, CSVCellContent.Reader data) {
         this(associatedPlayer, data.getBoolean(), data.getBoolean());
         setMoney(data.getInteger());

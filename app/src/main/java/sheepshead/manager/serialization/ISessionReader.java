@@ -22,7 +22,22 @@ import java.io.InputStream;
 
 import sheepshead.manager.session.Session;
 
+/**
+ * Interface for describing a reader, i.e. an instance that parses a {@link InputStream} and produces
+ * a valid {@link Session}
+ */
 public interface ISessionReader {
 
+    /**
+     * Reads as much data as needed from the given {@link InputStream}, parses the data and returns
+     * a valid {@link Session}
+     *
+     * @param inputStream The stream to read from
+     * @return a session build from data of the given {@link InputStream}
+     * @throws IOException                   The implementation may choose to throw an
+     *                                       {@linkplain IOException} when encountering IO-Problems
+     * @throws SessionDataCorruptedException The implementation may choose to throw this exception when
+     *                                       encountering corrupted data or data that does not match the format the implementation expects
+     */
     Session readFrom(InputStream inputStream) throws IOException, SessionDataCorruptedException;
 }

@@ -24,11 +24,14 @@ import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.serialization.CSVCellContent;
-import sheepshead.manager.serialization.CSVWrite;
+import sheepshead.manager.serialization.SessionCSVWriter;
 import sheepshead.manager.serialization.SessionDataCorruptedException;
 
-public class InternalSessionWriter implements CSVWrite {
-    public static final char csvSeparator = ';';
+
+/**
+ * Implementation for the internal load and save format
+ */
+public class InternalSessionWriter implements SessionCSVWriter.Writer {
     public static final char contentSeparator = '|';
 
 

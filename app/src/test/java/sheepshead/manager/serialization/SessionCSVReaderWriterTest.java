@@ -37,6 +37,9 @@ import sheepshead.manager.session.Stake;
 import static org.junit.Assert.assertEquals;
 
 public class SessionCSVReaderWriterTest {
+    private static final CSVFormat format = new CSVFormat(';', '"', "utf8", false, null, null);
+
+
     private static final String lineSeparator = "\r\n";
     private static final String[] players = {"P1", "p2", "p3", "p4"};
     private static final String expected = "header1;header2;header3;\"header;w sep\"" + lineSeparator
@@ -49,7 +52,7 @@ public class SessionCSVReaderWriterTest {
     @Test
     public void testReadWriteNormal() throws IOException, SessionDataCorruptedException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        CSVRules rules = new CSVRules(';', '"', "utf8", false, new FakeSessionWriter(), new FakeSessionReader());
+        CSVFormat rules = new CSVFormat(';', '"', "utf8", false, new FakeSessionWriter(), new FakeSessionReader());
         SessionCSVWriter writer = new SessionCSVWriter(rules);
         Session fakeSession = prepareFakeSession();
         writer.writeOut(fakeSession, stream);
@@ -75,11 +78,11 @@ public class SessionCSVReaderWriterTest {
     @Test(expected = SessionDataCorruptedException.class)
     public void testReadEmpty() throws IOException, SessionDataCorruptedException {
         ByteArrayInputStream is = new ByteArrayInputStream(new byte[0]);
-        SessionCSVReader reader = new SessionCSVReader(new CSVRules());
+        SessionCSVReader reader = new SessionCSVReader(format);
         reader.readFrom(is);
     }
 
-    private static class FakeSessionWriter implements CSVWrite {
+    private static class FakeSessionWriter implements SessionCSVWriter.Writer {
         int i = 0;
 
         @Override
@@ -95,7 +98,7 @@ public class SessionCSVReaderWriterTest {
         }
     }
 
-    private static class FakeSessionReader implements CSVRead {
+    private static class FakeSessionReader implements SessionCSVReader.Reader {
         private List<String> headerList;
         private List<List<String>> bodyList;
 

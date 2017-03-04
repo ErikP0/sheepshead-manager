@@ -14,10 +14,24 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.serialization;
+package sheepshead.manager.session;
 
 
+import sheepshead.manager.serialization.CSVCellContent;
+
+/**
+ * A interface for csv serialization used in {@link InternalSessionReader}/{@link InternalSessionWriter}.
+ * When Implementing this interface, it is usually needed to provide a static factory method or a
+ * constructor for constructing an object from a {@link sheepshead.manager.serialization.CSVCellContent.Reader}
+ */
 public interface ICSVSerializable {
 
+    /**
+     * Called for serializing this object.
+     * The implementor can fill the given {@linkplain CSVCellContent} with attributes and values that
+     * need to be serialized
+     *
+     * @param content A object where attributes can be stored for serialization
+     */
     void toCSVSerializableString(CSVCellContent content);
 }

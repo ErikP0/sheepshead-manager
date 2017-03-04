@@ -19,6 +19,11 @@ package sheepshead.manager.utils;
 
 import android.support.annotation.Nullable;
 
+/**
+ * Predicate as found in the java 8 libraries
+ *
+ * @param <T>
+ */
 public interface Predicate<T> {
 
     boolean evaluate(@Nullable T element);

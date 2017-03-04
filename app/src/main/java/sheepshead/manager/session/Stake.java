@@ -19,7 +19,6 @@ package sheepshead.manager.session;
 
 import sheepshead.manager.game.GameType;
 import sheepshead.manager.serialization.CSVCellContent;
-import sheepshead.manager.serialization.ICSVSerializable;
 
 /**
  * The stake class represents the different stake values for the game types and stake modifiers

@@ -19,7 +19,7 @@ package sheepshead.manager.game;
 import java.io.Serializable;
 
 import sheepshead.manager.serialization.CSVCellContent;
-import sheepshead.manager.serialization.ICSVSerializable;
+import sheepshead.manager.session.ICSVSerializable;
 
 /**
  * A game type describes a game mode in Schafkopf.
@@ -58,6 +58,10 @@ public enum GameType implements Serializable, ICSVSerializable {
         numberOfCallers = numCallers;
     }
 
+    /**
+     * @param data A readonly csv data cell
+     * @return the game type encoded in the given csv data cell
+     */
     public static GameType getGameType(CSVCellContent.Reader data) {
         int index = data.getInteger();
         return GameType.values()[index];

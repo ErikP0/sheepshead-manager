@@ -17,7 +17,7 @@
 package sheepshead.manager.game;
 
 import sheepshead.manager.serialization.CSVCellContent;
-import sheepshead.manager.serialization.ICSVSerializable;
+import sheepshead.manager.session.ICSVSerializable;
 
 /**
  * The class StakeModifier is a collection of information that modify the stake of a single game.

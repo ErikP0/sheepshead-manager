@@ -56,7 +56,9 @@ public class LoadingScreen extends AbstractBaseActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    //perform (time consuming) loading
                     SheepsheadManagerApplication.getInstance().loadingScreen();
+                    //advance to next activity
                     loadingScreen.post(new Runnable() {
                         @Override
                         public void run() {

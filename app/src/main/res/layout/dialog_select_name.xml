@@ -34,14 +34,14 @@
             android:inputType="text|textNoSuggestions|textPersonName"
             android:maxLines="1"
             android:selectAllOnFocus="false"
-            android:text="@string/DialogSaveSession.insert_filename" />
+            android:text="@string/DialogSelectName.insert_filename" />
 
         <Button
             android:id="@+id/DialogSelectName.btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/DialogSaveSession.btn_text_save"
+            android:text="@android:string/ok"
             android:textAllCaps="false" />
 
     </LinearLayout>

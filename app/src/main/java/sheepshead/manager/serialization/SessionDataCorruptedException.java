@@ -16,8 +16,19 @@
 
 package sheepshead.manager.serialization;
 
-
+/**
+ * Exception indicating corrupted, missing, or unexpected data while reading or writing session data
+ */
 public class SessionDataCorruptedException extends Exception {
+    //reflecting all constructors of Exception
+
+    public SessionDataCorruptedException() {
+        super();
+    }
+
+    public SessionDataCorruptedException(Throwable throwable) {
+        super(throwable);
+    }
 
     public SessionDataCorruptedException(String message, Throwable cause) {
         super(message, cause);

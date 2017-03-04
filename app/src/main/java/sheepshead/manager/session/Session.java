@@ -123,6 +123,9 @@ public class Session {
         return savedGames.descendingIterator();
     }
 
+    /**
+     * @return An iterator ranging from the first (oldest) game result to the last (latest) game result
+     */
     public Iterator<SingleGameResult> iterator() {
         return savedGames.iterator();
     }

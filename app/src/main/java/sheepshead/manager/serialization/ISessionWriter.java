@@ -22,7 +22,21 @@ import java.io.OutputStream;
 
 import sheepshead.manager.session.Session;
 
+/**
+ * Interface for describing a writer, i.e. an instance that takes {@link Session} and writes data
+ * to a {@link OutputStream}
+ */
 public interface ISessionWriter {
 
+    /**
+     * Uses the given session to write data to the given {@link OutputStream}
+     *
+     * @param session The session to write data from
+     * @param stream  The stream to write data into
+     * @throws IOException                   The implementation may choose to throw an
+     *                                       {@linkplain IOException} when encountering IO-Problems
+     * @throws SessionDataCorruptedException The implementation may choose to throw this exception when
+     *                                       encountering corrupted data or data that does not match the format the implementation expects
+     */
     void writeOut(Session session, OutputStream stream) throws IOException, SessionDataCorruptedException;
 }

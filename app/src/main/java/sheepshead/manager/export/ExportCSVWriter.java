@@ -26,16 +26,23 @@ import sheepshead.manager.R;
 import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
-import sheepshead.manager.serialization.CSVWrite;
+import sheepshead.manager.serialization.SessionCSVWriter;
 import sheepshead.manager.serialization.SessionDataCorruptedException;
 import sheepshead.manager.session.Session;
 
-public class ExportCSVWriter implements CSVWrite {
+/**
+ * Implementation for a human-readable session export writer used e.g. for email export.
+ * The format should easily be imported into a excel program
+ */
+class ExportCSVWriter implements SessionCSVWriter.Writer {
 
     private Activity activity;
+    /**
+     * A ascending counter for the number of each single game result
+     */
     private int counter;
 
-    public ExportCSVWriter(Activity activity) {
+    ExportCSVWriter(Activity activity) {
         this.activity = activity;
         counter = 1;
     }

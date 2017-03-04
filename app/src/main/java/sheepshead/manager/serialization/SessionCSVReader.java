@@ -29,21 +29,40 @@ import java.util.List;
 
 import sheepshead.manager.session.Session;
 
+/**
+ * A generic .csv reader following the {@link ISessionReader} interface.
+ * This reader parses .csv-formatted data and turns it into an intermediate form that is then passed
+ * to the {@link CSVFormat}-instance for further action.
+ */
 public class SessionCSVReader implements ISessionReader {
 
-    private final CSVRules rules;
+    /**
+     * The format for this instance
+     */
+    private final CSVFormat format;
+    /**
+     * The escape character as string
+     */
     private String escape;
+    /**
+     * The separation character as string
+     */
     private String separator;
 
-    public SessionCSVReader(CSVRules csvRules) {
-        rules = csvRules;
-        escape = Character.toString(rules.getEscape());
-        separator = Character.toString(rules.getSeparator());
+    /**
+     * Constructs a new CSVReader able to parse the given format
+     *
+     * @param csvFormat The format to expect
+     */
+    public SessionCSVReader(CSVFormat csvFormat) {
+        format = csvFormat;
+        escape = Character.toString(format.getEscape());
+        separator = Character.toString(format.getSeparator());
     }
 
     @Override
     public Session readFrom(InputStream inputStream) throws IOException, SessionDataCorruptedException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, rules.getEncoding()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, format.getEncoding()));
         String currentLine = reader.readLine();
         if (currentLine == null) {
             throw new SessionDataCorruptedException("The file is empty!");
@@ -52,16 +71,16 @@ public class SessionCSVReader implements ISessionReader {
         if (currentParsedLine == null) {
             throw new SessionDataCorruptedException("Empty header!");
         }
-        rules.getReader().readHeader(currentParsedLine);
+        format.getReader().readHeader(currentParsedLine);
         while ((currentLine = reader.readLine()) != null) {
             currentParsedLine = parseLine(currentLine);
             //in the body, empty lines are ok
             if (currentParsedLine != null) {
-                rules.getReader().readGame(currentParsedLine);
+                format.getReader().readGame(currentParsedLine);
             }
         }
         reader.close();
-        return rules.getReader().buildSession();
+        return format.getReader().buildSession();
     }
 
     @Nullable
@@ -106,5 +125,36 @@ public class SessionCSVReader implements ISessionReader {
             throw new SessionDataCorruptedException("Escape sequence was not closed");
         }
         return mergedCells;
+    }
+
+    /**
+     * Interface for defining further action to turn the intermediate results into a session
+     */
+    public interface Reader {
+
+        /**
+         * Called when the header (i.e. the first line in the document) is parsed
+         *
+         * @param headerCellContent The contents of each cell in the header
+         * @throws SessionDataCorruptedException The implementation may choose to throw this exception when
+         *                                       encountering corrupted data or data that does not match the format the implementation expects
+         */
+        void readHeader(List<String> headerCellContent) throws SessionDataCorruptedException;
+
+        /**
+         * Called when the data describing one game (usually one line) is parsed
+         *
+         * @param rowContent The contents of all cells belonging to the same game
+         * @throws SessionDataCorruptedException The implementation may choose to throw this exception when
+         *                                       encountering corrupted data or data that does not match the format the implementation expects
+         */
+        void readGame(List<String> rowContent) throws SessionDataCorruptedException;
+
+        /**
+         * Called when no more data is available and the session can be constructed
+         *
+         * @return a session
+         */
+        Session buildSession();
     }
 }

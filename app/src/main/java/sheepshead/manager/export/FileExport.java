@@ -28,19 +28,27 @@ import java.io.IOException;
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.serialization.CSVRules;
+import sheepshead.manager.serialization.CSVFormat;
 import sheepshead.manager.serialization.SessionCSVWriter;
 import sheepshead.manager.serialization.SessionDataCorruptedException;
 import sheepshead.manager.session.Session;
 import sheepshead.manager.uicontrolutils.DialogUtils;
 
+
+/**
+ * A chainable export action that exports a session with a certain csv format to a certain file path.
+ * The exported file is passed to the next chain element
+ */
 public class FileExport extends ChainableExport<FileExport.ExportParams, File> {
 
-    public FileExport(@Nullable ChainableExport<File, ?> consumer) {
-        super(consumer);
+    /**
+     * @param next The next chain element, or null if this is supposed to be the last element
+     */
+    public FileExport(@Nullable ChainableExport<File, ?> next) {
+        super(next);
     }
 
-    private static void saveSessionTo(@NonNull Session session, @NonNull File file, @NonNull CSVRules format) {
+    private static void saveSessionTo(@NonNull Session session, @NonNull File file, @NonNull CSVFormat format) {
         SessionCSVWriter writer = new SessionCSVWriter(format);
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -54,6 +62,13 @@ public class FileExport extends ChainableExport<FileExport.ExportParams, File> {
         }
     }
 
+    /**
+     * Creates and returns a menu action that saves the current session.
+     * This first opens a dialog where the user can name the file, it is then exported to <code>saveDirName/filename_by_user</code>
+     *
+     * @param saveDirName The directory name where the exported session will be stored
+     * @return a menu action for saving the current session
+     */
     public static ActivityDescriptor.MenuAction saveCurrentSession(final String saveDirName) {
         return new ActivityDescriptor.MenuAction() {
             @Override
@@ -62,7 +77,7 @@ public class FileExport extends ChainableExport<FileExport.ExportParams, File> {
                 Session session = SheepsheadManagerApplication.getInstance().getCurrentSession();
                 if (session != null) {
                     new FileNameDialog("csv", new FileExport(null))
-                            .startActionChain(new ExportParams(saveDir, session, SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_RULE), activity);
+                            .startActionChain(new ExportParams(saveDir, session, SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_FORMAT), activity);
                 } else {
                     DialogUtils.showInfoDialog(activity, activity.getString(R.string.Menu_no_session_available), activity.getString(android.R.string.ok), null);
                 }
@@ -83,12 +98,15 @@ public class FileExport extends ChainableExport<FileExport.ExportParams, File> {
         }
     }
 
+    /**
+     * File Export Parameter Object that contains the destination, the format and the session to export
+     */
     public static class ExportParams {
         private File exportDestination;
-        private CSVRules exportRules;
+        private CSVFormat exportRules;
         private Session exportSession;
 
-        public ExportParams(@NonNull File file, @NonNull Session session, @NonNull CSVRules rules) {
+        public ExportParams(@NonNull File file, @NonNull Session session, @NonNull CSVFormat rules) {
             exportDestination = file;
             exportRules = rules;
             exportSession = session;
@@ -102,11 +120,11 @@ public class FileExport extends ChainableExport<FileExport.ExportParams, File> {
             exportDestination = newDestination;
         }
 
-        public CSVRules getCSVRules() {
+        public CSVFormat getCSVRules() {
             return exportRules;
         }
 
-        void setCSVRules(@NonNull CSVRules rule) {
+        void setCSVRules(@NonNull CSVFormat rule) {
             exportRules = rule;
         }
     }

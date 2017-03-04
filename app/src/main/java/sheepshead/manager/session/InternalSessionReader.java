@@ -30,10 +30,13 @@ import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.game.StakeModifier;
 import sheepshead.manager.serialization.CSVCellContent;
-import sheepshead.manager.serialization.CSVRead;
+import sheepshead.manager.serialization.SessionCSVReader;
 import sheepshead.manager.serialization.SessionDataCorruptedException;
 
-public class InternalSessionReader implements CSVRead {
+/**
+ * Implementation for the internal load and save format
+ */
+public class InternalSessionReader implements SessionCSVReader.Reader {
 
     private Session session;
 

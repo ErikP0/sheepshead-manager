@@ -31,27 +31,42 @@ import java.io.File;
 
 import sheepshead.manager.R;
 
+/**
+ * A chainable export action that opens a dialog and asks the user for a (file-)name. This filename is
+ * then set in the file export parameter object and passed to the next chain element
+ */
 public class FileNameDialog extends ChainableExport<FileExport.ExportParams, FileExport.ExportParams> implements TextWatcher, View.OnClickListener {
 
+    /**
+     * A regular expression pattern for filtering the users input
+     */
     private static final String allowedChars = "[\\w\\d\\s-]+";//alphanumeric and -_
 
-    private AlertDialog dialog;
+    /**
+     * The file extesion that will be appended to the user input
+     */
     private String extension;
 
     private Activity activity;
     private FileExport.ExportParams exportParams;
 
+    //dialog attributes
+    private AlertDialog dialog;
     private TextView infoTextView;
     private Button confirmButton;
     private EditText filenameInput;
 
+    /**
+     * @param fileExtension This extension is appended to the user input
+     * @param next          The next action, or null if this is supposed to be the last element in the chain
+     */
     public FileNameDialog(String fileExtension, @NonNull ChainableExport<FileExport.ExportParams, ?> next) {
         super(next);
         extension = fileExtension;
     }
 
     private void setInfoText(String errorText) {
-        String infoText = String.format(activity.getString(R.string.DialogSaveSession_info_text),
+        String infoText = String.format(activity.getString(R.string.DialogSelectName_info_text),
                 exportParams.getExportDestination().getAbsolutePath(), errorText);
         infoTextView.setText(infoText);
     }
@@ -70,7 +85,7 @@ public class FileNameDialog extends ChainableExport<FileExport.ExportParams, Fil
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
         dialogBuilder.setView(dialogView);
-        dialogBuilder.setTitle(R.string.DialogSaveSession_title_text);
+        dialogBuilder.setTitle(R.string.DialogSelectName_title_text);
         dialog = dialogBuilder.show();
     }
 
@@ -95,11 +110,11 @@ public class FileNameDialog extends ChainableExport<FileExport.ExportParams, Fil
         String errormsg = "";
         if (text.length() <= 0) {
             //text is empty -> show error message
-            errormsg = activity.getString(R.string.DialogSaveSession_error_empty_name);
+            errormsg = activity.getString(R.string.DialogSelectName_error_empty_name);
         } else {
             String name = text.toString();
             if (!name.matches(allowedChars)) {
-                errormsg = activity.getString(R.string.DialogSaveSession_error_invalid_name);
+                errormsg = activity.getString(R.string.DialogSelectName_error_invalid_name);
             }
         }
         confirmButton.setEnabled(errormsg.isEmpty());

@@ -34,16 +34,22 @@ import java.util.Iterator;
 import java.util.Map;
 
 import sheepshead.manager.R;
-import sheepshead.manager.serialization.CSVRules;
+import sheepshead.manager.serialization.CSVFormat;
 import sheepshead.manager.uicontrolutils.DialogUtils;
 
+/**
+ * A dialog where the user can specify the .csv-export format (escape and separation characters, encoding, ...).
+ * This can be part of a ExportChain described in {@link ChainableExport}
+ */
 public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, FileExport.ExportParams> implements Button.OnClickListener {
 
+    /**
+     * A list of all available file encodings/charsets
+     */
     private static final String[] available_encodings = getAvailableEncodings();
 
     private Activity activity;
     private FileExport.ExportParams params;
-    private CSVRules currentSelectedRules;
 
     private AlertDialog dialog;
 
@@ -54,6 +60,9 @@ public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, File
     private Spinner encodingSpinner;
     private Button confirmButton;
 
+    /**
+     * @param next The next element of the export chain, or null if this is supposed to be the last action
+     */
     public CSVRuleDialog(@NonNull ChainableExport<FileExport.ExportParams, ?> next) {
         super(next);
     }
@@ -74,7 +83,6 @@ public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, File
     protected void performAction(FileExport.ExportParams input, final Activity activity) {
         this.activity = activity;
         params = input;
-        currentSelectedRules = input.getCSVRules();
         //show dialog
         View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_select_csv_rules, null);
         quoteAllSwitch = (Switch) dialogView.findViewById(R.id.DialogSelectCSVRule_switch_quote_cells);
@@ -97,8 +105,8 @@ public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, File
                 android.R.layout.simple_spinner_dropdown_item,
                 available_encodings));
 
-        //apply default rules
-        apply(currentSelectedRules);
+        //apply input rules
+        apply(input.getCSVRules());
 
         //add button listener
         confirmButton.setOnClickListener(this);
@@ -110,7 +118,7 @@ public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, File
         dialog = builder.show();
     }
 
-    private void apply(CSVRules rule) {
+    private void apply(CSVFormat rule) {
         quoteAllSwitch.setChecked(rule.quoteEveryCell());
         separatorInput.setText(Character.toString(rule.getSeparator()));
         escapeInput.setText(Character.toString(rule.getEscape()));
@@ -135,7 +143,7 @@ public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, File
 
     @Override
     public void onClick(View v) {
-        CSVRules selectedRule = new CSVRules(getChar(separatorInput), getChar(escapeInput),
+        CSVFormat selectedRule = new CSVFormat(getChar(separatorInput), getChar(escapeInput),
                 available_encodings[encodingSpinner.getSelectedItemPosition()],
                 quoteAllSwitch.isChecked(), new ExportCSVWriter(activity), null);//<-- no reader supplied
         params.setCSVRules(selectedRule);

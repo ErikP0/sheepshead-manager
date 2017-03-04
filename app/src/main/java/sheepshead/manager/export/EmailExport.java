@@ -30,10 +30,20 @@ import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.session.Session;
 import sheepshead.manager.uicontrolutils.DialogUtils;
 
+/**
+ * A chainable export action that lets the user pick an installed email client and starts a send-email
+ * intent with a file as attachment
+ */
 public class EmailExport extends ChainableExport<File, Void> {
 
+    /**
+     * The authority string for the email attachment file provider
+     */
     private static final String MAIL_AUTHORITY = "sheepshead.manager.export.EmailExport";
 
+    /**
+     * @return A menu action that exports the current session via email
+     */
     public static ActivityDescriptor.MenuAction emailCurrentSession() {
         return new ActivityDescriptor.MenuAction() {
             @Override
@@ -42,7 +52,7 @@ public class EmailExport extends ChainableExport<File, Void> {
                 if (session != null) {
                     //The only valid email attachment path is defined in xml/provider_paths.xml
                     File attachmentPath = new File(activity.getFilesDir(), "mailed/session.csv");
-                    FileExport.ExportParams params = new FileExport.ExportParams(attachmentPath, session, SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_RULE);
+                    FileExport.ExportParams params = new FileExport.ExportParams(attachmentPath, session, SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_FORMAT);
                     new CSVRuleDialog(new FileExport(new EmailExport())).startActionChain(params, activity);
                 } else {
                     DialogUtils.showInfoDialog(activity, activity.getString(R.string.Menu_no_session_available), activity.getString(android.R.string.ok), null);

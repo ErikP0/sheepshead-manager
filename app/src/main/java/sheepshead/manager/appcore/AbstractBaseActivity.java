@@ -95,6 +95,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //this is called when an item is selected from the appbar's options menu
         @IdRes int menuId = item.getItemId();
         Optional<ActivityDescriptor.MenuAction> action = activityDescriptor.getActionFor(menuId);
         if (!action.isEmpty()) {

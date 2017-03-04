@@ -65,13 +65,13 @@ public class InternalSessionSerializationTest {
     public void testDummySession() throws IOException, SessionDataCorruptedException {
         Session session = new DummySession();
         FileOutputStream fos = new FileOutputStream(outputPath);
-        ISessionWriter writer = new SessionCSVWriter(SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_RULE);
+        ISessionWriter writer = new SessionCSVWriter(SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_FORMAT);
         writer.writeOut(session, fos);
         fos.flush();
         fos.close();
 
         FileInputStream fis = new FileInputStream(outputPath);
-        ISessionReader reader = new SessionCSVReader(SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_RULE);
+        ISessionReader reader = new SessionCSVReader(SheepsheadManagerApplication.INTERNAL_LOAD_SAVE_FORMAT);
         Session loaded = reader.readFrom(fis);
         fis.close();
 
