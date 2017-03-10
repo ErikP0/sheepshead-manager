@@ -96,10 +96,21 @@
     <string name="Menu.settings">Einstellungen</string>
     <string name="Menu.no_session_available">Keine Sitzung vorhanden</string>
     <string name="Menu.shareEmail">Per Email versenden</string>
+    <string name="Menu.loadSession">Sitzung laden</string>
+
     <string name="EmailExport.subject">Ergebnisse meiner Schafkopfrunde</string>
     <string name="EmailExport.chooser_title">Wähle Mailprogramm</string>
     <string name="EmailExport.no_mail_installed">Kann keinen Email-Client auf dem Gerät finden.\n
         Installiere einen Email-Client, der Nachrichten des Typs "message/rfc822" verarbeiten kann</string>
+
+    <string name="SessionImport.text_io_exception" formatted="false">Kann Datei %s nicht laden.\nEin-/Ausgabefehler: %s</string>
+    <string name="SessionImport.text_session_corrupted" formatted="false">Die ausgewählte Datei scheint keine
+    Sitzungsdaten zu enthalten.\nFehler: %s</string>
+    <string name="SessionImport.dialog_title">Sitzung laden?</string>
+    <string name="SessionImport.dialog_confirm">Laden</string>
+    <string name="Sessionimport.dialog_abort">Abbrechen</string>
+    <string name="SessionImport.dialog_messsage" formatted="false">%d Spieler (%s) mit %d eingetragenen Spielen.%s</string>
+    <string name="SessionImport.dialog_unsaved_progress_warning">\nDer nicht gespeicherte Fortschritt der aktuellen Sitzung geht verloren</string>
 
     <!-- Strings for Dialogs -->
     <!-- Dialog "Select name" -->
@@ -120,4 +131,7 @@
     <string name="DialogSelectCSVRule.text_encoding">Kodierung</string>
     <string name="DialogSelectCSVRule.writer_delta_header">Im Spiel gewonnen</string>
     <string name="DialogSelectCSVRule.writer_nr_header">SpielNr.</string>
+
+    <!-- Dialog File Chooser -->
+    <string name="DialogFileChooser.title_text">Wähle Sitzung</string>
 </resources>

@@ -35,7 +35,7 @@ import sheepshead.manager.R;
  * A chainable export action that opens a dialog and asks the user for a (file-)name. This filename is
  * then set in the file export parameter object and passed to the next chain element
  */
-public class FileNameDialog extends ChainableExport<FileExport.ExportParams, FileExport.ExportParams> implements TextWatcher, View.OnClickListener {
+public class FileNameDialog extends ChainableAction<FileExport.ExportParams, FileExport.ExportParams> implements TextWatcher, View.OnClickListener {
 
     /**
      * A regular expression pattern for filtering the users input
@@ -60,7 +60,7 @@ public class FileNameDialog extends ChainableExport<FileExport.ExportParams, Fil
      * @param fileExtension This extension is appended to the user input
      * @param next          The next action, or null if this is supposed to be the last element in the chain
      */
-    public FileNameDialog(String fileExtension, @NonNull ChainableExport<FileExport.ExportParams, ?> next) {
+    public FileNameDialog(String fileExtension, @NonNull ChainableAction<FileExport.ExportParams, ?> next) {
         super(next);
         extension = fileExtension;
     }

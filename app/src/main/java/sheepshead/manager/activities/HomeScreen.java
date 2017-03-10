@@ -25,6 +25,8 @@ import sheepshead.manager.activities.displayscores.DisplayScoresHome;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
+import sheepshead.manager.export.SessionImport;
+import sheepshead.manager.serialization.SerializationActions;
 
 /**
  * A home screen where the user can chose to continue the last session or to create a new session
@@ -36,6 +38,8 @@ public class HomeScreen extends AbstractBaseActivity {
      */
     private static final ActivityDescriptor HOME_SCREEN = new ActivityDescriptor(R.layout.activity_home_screen)
             .toolbar(R.id.HomeScreen_toolbar)
+            .toolbarMenu(R.menu.menu_homescreen)
+            .menuAction(R.id.menu_loadSession, SessionImport.loadSession(SerializationActions.sessionSaveDirectory))
             .title(R.string.Title_HomeScreen);
 
     public HomeScreen() {

@@ -34,7 +34,7 @@ import sheepshead.manager.uicontrolutils.DialogUtils;
  * A chainable export action that lets the user pick an installed email client and starts a send-email
  * intent with a file as attachment
  */
-public class EmailExport extends ChainableExport<File, Void> {
+public class EmailExport extends ChainableAction<File, Void> {
 
     /**
      * The authority string for the email attachment file provider

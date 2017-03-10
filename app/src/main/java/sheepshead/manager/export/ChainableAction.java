@@ -21,8 +21,8 @@ import android.app.Activity;
 import android.support.annotation.Nullable;
 
 /**
- * A ChainableExport is one element of a chain of possible asynchronous actions that in the end lead
- * to an file/session export.
+ * A ChainableAction is one element of a chain of possible asynchronous actions. These may in the end
+ * lead to an file/session export or import.
  * Each chain element receives an argument from its caller, computes or performs its action and
  * supplies the next chain element with the computed result.
  * The start element receives its argument from the caller of the whole chain. The concept can be
@@ -39,34 +39,34 @@ import android.support.annotation.Nullable;
  * <br>
  * <br>
  * Implementation details:<br>
- * {@link #performAction(U, Activity)}: This specifies the action of each ChainableExport implementation.
+ * {@link #performAction(U, Activity)}: This specifies the action of each ChainableAction implementation.
  * When the computation is finished, call {@link #nextAction(V, Activity)} to call the next action
  *
  * @param <U> The input argument type
  * @param <V> The output argument type
  */
-public abstract class ChainableExport<U, V> {
+public abstract class ChainableAction<U, V> {
 
     /**
      * The next chain action, or null if this is the last element in the chain
      */
     private
     @Nullable
-    ChainableExport<V, ?> nextExport;
+    ChainableAction<V, ?> nextAction;
 
     /**
-     * Creates a new ChainableExport with the given action as the next action
+     * Creates a new ChainableAction with the given action as the next action
      *
      * @param next The next chain element, or null if this is supposed to be the last element in the chain
      */
-    protected ChainableExport(@Nullable ChainableExport<V, ?> next) {
-        nextExport = next;
+    protected ChainableAction(@Nullable ChainableAction<V, ?> next) {
+        nextAction = next;
     }
 
     /**
-     * Creates this ChainableExport as the last element in the export action chain
+     * Creates this ChainableAction as the last element in the export action chain
      */
-    protected ChainableExport() {
+    protected ChainableAction() {
         this(null);
     }
 
@@ -97,8 +97,8 @@ public abstract class ChainableExport<U, V> {
      * @param activity The current activity
      */
     protected void nextAction(V output, Activity activity) {
-        if (nextExport != null) {
-            nextExport.startActionChain(output, activity);
+        if (nextAction != null) {
+            nextAction.startActionChain(output, activity);
         }
     }
 }

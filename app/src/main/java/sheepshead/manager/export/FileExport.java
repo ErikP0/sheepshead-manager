@@ -39,12 +39,12 @@ import sheepshead.manager.uicontrolutils.DialogUtils;
  * A chainable export action that exports a session with a certain csv format to a certain file path.
  * The exported file is passed to the next chain element
  */
-public class FileExport extends ChainableExport<FileExport.ExportParams, File> {
+public class FileExport extends ChainableAction<FileExport.ExportParams, File> {
 
     /**
      * @param next The next chain element, or null if this is supposed to be the last element
      */
-    public FileExport(@Nullable ChainableExport<File, ?> next) {
+    public FileExport(@Nullable ChainableAction<File, ?> next) {
         super(next);
     }
 

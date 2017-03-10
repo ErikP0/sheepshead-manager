@@ -39,9 +39,9 @@ import sheepshead.manager.uicontrolutils.DialogUtils;
 
 /**
  * A dialog where the user can specify the .csv-export format (escape and separation characters, encoding, ...).
- * This can be part of a ExportChain described in {@link ChainableExport}
+ * This can be part of a ExportChain described in {@link ChainableAction}
  */
-public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, FileExport.ExportParams> implements Button.OnClickListener {
+public class CSVRuleDialog extends ChainableAction<FileExport.ExportParams, FileExport.ExportParams> implements Button.OnClickListener {
 
     /**
      * A list of all available file encodings/charsets
@@ -63,7 +63,7 @@ public class CSVRuleDialog extends ChainableExport<FileExport.ExportParams, File
     /**
      * @param next The next element of the export chain, or null if this is supposed to be the last action
      */
-    public CSVRuleDialog(@NonNull ChainableExport<FileExport.ExportParams, ?> next) {
+    public CSVRuleDialog(@NonNull ChainableAction<FileExport.ExportParams, ?> next) {
         super(next);
     }
 
