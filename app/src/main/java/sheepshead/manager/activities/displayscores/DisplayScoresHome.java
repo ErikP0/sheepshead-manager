@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 
 import sheepshead.manager.R;
+import sheepshead.manager.activities.DiagramActivity;
 import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
@@ -118,6 +119,15 @@ public class DisplayScoresHome extends AbstractBaseActivity {
             @Override
             public void onClick(View v) {
                 deleteLatestGameResult();
+            }
+        });
+
+        //add functionality to show diagram button
+        ImageButton showDiagramButton = findView(R.id.DisplayScores_btn_show_diagrams);
+        showDiagramButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intentToUpActivity(DiagramActivity.class);
             }
         });
     }

@@ -131,6 +131,7 @@ public class Session {
     /**
      * @return all players in the session
      */
+    @NonNull
     public Collection<Player> getPlayers() {
         return players;
     }

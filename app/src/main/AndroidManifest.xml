@@ -73,6 +73,12 @@
                 android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
         </activity>
 
+        <activity android:name=".activities.DiagramActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
+        </activity>
+
         <!-- The application can provide .csv files (saved sessions) for other applications -->
         <provider
             android:name="android.support.v4.content.FileProvider"

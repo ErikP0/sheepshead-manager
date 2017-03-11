@@ -45,6 +45,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
+
             <Button
                 android:id="@+id/DisplayScores.btn_add_single_game_result"
                 android:layout_width="wrap_content"
@@ -71,6 +72,15 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/DisplayScores.btn_show_table"
                 app:srcCompat="@android:drawable/ic_menu_delete" />
+
+            <ImageButton
+                android:id="@+id/DisplayScores.btn_show_diagrams"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/DisplayScores.btn_add_single_game_result"
+                app:srcCompat="@android:drawable/ic_menu_mapmode" />
 
         </RelativeLayout>
 
