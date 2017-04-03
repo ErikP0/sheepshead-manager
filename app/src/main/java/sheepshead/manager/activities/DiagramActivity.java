@@ -18,35 +18,33 @@ package sheepshead.manager.activities;
 
 
 import android.os.Bundle;
-
-import com.jjoe64.graphview.DefaultLabelFormatter;
-import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.LegendRenderer;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.Series;
-
-import java.text.NumberFormat;
-import java.util.Iterator;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ViewFlipper;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
-import sheepshead.manager.game.Player;
-import sheepshead.manager.game.PlayerRole;
-import sheepshead.manager.game.SingleGameResult;
+import sheepshead.manager.diagram.DiagramDataCreator;
+import sheepshead.manager.diagram.DiagramFactory;
+import sheepshead.manager.diagram.androidview.AVFactory;
+import sheepshead.manager.diagram.diagramtypes.MoneyBalanceDiagram;
+import sheepshead.manager.diagram.diagramtypes.WinLoseDiagram;
 import sheepshead.manager.session.Session;
-import sheepshead.manager.utils.ColorManagement;
+import sheepshead.manager.uicontrolutils.SwipeListener;
+import sheepshead.manager.utils.Consumer;
 
-public class DiagramActivity extends AbstractBaseActivity {
+public class DiagramActivity extends AbstractBaseActivity implements Consumer<SwipeListener.SwipeDirection> {
 
     private static final ActivityDescriptor DIAGRAM_ACTIVITY =
             new ActivityDescriptor(R.layout.activity_diagram)
                     .enableNavigationBackToParent()
                     .toolbar(R.id.DiagramActivity_toolbar);
 
-    private GraphView diagramView;
+    private static final DiagramFactory FACTORY = new AVFactory();
+    private final DiagramDataCreator[] diagramTypes = {new WinLoseDiagram(), new MoneyBalanceDiagram()};
+    private ViewFlipper flipper;
 
     public DiagramActivity() {
         super(DIAGRAM_ACTIVITY);
@@ -64,30 +62,45 @@ public class DiagramActivity extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
-        diagramView = findView(R.id.DiagramActivity_graph_view);
-        // activate horizontal zooming and scrolling
-        diagramView.getViewport().setScalable(true);
-        // activate horizontal scrolling
-        diagramView.getViewport().setScrollable(true);
-        // activate horizontal and vertical zooming and scrolling
-        diagramView.getViewport().setScalableY(true);
-        // activate vertical scrolling
-        diagramView.getViewport().setScrollableY(true);
+        flipper = findView(R.id.DiagramActivity_view_container);
 
+        SwipeListener swipeListener = new SwipeListener();
+        swipeListener.addListener(SwipeListener.SwipeDirection.LEFT, this);
+        swipeListener.addListener(SwipeListener.SwipeDirection.RIGHT, this);
+        flipper.setOnGenericMotionListener(swipeListener);
         Session session = SheepsheadManagerApplication.getInstance().getCurrentSession();
 
-
-        for (Player player : session.getPlayers()) {
-            diagramView.addSeries(createLineSeriesFor(session, player));
+        for (DiagramDataCreator creator : diagramTypes) {
+            View diagramView = FACTORY.buildDiagram(this, creator.createFromSession(session)).getDiagramView();
+            flipper.addView(diagramView);
+            diagramView.setOnGenericMotionListener(swipeListener);
         }
-        diagramView.getLegendRenderer().setVisible(true);
-        diagramView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setMinimumFractionDigits(0);
-        nf.setMaximumFractionDigits(0);
-        nf.setMinimumIntegerDigits(1);
-        diagramView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
+        Button prev = findView(R.id.DiagramActivity_btn_prev);
+        Button next = findView(R.id.DiagramActivity_btn_next);
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accept(SwipeListener.SwipeDirection.LEFT);
+            }
+        });
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accept(SwipeListener.SwipeDirection.RIGHT);
+            }
+        });
+
+//        for (Player player : session.getPlayers()) {
+//            diagramView.addSeries(createLineSeriesFor(session, player));
+//        }
+//
+//
+//        NumberFormat nf = NumberFormat.getInstance();
+//        nf.setMinimumFractionDigits(0);
+//        nf.setMaximumFractionDigits(0);
+//        nf.setMinimumIntegerDigits(1);
+//        diagramView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
     }
 
     @Override
@@ -95,26 +108,16 @@ public class DiagramActivity extends AbstractBaseActivity {
 
     }
 
-    private Series<DataPoint> createLineSeriesFor(Session session, Player player) {
-        DataPoint[] points = new DataPoint[session.getGameAmount()];
-        Iterator<SingleGameResult> it = session.iterator();
-        int last = 0;
-        int game = 0;
-        while (it.hasNext()) {
-            PlayerRole role = it.next().findRole(player);
-            if (role != null) {
-                last = role.getPlayerBalance();
-            }
-            points[game] = new DataPoint(game, last);
-            game++;
+    @Override
+    public void accept(SwipeListener.SwipeDirection direction) {
+        if (direction.equals(SwipeListener.SwipeDirection.RIGHT)) {
+            flipper.setInAnimation(this, R.anim.in_left);
+            flipper.setOutAnimation(this, R.anim.out_right);
+            flipper.showPrevious();
+        } else if (direction.equals(SwipeListener.SwipeDirection.LEFT)) {
+            flipper.setInAnimation(this, R.anim.in_right);
+            flipper.setOutAnimation(this, R.anim.out_left);
+            flipper.showNext();
         }
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
-        series.setTitle(player.getName());
-        series.setColor(ColorManagement.getColorForPlayer(player));
-        series.setAnimated(true);
-        series.setDrawDataPoints(true);
-        series.setDataPointsRadius(3f);
-        series.setThickness(2);
-        return series;
     }
 }
