@@ -50,17 +50,39 @@ public class LineDiagramData implements Iterable<LineDiagramData.LineGraphData> 
     }
 
     public static class LineGraphData implements Comparator<LineGraphDataPoint>, Iterable<LineGraphDataPoint> {
+        private static final float DEFAULT_THICKNESS = 2;
+        private static final float DEFAULT_POINT_RADIUS = 4;
         private String label;
         private int color;
         private boolean isAnimated;
         private boolean drawDataPoints;
         private boolean hasConnectingLines;
+        private float thickness;
+        private float pointRadius;
 
         private SortedSet<LineGraphDataPoint> points;
 
         public LineGraphData(int color) {
             this.color = color;
             points = new TreeSet<>(this);
+            thickness = DEFAULT_THICKNESS;
+            pointRadius = DEFAULT_POINT_RADIUS;
+        }
+
+        public float getThickness() {
+            return thickness;
+        }
+
+        public void setThickness(float thickness) {
+            this.thickness = thickness;
+        }
+
+        public float getPointRadius() {
+            return pointRadius;
+        }
+
+        public void setPointRadius(float pointRadius) {
+            this.pointRadius = pointRadius;
         }
 
         public String getLabel() {

@@ -25,6 +25,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,13 @@ import sheepshead.manager.diagram.LineDiagramData;
 
 
 public class AVFactory implements DiagramFactory {
+    private static final Comparator<DataPoint> X_COMP = new Comparator<DataPoint>() {
+        @Override
+        public int compare(DataPoint o1, DataPoint o2) {
+            return Double.compare(o1.getX(), o2.getX());
+        }
+    };
+
     @Override
     public DiagramViewSupplier buildDiagram(Context context, DiagramData data) {
         GraphView diagramView = new GraphView(context);
@@ -61,14 +70,17 @@ public class AVFactory implements DiagramFactory {
 
     private void handleLineDiagram(LineDiagramData lineData, GraphView diagramView) {
         for (LineDiagramData.LineGraphData line : lineData) {
-
+            //TODO optimize: use array instead of arraylist in first place
             ArrayList<DataPoint> points = new ArrayList<>();
             for (LineDiagramData.LineGraphDataPoint point : line) {
-                points.add(new DataPoint(point.getXValue(), point.getXValue()));
+                points.add(new DataPoint(point.getXValue(), point.getYValue()));
             }
-            //TODO need ordering of values
+
+            Collections.sort(points, X_COMP);
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points.toArray(new DataPoint[points.size()]));
             series.setAnimated(line.isAnimated());
+            series.setThickness(Math.round(line.getThickness()));
+            series.setDataPointsRadius(Math.round(line.getPointRadius()));
             series.setDrawDataPoints(line.drawDataPoints());
             series.setDrawAsPath(line.hasConnectingLines());
             series.setColor(line.getColor());
