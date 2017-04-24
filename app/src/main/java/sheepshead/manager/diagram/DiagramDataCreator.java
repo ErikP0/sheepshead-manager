@@ -17,9 +17,13 @@
 package sheepshead.manager.diagram;
 
 
+import com.jjoe64.graphview.GraphView;
+
 import sheepshead.manager.session.Session;
 
 public interface DiagramDataCreator {
 
     DiagramFactory.DiagramData createFromSession(Session session);
+
+    void specialize(GraphView graphImpl);
 }

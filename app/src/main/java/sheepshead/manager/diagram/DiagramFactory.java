@@ -22,9 +22,11 @@ import android.content.Context;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import sheepshead.manager.session.Session;
+
 public interface DiagramFactory {
 
-    DiagramViewSupplier buildDiagram(Context context, DiagramData data);
+    DiagramViewSupplier buildDiagram(Context context, DiagramDataCreator data, Session session);
 
     class DiagramData {
         private Collection<BarDiagramData> barDiagrams;

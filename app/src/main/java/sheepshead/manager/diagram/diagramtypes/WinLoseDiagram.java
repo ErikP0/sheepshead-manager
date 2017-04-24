@@ -19,6 +19,9 @@ package sheepshead.manager.diagram.diagramtypes;
 
 import android.graphics.Color;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
+
 import java.util.Iterator;
 
 import sheepshead.manager.diagram.BarDiagramData;
@@ -62,5 +65,19 @@ public class WinLoseDiagram implements DiagramDataCreator {
         data.add(diagram);
 
         return data;
+    }
+
+    @Override
+    public void specialize(GraphView diagramView) {
+        // activate horizontal zooming and scrolling
+        diagramView.getViewport().setScalable(true);
+        // activate horizontal scrolling
+        diagramView.getViewport().setScrollable(true);
+        // activate horizontal and vertical zooming and scrolling
+        diagramView.getViewport().setScalableY(true);
+        // activate vertical scrolling
+        diagramView.getViewport().setScrollableY(true);
+        diagramView.getLegendRenderer().setVisible(true);
+        diagramView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
     }
 }

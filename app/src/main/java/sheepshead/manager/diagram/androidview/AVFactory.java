@@ -19,7 +19,6 @@ package sheepshead.manager.diagram.androidview;
 import android.content.Context;
 
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -32,9 +31,11 @@ import java.util.List;
 import java.util.Map;
 
 import sheepshead.manager.diagram.BarDiagramData;
+import sheepshead.manager.diagram.DiagramDataCreator;
 import sheepshead.manager.diagram.DiagramFactory;
 import sheepshead.manager.diagram.DiagramViewSupplier;
 import sheepshead.manager.diagram.LineDiagramData;
+import sheepshead.manager.session.Session;
 
 
 public class AVFactory implements DiagramFactory {
@@ -46,25 +47,16 @@ public class AVFactory implements DiagramFactory {
     };
 
     @Override
-    public DiagramViewSupplier buildDiagram(Context context, DiagramData data) {
+    public DiagramViewSupplier buildDiagram(Context context, DiagramDataCreator dataCreator, Session session) {
+        DiagramData data = dataCreator.createFromSession(session);
         GraphView diagramView = new GraphView(context);
-        // activate horizontal zooming and scrolling
-        diagramView.getViewport().setScalable(true);
-        // activate horizontal scrolling
-        diagramView.getViewport().setScrollable(true);
-        // activate horizontal and vertical zooming and scrolling
-        diagramView.getViewport().setScalableY(true);
-        // activate vertical scrolling
-        diagramView.getViewport().setScrollableY(true);
-        diagramView.getLegendRenderer().setVisible(true);
-        diagramView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-
         for (LineDiagramData line : data.getLineDiagrams()) {
             handleLineDiagram(line, diagramView);
         }
         for (BarDiagramData barDiagrams : data.getBarDiagrams()) {
             handleBarDiagram(barDiagrams, diagramView);
         }
+        dataCreator.specialize(diagramView);
         return new DiagramViewSupplier.SimpleViewSupplier(diagramView);
     }
 

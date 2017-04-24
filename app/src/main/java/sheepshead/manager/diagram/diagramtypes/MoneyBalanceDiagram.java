@@ -17,6 +17,9 @@
 package sheepshead.manager.diagram.diagramtypes;
 
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
+
 import java.util.Iterator;
 
 import sheepshead.manager.diagram.DiagramDataCreator;
@@ -58,5 +61,15 @@ public class MoneyBalanceDiagram implements DiagramDataCreator {
         DiagramFactory.DiagramData data = new DiagramFactory.DiagramData();
         data.add(diagram);
         return data;
+    }
+
+    @Override
+    public void specialize(GraphView diagramView) {
+        // activate horizontal zooming and scrolling
+        diagramView.getViewport().setScalable(true);
+        // activate horizontal scrolling
+        diagramView.getViewport().setScrollable(true);
+        diagramView.getLegendRenderer().setVisible(true);
+        diagramView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
     }
 }

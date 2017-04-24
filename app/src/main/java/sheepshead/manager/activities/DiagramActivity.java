@@ -71,7 +71,7 @@ public class DiagramActivity extends AbstractBaseActivity implements Consumer<Sw
         Session session = SheepsheadManagerApplication.getInstance().getCurrentSession();
 
         for (DiagramDataCreator creator : diagramTypes) {
-            View diagramView = FACTORY.buildDiagram(this, creator.createFromSession(session)).getDiagramView();
+            View diagramView = FACTORY.buildDiagram(this, creator, session).getDiagramView();
             flipper.addView(diagramView);
             diagramView.setOnGenericMotionListener(swipeListener);
         }
