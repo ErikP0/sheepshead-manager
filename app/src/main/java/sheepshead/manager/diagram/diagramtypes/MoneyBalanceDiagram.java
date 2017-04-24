@@ -17,6 +17,8 @@
 package sheepshead.manager.diagram.diagramtypes;
 
 
+import android.graphics.Color;
+
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LegendRenderer;
 
@@ -25,6 +27,7 @@ import java.util.Iterator;
 import sheepshead.manager.diagram.DiagramDataCreator;
 import sheepshead.manager.diagram.DiagramFactory;
 import sheepshead.manager.diagram.LineDiagramData;
+import sheepshead.manager.diagram.androidview.GameLabelFormatter;
 import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
@@ -67,9 +70,9 @@ public class MoneyBalanceDiagram implements DiagramDataCreator {
     public void specialize(GraphView diagramView) {
         // activate horizontal zooming and scrolling
         diagramView.getViewport().setScalable(true);
-        // activate horizontal scrolling
-        diagramView.getViewport().setScrollable(true);
         diagramView.getLegendRenderer().setVisible(true);
         diagramView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        diagramView.getLegendRenderer().setBackgroundColor(Color.TRANSPARENT);
+        diagramView.getGridLabelRenderer().setLabelFormatter(new GameLabelFormatter());
     }
 }

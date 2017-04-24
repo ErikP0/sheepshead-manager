@@ -20,9 +20,14 @@ package sheepshead.manager.diagram.diagramtypes;
 import android.graphics.Color;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.Series;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import sheepshead.manager.diagram.BarDiagramData;
 import sheepshead.manager.diagram.DiagramDataCreator;
@@ -34,11 +39,15 @@ import sheepshead.manager.session.Session;
 
 public class WinLoseDiagram implements DiagramDataCreator {
 
+    private List<String> playerNames;
+
     public DiagramFactory.DiagramData createFromSession(Session s) {
+        playerNames = new ArrayList<>(s.getPlayers().size());
         BarDiagramData diagram = new BarDiagramData("Spiele gewonnen/verloren", 30);
 
         for (Player player : s.getPlayers()) {
-            BarDiagramData.BarGroup group = new BarDiagramData.BarGroup(player.getName(), 5);
+            playerNames.add(player.getName());
+            BarDiagramData.BarGroup group = new BarDiagramData.BarGroup(player.getName(), 30);
 
             int won = 0;
             int lost = 0;
@@ -55,9 +64,7 @@ public class WinLoseDiagram implements DiagramDataCreator {
             }
 
             group.addBar(new BarDiagramData.BarData(won, Color.GREEN, "Gewonnen"));
-            group.addBar(new BarDiagramData.BarData(-lost, Color.RED, "Verloren"));
-            int ratioColor = won - lost > 0 ? Color.GREEN : Color.RED;
-            group.addBar(new BarDiagramData.BarData(won - lost, ratioColor, "Verhältnis"));
+            group.addBar(new BarDiagramData.BarData(lost, Color.RED, "Verloren"));
 
             diagram.addGroup(group);
         }
@@ -69,15 +76,16 @@ public class WinLoseDiagram implements DiagramDataCreator {
 
     @Override
     public void specialize(GraphView diagramView) {
-        // activate horizontal zooming and scrolling
+        diagramView.getGridLabelRenderer().setGridStyle(GridLabelRenderer.GridStyle.NONE);
+        diagramView.getGridLabelRenderer().setVerticalLabelsVisible(false);
+        diagramView.getGridLabelRenderer().setHorizontalLabelsVisible(false);
         diagramView.getViewport().setScalable(true);
-        // activate horizontal scrolling
-        diagramView.getViewport().setScrollable(true);
-        // activate horizontal and vertical zooming and scrolling
-        diagramView.getViewport().setScalableY(true);
-        // activate vertical scrolling
-        diagramView.getViewport().setScrollableY(true);
         diagramView.getLegendRenderer().setVisible(true);
         diagramView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        for (Series series : diagramView.getSeries()) {
+            BarGraphSeries bar = (BarGraphSeries) series;
+            bar.setDrawValuesOnTop(true);
+            bar.setValuesOnTopColor(Color.BLACK);
+        }
     }
 }
