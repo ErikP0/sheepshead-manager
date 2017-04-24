@@ -28,7 +28,6 @@ import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.diagram.DiagramDataCreator;
 import sheepshead.manager.diagram.DiagramFactory;
-import sheepshead.manager.diagram.androidview.AVFactory;
 import sheepshead.manager.diagram.diagramtypes.MoneyBalanceDiagram;
 import sheepshead.manager.diagram.diagramtypes.WinLoseDiagram;
 import sheepshead.manager.session.Session;
@@ -42,7 +41,7 @@ public class DiagramActivity extends AbstractBaseActivity implements Consumer<Sw
                     .enableNavigationBackToParent()
                     .toolbar(R.id.DiagramActivity_toolbar);
 
-    private static final DiagramFactory FACTORY = new AVFactory();
+    private static final DiagramFactory FACTORY = null;
     private final DiagramDataCreator[] diagramTypes = {new WinLoseDiagram(), new MoneyBalanceDiagram()};
     private ViewFlipper flipper;
 
@@ -94,13 +93,6 @@ public class DiagramActivity extends AbstractBaseActivity implements Consumer<Sw
 //        for (Player player : session.getPlayers()) {
 //            diagramView.addSeries(createLineSeriesFor(session, player));
 //        }
-//
-//
-//        NumberFormat nf = NumberFormat.getInstance();
-//        nf.setMinimumFractionDigits(0);
-//        nf.setMaximumFractionDigits(0);
-//        nf.setMinimumIntegerDigits(1);
-//        diagramView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(nf, nf));
     }
 
     @Override
