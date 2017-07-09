@@ -28,6 +28,7 @@ import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.diagram.DiagramDataCreator;
 import sheepshead.manager.diagram.DiagramFactory;
+import sheepshead.manager.diagram.androidplot.APFactory;
 import sheepshead.manager.diagram.diagramtypes.MoneyBalanceDiagram;
 import sheepshead.manager.diagram.diagramtypes.WinLoseDiagram;
 import sheepshead.manager.session.Session;
@@ -41,7 +42,7 @@ public class DiagramActivity extends AbstractBaseActivity implements Consumer<Sw
                     .enableNavigationBackToParent()
                     .toolbar(R.id.DiagramActivity_toolbar);
 
-    private static final DiagramFactory FACTORY = null;
+    private static final DiagramFactory FACTORY = new APFactory();
     private final DiagramDataCreator[] diagramTypes = {new WinLoseDiagram(), new MoneyBalanceDiagram()};
     private ViewFlipper flipper;
 

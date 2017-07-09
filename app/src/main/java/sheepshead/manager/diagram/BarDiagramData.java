@@ -36,6 +36,10 @@ public class BarDiagramData implements Iterable<BarDiagramData.BarGroup> {
         groups = new LinkedList<>();
     }
 
+    public int getGroupAmount() {
+        return groups.size();
+    }
+
     @Override
     public Iterator<BarGroup> iterator() {
         return groups.iterator();

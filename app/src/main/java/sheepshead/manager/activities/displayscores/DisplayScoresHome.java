@@ -25,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 
 import sheepshead.manager.R;
-import sheepshead.manager.activities.DiagramActivity;
 import sheepshead.manager.activities.fillgameresult.FillGameResult;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
@@ -37,6 +36,7 @@ import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.serialization.SerializationActions;
 import sheepshead.manager.session.Session;
+import sheepshead.manager.uicontrolutils.DialogUtils;
 
 /**
  * Activity that shows an overview for the current session.
@@ -127,7 +127,9 @@ public class DisplayScoresHome extends AbstractBaseActivity {
         showDiagramButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentToUpActivity(DiagramActivity.class);
+                //TODO enable when fixed
+                //intentToUpActivity(DiagramActivity.class);
+                DialogUtils.showInfoDialog(DisplayScoresHome.this, "This feature is not yet implemented", "OK", null);
             }
         });
     }
