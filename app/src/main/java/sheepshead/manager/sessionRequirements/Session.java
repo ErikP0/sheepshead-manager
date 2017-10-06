@@ -106,6 +106,14 @@ public class Session {
         playerList.get((firstPlayerToParticipate + 3) % playerList.size()).setParticipant(true);
     }
 
+    //für Testzwecke
+    public void showScoreBoard(){
+        for (int i = 0; i < scoreBoard.size(); i++){
+            gameResults.get(i).showSingleGameLine();
+            System.out.println();
+        }
+        System.out.println();
+    }
 
     public ArrayList<Player> getPlayerList() {
         return playerList;

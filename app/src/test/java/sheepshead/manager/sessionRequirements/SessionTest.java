@@ -98,15 +98,72 @@ public class SessionTest {
         player3.setCaller(true);
         session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 0, 2, 3, 4 //-10, 150, -40, -40, -60
 
-        ArrayList<Integer> line2OfScoreBoard = session.getLineOfScoreBoard(2);
-        for (Player player : players){
-            System.out.print(player.getPriceToGetInSession()+ " ");
-        }
-        assertEquals((int)line2OfScoreBoard.get(0), player0.getPriceToGetInSession());
-        assertEquals((int)line2OfScoreBoard.get(2), player1.getPriceToGetInSession());
-        assertEquals((int)line2OfScoreBoard.get(4), player2.getPriceToGetInSession());
-        assertEquals((int)line2OfScoreBoard.get(6), player3.getPriceToGetInSession());
-        assertEquals((int)line2OfScoreBoard.get(8), player4.getPriceToGetInSession());
+        session.showScoreBoard();
+        assertEquals((int)session.getLineOfScoreBoard(2).get(0), player0.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(2).get(2), player1.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(2).get(4), player2.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(2).get(6), player3.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(2).get(8), player4.getPriceToGetInSession());
+    }
+
+    @Test
+    public void addNewSingleGameResultScoreBoardWorks2() throws Exception {
+        session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 0, 1, 2, 3 //jeder Spieler 0+
+        gameType = GameType.SOLO; //
+        player1.setHasWon(true);
+        player1.setCaller(true);
+        session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 1, 2, 3, 4 //0, 150, -50, -50, -50
+        gameType = GameType.SAUSPIEL;
+        player1.setHasWon(false);
+        player1.setCaller(false);
+        player2.setHasWon(true);
+        player2.setCaller(true);
+        player3.setHasWon(true);
+        player3.setCaller(true);
+        session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 0, 2, 3, 4 //
+        gameType = GameType.SOLO; //
+        player1.setHasWon(true);
+        player1.setCaller(true);
+        player2.setHasWon(false);
+        player2.setCaller(false);
+        player3.setHasWon(false);
+        player3.setCaller(false);
+        session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 0, 1, 3, 4 //
+        gameType = GameType.SAUSPIEL;
+        player1.setHasWon(false);
+        player1.setCaller(false);
+        player2.setHasWon(true);
+        player2.setCaller(true);
+        player4.setHasWon(true);
+        player4.setCaller(true);
+        session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 0, 1, 2, 4 //
+        gameType = GameType.SOLO; //
+        player1.setHasWon(true);
+        player1.setCaller(true);
+        player2.setHasWon(false);
+        player2.setCaller(false);
+        player4.setHasWon(false);
+        player4.setCaller(false);
+        session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 0, 1, 2, 3 //
+        gameType = GameType.SAUSPIEL;
+        player1.setHasWon(false);
+        player1.setCaller(false);
+        player2.setHasWon(true);
+        player2.setCaller(true);
+        player3.setHasWon(true);
+        player3.setCaller(true);
+        session.addNewSingleGameResult(gameType, stakeModifier); //Spieler sind 1, 2, 3, 4 //
+        player2.setHasWon(false);
+        player2.setCaller(false);
+        player3.setHasWon(false);
+        player3.setCaller(false);
+
+        session.showScoreBoard();
+        assertEquals((int)session.getLineOfScoreBoard(6).get(0), player0.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(6).get(2), player1.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(6).get(4), player2.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(6).get(6), player3.getPriceToGetInSession());
+        assertEquals((int)session.getLineOfScoreBoard(6).get(8), player4.getPriceToGetInSession());
     }
 
 }

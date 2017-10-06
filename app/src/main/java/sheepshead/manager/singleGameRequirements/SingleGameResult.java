@@ -119,4 +119,17 @@ public class SingleGameResult {
         return singleGameMoney;
     }
 
+    public void showSingleGameLine(){
+        String string;
+        String leerzeichen = "";
+        for (int i = 0; i < singleGameMoney.size(); i++){
+            string = singleGameMoney.get(i) + "";
+            for (int j = 0; j < (6 - string.length()); j++){
+                leerzeichen += " ";
+            }
+            System.out.print(leerzeichen + string + " ");
+            leerzeichen = "";
+        }
+    }
+
 }
