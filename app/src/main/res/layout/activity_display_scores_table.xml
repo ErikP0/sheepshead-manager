@@ -24,51 +24,10 @@
         android:id="@+id/DisplayScoresTable.toolbar"
         layout="@layout/toolbar" />
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/DisplayScoresTable.toolbar">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/scoreboard_background">
-
-
-            <TableLayout
-                android:id="@+id/DisplayScoresTable.header_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true">
-
-                <include layout="@layout/display_scores_header" />
-            </TableLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/DisplayScoresTable.header_container">
-
-
-                <TableLayout
-                    android:id="@+id/DisplayScoresTable.table"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </TableLayout>
-            </ScrollView>
-
-
-        </RelativeLayout>
-
-    </HorizontalScrollView>
+    <include android:id="@+id/DisplayScoresTable.table"
+        android:layout_below="@id/DisplayScoresTable.toolbar"
+        layout="@layout/dynamic_table"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 
 </RelativeLayout>

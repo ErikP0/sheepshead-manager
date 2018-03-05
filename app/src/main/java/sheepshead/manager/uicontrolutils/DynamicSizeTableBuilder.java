@@ -21,12 +21,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sheepshead.manager.R;
 import sheepshead.manager.utils.Consumer;
 import sheepshead.manager.utils.Optional;
 
@@ -91,7 +94,18 @@ public class DynamicSizeTableBuilder {
     /**
      * The amount of columns of this table
      */
+    private ITableCellBuilder fixedLeftUpperCell;
+
     private int maxWidth = 0;
+
+    /**
+     * Indicates a fixed header (header will not scroll vertically)
+     */
+    private boolean fixedHeader;
+    /**
+     * Indicates a fixed first column in the table (first column will not scroll horizontally)
+     */
+    private boolean fixedFirstColumn;
 
     /**
      * Creates a new builder
@@ -114,10 +128,21 @@ public class DynamicSizeTableBuilder {
     }
 
     /**
-     * Enables the header for this table. The header is disabled by default
+     * Fixes the first column of the table such that it will not scroll horizontally.
+     * This is disabled by default.
      */
-    public void enableHeader() {
+    public void fixFirstColumn() {
+        fixedFirstColumn = true;
+    }
+
+    /**
+     * Enables the header for this table. The header is disabled by default
+     *
+     * @param fixed if true, the header is fixed, i.e. will not scroll vertically
+     */
+    public void enableHeader(boolean fixed) {
         isHeaderEnabled = true;
+        fixedHeader = fixed;
         header = new ArrayList<>();
     }
 
@@ -126,14 +151,19 @@ public class DynamicSizeTableBuilder {
      *
      * @param builder The builder for this single cell
      * @throws IllegalStateException If the header is disabled
-     * @see #enableHeader()
+     * @see #enableHeader(boolean)
      */
     public void putHeaderCell(@NonNull ITableCellBuilder builder) {
         if (!isHeaderEnabled) {
             throw new IllegalStateException("Enable Header first");
         }
         checkIfNull(builder);
-        header.add(builder);
+        if (fixedHeader && fixedFirstColumn && fixedLeftUpperCell == null && header.isEmpty()) {
+            //builder is the first cell in the header
+            fixedLeftUpperCell = builder;
+        } else {
+            header.add(builder);
+        }
     }
 
     private void checkIfNull(ITableCellBuilder b) {
@@ -167,9 +197,16 @@ public class DynamicSizeTableBuilder {
         currentRow.add(builder);
     }
 
-    private TableRow buildRow(Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
-        TableRow row = new TableRow(c);
-        row.setLayoutParams(layoutParams);
+    /**
+     * Creates views from the given list of {@link ITableCellBuilder} and adds them to the given row.
+     * If the given consumer is not null, it will be called for each created view.
+     *
+     * @param row      the row to insert into
+     * @param c        the creation context
+     * @param cells    a list containing builders for all views
+     * @param consumer a consumer that accepts the created view, may be null
+     */
+    private void addToRow(TableRow row, Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
         for (ITableCellBuilder builder : cells) {
             View child = builder.build(c);
             if (consumer != null) {
@@ -177,6 +214,21 @@ public class DynamicSizeTableBuilder {
             }
             row.addView(child);
         }
+    }
+
+    /**
+     * Creates views from the given list of {@link ITableCellBuilder} and adds them to the given row.
+     * If the given consumer is not null, it will be called for each created view.
+     * If cells does not contain enough builders to fill the role (maxWidth), empty cells are added.
+     *
+     * @param row      the row to insert into
+     * @param c        the creation context
+     * @param cells    a list containing builders for all views
+     * @param consumer a consumer that accepts the created view, may be null
+     * @see #addToRow(TableRow, Context, List, Consumer)
+     */
+    private void populateRow(TableRow row, Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
+        addToRow(row, c, cells, consumer);
         int neededSpace = maxWidth - cells.size();
         if (neededSpace > 0) {
             for (int i = 0; i < neededSpace; i++) {
@@ -187,34 +239,37 @@ public class DynamicSizeTableBuilder {
                 row.addView(child);
             }
         }
+    }
+
+    /**
+     * Creates a new table row, creates cell views from the given builders and inserts the cell views
+     * into the row. If the given consumer is not null, it will be called for each created view.
+     *
+     * @param c        the creation context
+     * @param cells    a list containing builders for all views
+     * @param consumer a consumer that accepts the created view, may be null
+     * @return a table row containing all cell views as children
+     */
+    private TableRow buildRow(Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
+        TableRow row = new TableRow(c);
+        populateRow(row, c, cells, consumer);
         return row;
     }
 
     /**
-     * Builds the table. Creates a new table, adds the header to the top (if enabled) and the appends
-     * the body
+     * Removes the first cell view from the given table row and inserts it as table row into the given
+     * table layout.
      *
-     * @return The generated table view
+     * @param context     the creation context for the new table row
+     * @param fixedColumn the table layout to insert the new row into
+     * @param from        the row to remove the first cell view from
      */
-    public
-    @NonNull
-    TableLayout build(Context c) {
-        return build(c, null, null);
-    }
-
-    /**
-     * Builds the table. If the given table layout is not null, the contents are appended to the existing table.
-     * If it is null, a new table is created. In both cases the table that was edited, is returned.
-     * If the header is enabled, its content is inserted into the top of the table.
-     *
-     * @param context       The current context
-     * @param existingTable An existing table layout to append the contents, if null a new table will be created
-     * @return The edited table
-     */
-    public
-    @NonNull
-    TableLayout build(Context context, @NonNull TableLayout existingTable) {
-        return build(context, existingTable, null);
+    private void addToFixedColumn(Context context, TableLayout fixedColumn, TableRow from) {
+        View firstColumn = from.getVirtualChildAt(0);
+        from.removeViewAt(0);
+        TableRow firstColumnRow = new TableRow(context);
+        firstColumnRow.addView(firstColumn);
+        fixedColumn.addView(firstColumnRow);
     }
 
     /**
@@ -223,39 +278,79 @@ public class DynamicSizeTableBuilder {
      * If the external header is null, the header is added to the top of the table, if not the header
      * contents are appended to the existing header. If the header is disabled, no header content is appended in any case.
      *
-     * @param context        The current context
-     * @param existing       An existing table layout to append the contents, if null a new table will be created
-     * @param externalHeader An existing (external) header to append the header content,
-     *                       if null the header will be inserted into the top of the table
-     * @return The edited table
+     * @param context      The current context
+     * @param dynamicTable the dynamic_table layout container
      */
-    public
-    @NonNull
-    TableLayout build(Context context, @Nullable TableLayout existing, @Nullable ViewGroup externalHeader) {
+    public void populate(Context context, @NonNull View dynamicTable) {
         //check if the last row is the biggest one
         if (currentRow != null) {
             maxWidth = Math.max(maxWidth, currentRow.size());
         }
 
-        TableLayout table = existing;
-        ViewGroup headerContainer = externalHeader;
+        TableLayout table = dynamicTable.findViewById(R.id.dynamic_table_table);
+        TableRow headerCont = dynamicTable.findViewById(R.id.dynamic_table_fixed_header);
+        TableLayout columnCont = dynamicTable.findViewById(R.id.dynamic_table_fixed_column);
+        LinearLayout leftUpperCellCont = dynamicTable.findViewById(R.id.dynamic_table_fixed_left_upper_cell);
+        ScrollView verticalMainScroll = dynamicTable.findViewById(R.id.dynamic_table_vertical_scroll);
+        ScrollView verticalFixedColumnScroll = dynamicTable.findViewById(R.id.dynamic_table_fixed_column_scroll);
         if (table == null) {
-            table = new TableLayout(context);
+            throw new IllegalStateException("table is null");
         }
-        if (headerContainer == null) {
-            headerContainer = table;
+        if (headerCont == null) {
+            throw new IllegalStateException("header is null");
         }
+        if (columnCont == null) {
+            throw new IllegalStateException("column is null");
+        }
+        if (verticalMainScroll == null) {
+            throw new IllegalStateException("vertical main scroll is null");
+        }
+        if (verticalFixedColumnScroll == null) {
+            throw new IllegalStateException("vertical fixed column scroll is null");
+        }
+
+        //scrolling in either the first column or the rest of the table should scroll the other one as well
+        verticalMainScroll.setOnScrollChangeListener((View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) -> {
+            verticalFixedColumnScroll.scrollTo(scrollX, scrollY);
+        });
+        verticalFixedColumnScroll.setOnScrollChangeListener((View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) -> {
+            verticalMainScroll.scrollTo(scrollX, scrollY);
+        });
+
+
+        //clear previous content
+        table.removeAllViews();
+        leftUpperCellCont.removeAllViews();
+        headerCont.removeAllViews();
+        columnCont.removeAllViews();
+
         if (isHeaderEnabled) {
             //create Header
-            TableRow headerRow = buildRow(context, header, headerConsumer);
-            headerContainer.addView(headerRow);
+            if (fixedHeader) {
+                if (fixedLeftUpperCell != null) {
+                    View v = fixedLeftUpperCell.build(context);
+                    if (headerConsumer != null) {
+                        headerConsumer.accept(v);
+                    }
+                    leftUpperCellCont.addView(v);
+                }
+                addToRow(headerCont, context, header, headerConsumer);
+            } else {
+                TableRow headerRow = buildRow(context, header, headerConsumer);
+                if (fixedFirstColumn) {
+                    addToFixedColumn(context, columnCont, headerRow);
+                }
+                table.addView(headerRow);
+            }
         }
         for (List<ITableCellBuilder> row : tableRows) {
             //create one row
             TableRow tableRow = buildRow(context, row, bodyConsumer);
+            if (fixedFirstColumn) {
+                addToFixedColumn(context, columnCont, tableRow);
+            }
             table.addView(tableRow);
         }
-        return table;
     }
 
     /**
