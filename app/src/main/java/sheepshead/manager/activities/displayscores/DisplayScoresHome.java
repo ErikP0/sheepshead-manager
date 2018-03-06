@@ -131,7 +131,7 @@ public class DisplayScoresHome extends AbstractBaseActivity {
             if (latestGame != null) {
                 role = latestGame.findRole(player);
             }
-            panel.addView(new PlayerScoreOverwievBuilder(new PlayerScoreEntry(player, role)).build(this));
+            panel.addView(new PlayerScoreOverviewBuilder(new PlayerScoreEntry(player, role)).build(this));
         }
     }
 

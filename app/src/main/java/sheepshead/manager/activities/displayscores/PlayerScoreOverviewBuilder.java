@@ -35,7 +35,7 @@ import sheepshead.manager.game.PlayerRole;
 /**
  * Builder convenience class for generating the balance overview for the DisplayScoresHome-Activity
  */
-class PlayerScoreOverwievBuilder {
+class PlayerScoreOverviewBuilder {
 
     private static final
     @LayoutRes
@@ -59,7 +59,7 @@ class PlayerScoreOverwievBuilder {
      *
      * @param entry The PlayerScoreEntry that should be displayed
      */
-    PlayerScoreOverwievBuilder(@NonNull PlayerScoreEntry entry) {
+    PlayerScoreOverviewBuilder(@NonNull PlayerScoreEntry entry) {
         data = entry;
     }
 
