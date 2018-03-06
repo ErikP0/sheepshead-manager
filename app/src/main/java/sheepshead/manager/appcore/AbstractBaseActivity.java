@@ -74,8 +74,13 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
             //look for the toolbar widget in the given view container
             Toolbar bar = (Toolbar) findView(activityDescriptor.getToolbarId().getValue()).findViewById(R.id.toolbar);
             setSupportActionBar(bar);
+
             toolbar = getSupportActionBar();
             toolbar.setDisplayHomeAsUpEnabled(activityDescriptor.hasNavigationBackToParentEnabled());
+            if (activityDescriptor.hasNavigationBackToParentEnabled()) {
+                //see https://www.reddit.com/r/androiddev/comments/2ox3s6/appcompat_toolbar_back_button_functionality_on/?st=jefj5rqi&sh=998767bb
+                bar.setNavigationOnClickListener(v -> onBackPressed());
+            }
             bar.setTitleTextAppearance(this, R.style.SheepsheadText_Title_Big);
             if (!activityDescriptor.getTitle().isEmpty()) {
                 toolbar.setTitle(activityDescriptor.getTitle().getValue());
