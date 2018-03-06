@@ -31,7 +31,6 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,14 +41,17 @@
 
         <activity
             android:name=".activities.CreateSession"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:parentActivityName=".activities.HomeScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.HomeScreen" />
         </activity>
 
 
-        <activity android:name=".activities.displayscores.DisplayScoresHome">
+        <activity
+            android:name=".activities.displayscores.DisplayScoresHome"
+            android:parentActivityName=".activities.HomeScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.HomeScreen" />
@@ -58,7 +60,8 @@
 
         <activity
             android:name=".activities.fillgameresult.FillGameResult"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:parentActivityName=".activities.displayscores.DisplayScoresHome">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
@@ -67,7 +70,16 @@
 
         <activity
             android:name=".activities.displayscores.DisplayScoresTable"
-            android:configChanges="orientation|keyboardHidden|screenSize">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:parentActivityName=".activities.displayscores.DisplayScoresHome">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />
+        </activity>
+
+        <activity
+            android:name=".activities.DiagramActivity"
+            android:parentActivityName=".activities.displayscores.DisplayScoresHome">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="sheepshead.manager.activities.displayscores.DisplayScoresHome" />

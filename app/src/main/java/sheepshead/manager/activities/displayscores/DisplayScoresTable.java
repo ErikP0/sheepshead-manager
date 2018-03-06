@@ -17,7 +17,7 @@
 package sheepshead.manager.activities.displayscores;
 
 import android.os.Bundle;
-import android.widget.TableLayout;
+import android.view.View;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
@@ -43,6 +43,11 @@ public class DisplayScoresTable extends AbstractBaseActivity {
     private Session session;
 
     /**
+     * The dynamic_table layout container
+     */
+    private View tableContainer;
+
+    /**
      * Don't create this activity by hand. Use an intent
      */
     public DisplayScoresTable() {
@@ -56,14 +61,7 @@ public class DisplayScoresTable extends AbstractBaseActivity {
     @Override
     protected void updateUserInterface() {
         //Populate table
-        TableLayout header = findView(R.id.DisplayScoresTable_header);
-        TableLayout scoreboard = findView(R.id.DisplayScoresTable_table);
-
-        //remove potentially old views
-        header.removeAllViews();
-        scoreboard.removeAllViews();
-
-        ScoreBoardBuilder builder = new ScoreBoardBuilder(this, header, scoreboard);
+        ScoreBoardBuilder builder = new ScoreBoardBuilder(this, tableContainer);
         builder.addHeader(session.getPlayers());
         builder.addBody(session, session.getPlayers());
         builder.build();
@@ -81,6 +79,7 @@ public class DisplayScoresTable extends AbstractBaseActivity {
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
+        tableContainer = findView(R.id.DisplayScoresTable_table);
         //Populating is done in update
     }
 }

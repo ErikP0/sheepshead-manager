@@ -14,28 +14,22 @@
  *    limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package sheepshead.manager.uicontrolutils.table;
 
-buildscript {
-    repositories {
-        jcenter()
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
+import android.content.Context;
+import android.view.View;
 
-allprojects {
-    repositories {
-        jcenter()
-        google()
-    }
-}
+/**
+ * Interface for building cells for the table
+ */
+public interface ITableCellBuilder {
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    /**
+     * Creates and returns the child view that will be used for the cell
+     *
+     * @param context The context
+     * @return A child view for the cell
+     */
+    View build(Context context);
 }
