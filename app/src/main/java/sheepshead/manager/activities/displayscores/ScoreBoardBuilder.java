@@ -20,19 +20,16 @@ package sheepshead.manager.activities.displayscores;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import sheepshead.manager.R;
@@ -40,8 +37,9 @@ import sheepshead.manager.game.Player;
 import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.session.Session;
-import sheepshead.manager.uicontrolutils.DynamicSizeTableBuilder;
-import sheepshead.manager.utils.Consumer;
+import sheepshead.manager.uicontrolutils.table.BgDrawables;
+import sheepshead.manager.uicontrolutils.table.DynamicSizeTableBuilder;
+import sheepshead.manager.uicontrolutils.table.ITableCellBuilder;
 
 /**
  * Convenience builder class for populating the score board table with the desired content.
@@ -105,8 +103,9 @@ class ScoreBoardBuilder {
         activity = a;
         this.tableContainer = tableContainer;
         playerNotParticipating = activity.getString(R.string.DisplayScores_text_player_not_participating);
-        builder = new DynamicSizeTableBuilder(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT), new BoardBackgroundDrawer(), new BoardBackgroundDrawer());
+        BgDrawables drawables = new BgDrawables(R.drawable.display_scores_table_bg, R.drawable.display_scores_table_bg, R.drawable.display_scores_table_bg_arrow_up, R.drawable.display_scores_table_bg_arrow_down);
+        builder = new DynamicSizeTableBuilder(drawables, null, null,
+                new ColumnOrder());
     }
 
     /**
@@ -152,7 +151,7 @@ class ScoreBoardBuilder {
 
     private void addGame(int number, SingleGameResult result, Collection<Player> players) {
         builder.startRow();
-        DynamicSizeTableBuilder.ITableCellBuilder nr = new FixedSizeTextViewBuilder(Integer.toString(number), CELL_WIDTH / 2, CELL_HEIGHT, FONT_SIZE_NORMAL_SP, CELL_PADDING);
+        ITableCellBuilder nr = new FixedSizeTextViewBuilder(Integer.toString(number), CELL_WIDTH / 2, CELL_HEIGHT, FONT_SIZE_NORMAL_SP, CELL_PADDING);
         builder.putRowCell(nr);
         for (Player p : players) {
             PlayerRole role = result.findRole(p);
@@ -161,41 +160,23 @@ class ScoreBoardBuilder {
                 //cell is empty
                 builder.putRowCell(new FixedSizeTextViewBuilder(playerNotParticipating, CELL_WIDTH, CELL_HEIGHT, FONT_SIZE_NORMAL_SP, CELL_PADDING));
             } else {
-                DynamicSizeTableBuilder.ITableCellBuilder playerGameResult = new ScoreBuilder(role.getPlayerBalance(), role.getMoney(), CELL_WIDTH, CELL_HEIGHT, CELL_PADDING);
+                ITableCellBuilder playerGameResult = new ScoreBuilder(role.getPlayerBalance(), role.getMoney(), CELL_WIDTH, CELL_HEIGHT, CELL_PADDING);
                 builder.putRowCell(playerGameResult);
             }
         }
     }
 
     /**
-     * This consumer is called for each header and table body cell.
-     * <p>
-     * As TableLayout has no way to draw column/row splitting lines for the table,
-     * a solution is to set a rectangular shape as background of each cell.
-     * The rectangular cell has a border of a different color to create splitting lines
-     * See: http://stackoverflow.com/questions/2108456/how-can-i-create-a-table-with-borders-in-android
-     */
-    private static class BoardBackgroundDrawer implements Consumer<View> {
-        @DrawableRes
-        private static final int drawable = R.drawable.display_scores_table_bg;
-
-        @Override
-        public void accept(View view) {
-            view.setBackgroundResource(drawable);
-        }
-    }
-
-    /**
      * Builder class for a TextView with a fixed width and font size
      */
-    private static class FixedSizeTextViewBuilder implements DynamicSizeTableBuilder.ITableCellBuilder {
-        private CharSequence text;
+    private static class FixedSizeTextViewBuilder implements ITableCellBuilder, Comparable<FixedSizeTextViewBuilder> {
+        private String text;
         private int width;
         private int height;
         private int fontsize;
         private int padding;
 
-        FixedSizeTextViewBuilder(CharSequence s, int cellwidth, int cellheight, int fontsize, int padding) {
+        FixedSizeTextViewBuilder(String s, int cellwidth, int cellheight, int fontsize, int padding) {
             text = s;
             width = cellwidth;
             height = cellheight;
@@ -214,6 +195,19 @@ class ScoreBoardBuilder {
             t.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontsize);
             return t;
         }
+
+        @Override
+        public int compareTo(@NonNull FixedSizeTextViewBuilder o) {
+            //tries to compare the text as numbers, if that fails, the text is compared alphabetically
+            try {
+                int nr1 = Integer.parseInt(text);
+                int nr2 = Integer.parseInt(o.text);
+                return Integer.compare(nr1, nr2);
+            } catch (NumberFormatException ignored) {
+
+            }
+            return text.compareTo(o.text);
+        }
     }
 
     /**
@@ -222,7 +216,7 @@ class ScoreBoardBuilder {
      * happened) and his earnings/losses. The values are color annotated, green for a non-negative value,
      * red for a negative value
      */
-    private static class ScoreBuilder implements DynamicSizeTableBuilder.ITableCellBuilder {
+    private static class ScoreBuilder implements ITableCellBuilder, Comparable<ScoreBuilder> {
         @ColorRes
         private static final int COLOR_NEGATIVE = R.color.scoreboard_negative_text;
         @ColorRes
@@ -264,6 +258,44 @@ class ScoreBoardBuilder {
             } else {
                 return ContextCompat.getColor(c, COLOR_POSITIVE);
             }
+        }
+
+        @Override
+        public int compareTo(@NonNull ScoreBuilder o) {
+            // compares by delta
+            return Integer.compare(delta, o.delta);
+        }
+    }
+
+    /**
+     * Comparator that can compare the different cell types ({@link ScoreBuilder}, {@link FixedSizeTextViewBuilder}).
+     * If both {@link ITableCellBuilder} are of same type, then the comparison method of this type is called.
+     * If not, the comparison order is as follows: {@linkplain ScoreBuilder} < {@linkplain FixedSizeTextViewBuilder} < any type
+     */
+    private static class ColumnOrder implements Comparator<ITableCellBuilder> {
+
+        @Override
+        public int compare(ITableCellBuilder o1, ITableCellBuilder o2) {
+            boolean scoreBuilder1 = o1 instanceof ScoreBuilder;
+            boolean scoreBuilder2 = o2 instanceof ScoreBuilder;
+            boolean text1 = o1 instanceof FixedSizeTextViewBuilder;
+            boolean text2 = o2 instanceof FixedSizeTextViewBuilder;
+            if (scoreBuilder1 && scoreBuilder2) {
+                //both are of type ScoreBuilder
+                return ((ScoreBuilder) o1).compareTo((ScoreBuilder) o2);
+            } else if (scoreBuilder1) {
+                return -1;
+            } else if (scoreBuilder2) {
+                return 1;
+            } else if (text1 && text2) {
+                //both are of type FixedSizeTextViewBuilder
+                return ((FixedSizeTextViewBuilder) o1).compareTo((FixedSizeTextViewBuilder) o2);
+            } else if (text1) {
+                return -1;
+            } else if (text2) {
+                return 1;
+            }
+            return 0;
         }
     }
 }

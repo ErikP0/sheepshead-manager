@@ -14,19 +14,20 @@
  *    limitations under the License.
  */
 
-package sheepshead.manager.uicontrolutils;
+package sheepshead.manager.uicontrolutils.table;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import sheepshead.manager.R;
@@ -61,10 +62,6 @@ import sheepshead.manager.utils.Optional;
  */
 public class DynamicSizeTableBuilder {
 
-    /**
-     * the desired layout parameters
-     */
-    private final TableRow.LayoutParams layoutParams;
     /**
      * A consumer for more customization of header cells
      */
@@ -108,23 +105,30 @@ public class DynamicSizeTableBuilder {
     private boolean fixedFirstColumn;
 
     /**
+     * A comparator for comparing cells
+     */
+    private Comparator<ITableCellBuilder> order;
+
+    /**
+     * Information for drawing the background of each cell
+     */
+    private BgDrawables drawables;
+
+    /**
      * Creates a new builder
      *
-     * @param params      desired layout params, can be null
      * @param headerSpecs consumer for more customization of each header cell, can be null
      * @param bodySpecs   consumer for more customization of each body cell, can be null
+     * @param order       comparator for cells
      */
-    public DynamicSizeTableBuilder(@Nullable TableRow.LayoutParams params, @Nullable Consumer<View> headerSpecs, @Nullable Consumer<View> bodySpecs) {
+    public DynamicSizeTableBuilder(BgDrawables drawables, @Nullable Consumer<View> headerSpecs, @Nullable Consumer<View> bodySpecs, Comparator<ITableCellBuilder> order) {
         header = null;
         tableRows = new ArrayList<>();
         isHeaderEnabled = false;
-        if (params != null) {
-            layoutParams = params;
-        } else {
-            layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
-        }
         headerConsumer = headerSpecs;
         bodyConsumer = bodySpecs;
+        this.order = order;
+        this.drawables = drawables;
     }
 
     /**
@@ -205,10 +209,12 @@ public class DynamicSizeTableBuilder {
      * @param c        the creation context
      * @param cells    a list containing builders for all views
      * @param consumer a consumer that accepts the created view, may be null
+     * @param bg       drawable resource for the background of the cell
      */
-    private void addToRow(TableRow row, Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
+    private void addToRow(TableRow row, Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer, @DrawableRes int bg) {
         for (ITableCellBuilder builder : cells) {
             View child = builder.build(c);
+            child.setBackgroundResource(bg);
             if (consumer != null) {
                 consumer.accept(child);
             }
@@ -225,10 +231,11 @@ public class DynamicSizeTableBuilder {
      * @param c        the creation context
      * @param cells    a list containing builders for all views
      * @param consumer a consumer that accepts the created view, may be null
-     * @see #addToRow(TableRow, Context, List, Consumer)
+     * @param bg       drawable resource for the background of the cell
+     * @see #addToRow(TableRow, Context, List, Consumer, int)
      */
-    private void populateRow(TableRow row, Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
-        addToRow(row, c, cells, consumer);
+    private void populateRow(TableRow row, Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer, @DrawableRes int bg) {
+        addToRow(row, c, cells, consumer, bg);
         int neededSpace = maxWidth - cells.size();
         if (neededSpace > 0) {
             for (int i = 0; i < neededSpace; i++) {
@@ -248,11 +255,12 @@ public class DynamicSizeTableBuilder {
      * @param c        the creation context
      * @param cells    a list containing builders for all views
      * @param consumer a consumer that accepts the created view, may be null
+     * @param bg       drawable resource for the background of the cell
      * @return a table row containing all cell views as children
      */
-    private TableRow buildRow(Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer) {
+    private TableRow buildRow(Context c, List<ITableCellBuilder> cells, @Nullable Consumer<View> consumer, @DrawableRes int bg) {
         TableRow row = new TableRow(c);
-        populateRow(row, c, cells, consumer);
+        populateRow(row, c, cells, consumer, bg);
         return row;
     }
 
@@ -270,6 +278,31 @@ public class DynamicSizeTableBuilder {
         TableRow firstColumnRow = new TableRow(context);
         firstColumnRow.addView(firstColumn);
         fixedColumn.addView(firstColumnRow);
+    }
+
+    /**
+     * Creates and returns the header cell view. This includes the functionality when the user clicks
+     * on the header, the table is sorted by this column
+     *
+     * @param context      the creation context
+     * @param builder      the builder for the content of the cell
+     * @param cellConsumer a consumer that accepts the content view, may be null
+     * @param index        the column index of this header cell
+     * @param state        the state of the table
+     * @param bg           the initial background for the header cell
+     * @return a view representing the header cell
+     */
+    private View createHeaderView(Context context, ITableCellBuilder builder, @Nullable Consumer<View> cellConsumer, int index, DynamicTableState state,
+                                  @DrawableRes int bg) {
+        View content = builder.build(context);
+        content.setBackgroundResource(bg);
+        if (cellConsumer != null) {
+            cellConsumer.accept(content);
+        }
+        content.setOnClickListener(view -> {
+            state.reorder(index);
+        });
+        return content;
     }
 
     /**
@@ -324,19 +357,23 @@ public class DynamicSizeTableBuilder {
         headerCont.removeAllViews();
         columnCont.removeAllViews();
 
+        DynamicTableState state = new DynamicTableState(table, leftUpperCellCont, headerCont, columnCont, fixedHeader, fixedFirstColumn, drawables);
+
         if (isHeaderEnabled) {
             //create Header
             if (fixedHeader) {
                 if (fixedLeftUpperCell != null) {
-                    View v = fixedLeftUpperCell.build(context);
-                    if (headerConsumer != null) {
-                        headerConsumer.accept(v);
-                    }
+                    View v = createHeaderView(context, fixedLeftUpperCell, headerConsumer, 0, state, drawables.getBgHeaderDesc());
                     leftUpperCellCont.addView(v);
                 }
-                addToRow(headerCont, context, header, headerConsumer);
+                int index = fixedLeftUpperCell != null ? 1 : 0;
+                for (ITableCellBuilder builder : header) {
+                    View v = createHeaderView(context, builder, headerConsumer, index, state, drawables.getBgHeader());
+                    headerCont.addView(v);
+                    index++;
+                }
             } else {
-                TableRow headerRow = buildRow(context, header, headerConsumer);
+                TableRow headerRow = buildRow(context, header, headerConsumer, drawables.getBgHeader());
                 if (fixedFirstColumn) {
                     addToFixedColumn(context, columnCont, headerRow);
                 }
@@ -345,32 +382,19 @@ public class DynamicSizeTableBuilder {
         }
         for (List<ITableCellBuilder> row : tableRows) {
             //create one row
-            TableRow tableRow = buildRow(context, row, bodyConsumer);
+            TableRow tableRow = buildRow(context, row, bodyConsumer, drawables.getBgCell());
             if (fixedFirstColumn) {
                 addToFixedColumn(context, columnCont, tableRow);
             }
             table.addView(tableRow);
         }
-    }
-
-    /**
-     * Interface for building cells for the table
-     */
-    public interface ITableCellBuilder {
-
-        /**
-         * Creates and returns the child view that will be used for the cell
-         *
-         * @param context The context
-         * @return A child view for the cell
-         */
-        View build(Context context);
+        state.setContent(tableRows, order);
     }
 
     /**
      * Builds an empty table cell (a cell with no content to display)
      */
-    public static class EmptyCellBuilder implements ITableCellBuilder {
+    public static class EmptyCellBuilder implements ITableCellBuilder, Comparable<EmptyCellBuilder> {
         Optional<Integer> optWidth;
 
         private EmptyCellBuilder(Optional<Integer> width) {
@@ -393,5 +417,11 @@ public class DynamicSizeTableBuilder {
             }
             return space;
         }
+
+        @Override
+        public int compareTo(@NonNull EmptyCellBuilder o) {
+            return 0;//all empty cells are equal
+        }
     }
+
 }

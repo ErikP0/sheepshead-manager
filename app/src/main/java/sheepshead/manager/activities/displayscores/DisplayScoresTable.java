@@ -18,15 +18,12 @@ package sheepshead.manager.activities.displayscores;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 
 import sheepshead.manager.R;
 import sheepshead.manager.appcore.AbstractBaseActivity;
 import sheepshead.manager.appcore.ActivityDescriptor;
 import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.session.Session;
-import sheepshead.manager.uicontrolutils.table.DynamicTable;
 
 /**
  * Activity that lists the results of all game results of the current session in a table-style
