@@ -24,6 +24,7 @@
 
     <!-- Main-Background color-->
     <color name="color_background">#FFFFFF</color>
+    <color name="color_card_background">#eeeeee</color>
     <!-- Main-text color -->
     <color name="color_main_texts">#000000</color>
     <!-- Title-bar text color -->

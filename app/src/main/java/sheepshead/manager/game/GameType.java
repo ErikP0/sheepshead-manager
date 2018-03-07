@@ -16,8 +16,12 @@
 
 package sheepshead.manager.game;
 
+import android.content.Context;
+import android.support.annotation.StringRes;
+
 import java.io.Serializable;
 
+import sheepshead.manager.R;
 import sheepshead.manager.serialization.CSVCellContent;
 import sheepshead.manager.session.ICSVSerializable;
 
@@ -28,10 +32,10 @@ import sheepshead.manager.session.ICSVSerializable;
  */
 public enum GameType implements Serializable, ICSVSerializable {
 
-    SAUSPIEL(1, 3, 8, 2),
-    WENZ(3, 2, 4, 1),
-    SOLO(3, 3, 8, 1),
-    LEER(1, -1, -1, -1);
+    SAUSPIEL(1, 3, 8, 2, R.string.GameType_SAUSPIEL),
+    WENZ(3, 2, 4, 1, R.string.GameType_WENZ),
+    SOLO(3, 3, 8, 1, R.string.GameType_SOLO),
+    LEER(1, -1, -1, -1, R.string.GameType_LEER);
 
     private int teamMultiplier;
 
@@ -51,11 +55,18 @@ public enum GameType implements Serializable, ICSVSerializable {
      */
     private int numberOfCallers;
 
-    GameType(int teamMultiplier, int laufendeBegin, int laufendeEndIncl, int numCallers) {
+    /**
+     * the string resource of the name of this game type
+     */
+    private @StringRes
+    int displayString;
+
+    GameType(int teamMultiplier, int laufendeBegin, int laufendeEndIncl, int numCallers, @StringRes int displaystring) {
         this.teamMultiplier = teamMultiplier;
         minLaufende = laufendeBegin;
         maxLaufendeIncl = laufendeEndIncl;
         numberOfCallers = numCallers;
+        displayString = displaystring;
     }
 
     /**
@@ -95,5 +106,15 @@ public enum GameType implements Serializable, ICSVSerializable {
     @Override
     public void toCSVSerializableString(CSVCellContent content) {
         content.put(ordinal());
+    }
+
+    /**
+     * Returns a translated, human-readable name of this game type
+     *
+     * @param context the context for translation
+     * @return a human-readable string to display
+     */
+    public String toDisplayString(Context context) {
+        return context.getResources().getString(displayString);
     }
 }
