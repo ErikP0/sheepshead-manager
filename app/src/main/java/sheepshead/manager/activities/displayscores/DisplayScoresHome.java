@@ -18,11 +18,16 @@ package sheepshead.manager.activities.displayscores;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import sheepshead.manager.R;
 import sheepshead.manager.activities.fillgameresult.FillGameResult;
@@ -32,10 +37,12 @@ import sheepshead.manager.appcore.SheepsheadManagerApplication;
 import sheepshead.manager.export.EmailExport;
 import sheepshead.manager.export.FileExport;
 import sheepshead.manager.game.Player;
-import sheepshead.manager.game.PlayerRole;
 import sheepshead.manager.game.SingleGameResult;
 import sheepshead.manager.serialization.SerializationActions;
 import sheepshead.manager.session.Session;
+import sheepshead.manager.uicontrolutils.DetailsGame;
+import sheepshead.manager.uicontrolutils.TextViewUtils;
+import sheepshead.manager.utils.Conversions;
 
 /**
  * Activity that shows an overview for the current session.
@@ -59,8 +66,6 @@ public class DisplayScoresHome extends AbstractBaseActivity {
      * The current session
      */
     private Session session;
-
-    private ImageButton deleteGameButton;
 
     /**
      * Don't create this activity by hand. Use an intent
@@ -86,52 +91,45 @@ public class DisplayScoresHome extends AbstractBaseActivity {
     @Override
     protected void updateUserInterface() {
         //generate and show the overview of players balances
-        TableLayout playerPanel = findView(R.id.DisplayScores_panel_player_scores);
-        createPlayerOverviewArea(playerPanel);
-        deleteGameButton.setEnabled(session.getLatestResult() != null);
+
+        TableLayout totalScoreTable = findView(R.id.DisplayScores_total_score_table);
+        createTotalScoreTable(totalScoreTable);
+
+        DetailsGame detailsGame = findView(R.id.DisplayScores_latest_game_details);
+        String title = getString(R.string.DisplayScores_text_last_game, session.getGameAmount());
+        detailsGame.setGame(this, session.getLatestResult(), title, v -> deleteLatestGameResult());
     }
 
     @Override
     protected void createUserInterface(Bundle savedInstanceState) {
 
         //add functionality to the scoreboard button
-        Button showScoreboardButton = findView(R.id.DisplayScores_btn_show_table);
-        showScoreboardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showScoreboard();
-            }
-        });
+        View showScoreboardView = findView(R.id.DisplayScores_show_score_table);
+        showScoreboardView.setOnClickListener(v -> showScoreboard());
 
         //add functionality to the fill game result button
-        Button addResultButton = findView(R.id.DisplayScores_btn_add_single_game_result);
-        addResultButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intentToUpActivity(FillGameResult.class);
-            }
-        });
-
-        //add functionality to the delete result button
-        deleteGameButton = findView(R.id.DisplayScores_btn_delete_result);
-        deleteGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteLatestGameResult();
-            }
-        });
+        FloatingActionButton addResultButton = findView(R.id.DisplayScores_btn_add_single_game_result);
+        addResultButton.setOnClickListener(v -> intentToUpActivity(FillGameResult.class));
     }
 
-    private void createPlayerOverviewArea(TableLayout panel) {
+    private void createTotalScoreTable(TableLayout panel) {
         //remove all old child views before adding the latest ones
         panel.removeAllViews();
         SingleGameResult latestGame = session.getLatestResult();
-        for (Player player : session.getPlayers()) {
-            PlayerRole role = null;
-            if (latestGame != null) {
-                role = latestGame.findRole(player);
-            }
-            panel.addView(new PlayerScoreOverviewBuilder(new PlayerScoreEntry(player, role)).build(this));
+
+        List<Player> players = new ArrayList<>(session.getPlayers());
+        Collections.sort(players, (p1, p2) -> -Integer.compare(p1.getSessionMoney(), p2.getSessionMoney()));
+        int padding = Conversions.dpToPx(this, 4);
+        for (Player player : players) {
+            TableRow row = new TableRow(this);
+            TextView name = new TextView(this);
+            name.setText(player.getName());
+            name.setPadding(padding, padding, padding, padding);
+            row.addView(name);
+            TextView money = TextViewUtils.createColoredText(this, player.getSessionMoney());
+            money.setPadding(padding, padding, padding, padding);
+            row.addView(money);
+            panel.addView(row);
         }
     }
 

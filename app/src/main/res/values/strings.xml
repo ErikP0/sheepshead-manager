@@ -90,6 +90,13 @@
     <string name="DisplayScores.dialog_delete_message">Letztes Ergbnis löschen?</string>
     <string name="DisplayScores.dialog_delete_confirm">Löschen</string>
     <string name="DisplayScores.dialog_delete_abort">Abbrechen</string>
+    <string name="DisplayScores.text_current_score">Punktestand</string>
+    <string name="DisplayScores.text_last_game">Letztes Spiel (Nr. %d)</string>
+
+
+    <!-- DetailsGame -->
+    <string name="details_game.no_game">Kein Spiel zum Anzeigen</string>
+    <string name="details_game_laufende">%d Laufende</string>
 
     <!-- Strings for Menu Items -->
     <string name="Menu.saveSession">Sitzung speichern</string>
@@ -134,4 +141,10 @@
 
     <!-- Dialog File Chooser -->
     <string name="DialogFileChooser.title_text">Wähle Sitzung</string>
+
+    <!-- GameType -->
+    <string name="GameType.SAUSPIEL">Sauspiel</string>
+    <string name="GameType.WENZ">Wenz</string>
+    <string name="GameType.SOLO">Solo</string>
+    <string name="GameType.LEER">leer</string>
 </resources>
